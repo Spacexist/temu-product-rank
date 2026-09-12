@@ -1,0 +1,21 @@
+{
+  "prec_sale_gt0": 0.8571428571428571,
+  "rec_sale_gt0": 0.06948640483383686,
+  "base_sale_gt0": 0.617985686132144,
+  "prec_sale_ge5": 0.650103519668737,
+  "rec_sale_ge5": 0.0781483325037332,
+  "base_sale_ge5": 0.4167617467067732,
+  "prec_sale_ge20": 0.2691511387163561,
+  "rec_sale_ge20": 0.0936599423631124,
+  "base_sale_ge20": 0.1439684680012447,
+  "top_k": 483,
+  "n": 9641,
+  "file": "2097863420316155906.csv",
+  "spearman": 0.3779624282618605,
+  "img_cache_before": 9644,
+  "rows_prepared": 10000,
+  "rows_scored": 9641,
+  "sample_n": null,
+  "sample_pct": 0,
+  "elapsed_sec": 518.7
+}

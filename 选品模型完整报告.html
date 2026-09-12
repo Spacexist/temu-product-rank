@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>选品排序模型完整报告 · 2026-09-12</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #5c5c5c;
+    --line: #d8d4cc;
+    --paper: #f7f4ee;
+    --card: #fffdf8;
+    --accent: #8b2e1a;
+    --ok: #1f5c3a;
+    --warn: #8a5a12;
+    --code: #f0ebe3;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font: 16px/1.7 "Iowan Old Style", "Palatino Linotype", "Source Han Serif SC", "Noto Serif SC", "Songti SC", serif;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 48px 28px 96px; }
+  header.hero {
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+  header.hero p.kicker {
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 8px;
+    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  }
+  h1 { font-size: 34px; line-height: 1.25; margin: 0 0 12px; }
+  h2 {
+    font-size: 24px;
+    margin: 56px 0 16px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  h3 { font-size: 18px; margin: 32px 0 10px; }
+  p { margin: 0 0 14px; }
+  a { color: var(--accent); }
+  .lede { font-size: 18px; color: #333; }
+  .note, .warn, .ok {
+    padding: 14px 16px;
+    margin: 18px 0;
+    background: var(--card);
+    border-left: 4px solid var(--ink);
+  }
+  .warn { border-left-color: var(--warn); }
+  .ok { border-left-color: var(--ok); }
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 16px 20px;
+    margin: 24px 0 36px;
+    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    font-size: 14px;
+  }
+  nav.toc strong { display: block; margin-bottom: 8px; }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+  nav.toc ol { margin: 0; padding-left: 20px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 14px 0 22px;
+    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    background: var(--card);
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 7px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #efeae1; font-weight: 600; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.hl td { background: #f3e6df; font-weight: 600; }
+  code, pre {
+    font-family: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    font-size: 13px;
+  }
+  code { background: var(--code); padding: 1px 5px; }
+  pre {
+    background: #1e1c19;
+    color: #f3efe6;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  ul, ol { margin: 0 0 16px; padding-left: 22px; }
+  li { margin-bottom: 4px; }
+  .part {
+    display: inline-block;
+    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: #fff;
+    padding: 3px 8px;
+    margin-bottom: 8px;
+  }
+  footer {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+    font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  }
+  @media print {
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    h2 { break-before: page; }
+    h2:first-of-type { break-before: auto; }
+    pre { white-space: pre-wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <p class="kicker">C:\Users\ZFGJ-WCH\Desktop\8天前数据 · 2026-09-12</p>
+  <h1>选品排序模型完整报告</h1>
+  <p class="lede">当前可部署模型是 <strong>full</strong>：表格特征 + ResNet18 主图向量 + BGE 中文标题向量，再交给 LightGBM 回归打分。不要部署 <code>LEAK_shop</code>（含店铺规模列，仅诊断用）。</p>
+  <p>本文分两半。上半给人看：模型是什么、能干什么、数字怎么读、不能信什么。下半给 Codex / 任何执行者：按那一节重训，应能得到同一套指标。</p>
+</header>
+
+<nav class="toc">
+  <strong>目录</strong>
+  <ol>
+    <li><a href="#p1">上半：给人看的结论</a>
+      <ol>
+        <li><a href="#s1">一句话</a></li>
+        <li><a href="#s2">现在怎么用</a></li>
+        <li><a href="#s3">数据长什么样</a></li>
+        <li><a href="#s4">模型在干什么</a></li>
+        <li><a href="#s5">数字怎么读</a></li>
+        <li><a href="#s6">按天切分</a></li>
+        <li><a href="#s7">能信 / 不能信 / 已知坑</a></li>
+      </ol>
+    </li>
+    <li><a href="#p2">下半：给 Codex 的复现说明书</a>
+      <ol>
+        <li><a href="#s8">目标与禁区</a></li>
+        <li><a href="#s9">环境</a></li>
+        <li><a href="#s10">读表</a></li>
+        <li><a href="#s11">特征</a></li>
+        <li><a href="#s12">两种切分</a></li>
+        <li><a href="#s13">LightGBM</a></li>
+        <li><a href="#s14">评测</a></li>
+        <li><a href="#s15">复现命令与期望数字</a></li>
+        <li><a href="#s16">产物清单</a></li>
+        <li><a href="#s17">硬性验收</a></li>
+        <li><a href="#s18">不要做的事</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+
+<span class="part" id="p1">Part 1 · 给人看</span>
+<h2 id="s1">1. 一句话</h2>
+<p>这是一个<strong>筛子</strong>，不是一个<strong>预言机</strong>。</p>
+<p>你每天有几千个家居厨房新品。模型按「看起来会不会卖」排序。你只人工看前 5%。历史数据里：</p>
+<ul>
+  <li>随便翻：100 个品里大约 22 个卖得出去。</li>
+  <li>模型挑的前 5%：100 个里大约 55 个卖得出去。</li>
+  <li>换成「用前两天训练、去挑第三天新品」这种更接近真实用法的测法：100 个里大约 54 个卖得出去，相对基线大约是 <strong>2 倍</strong>（从 2.5 倍掉到 2 倍）。</li>
+</ul>
+<p>它帮你把几千个品压成两三百个值得花两秒看一眼的。它<strong>不会</strong>告诉你哪个会爆。前 20 名里也曾出现过 4 个零销量。</p>
+
+<h2 id="s2">2. 现在怎么用</h2>
+<ol>
+  <li><strong>永远按比例取，不要设分数线。</strong>正确说法：「今天这批的前 5%」。错误说法：「预测分大于 1.0 就上」。分数没有校准过。</li>
+  <li><strong>只看家居厨房。</strong>三个训练文件的一级类目 100% 是「家居厨房用品」。</li>
+  <li><strong>主图拉不到的品单独挑出来人工看，不要扔。</strong>流水线会静默丢掉主图失败的行。历史里这 432 个品动销率 <strong>74.3%</strong>，平均销量 15.7，是整批最高的。</li>
+  <li><strong>不要把店铺信息喂给模型。</strong>候选品最终都进同一家店（你的店），店铺变量对排序本来就没贡献。</li>
+  <li><strong>预期下调到 2 倍，不要还按 2.5 倍想。</strong>2.5 倍是三天混合、按店铺切开的成绩。</li>
+  <li><strong>试卖才能回答「搬到我店能不能卖」。 </strong>离线实验学的是这个品在原来那家店卖得怎么样。</li>
+</ol>
+
+<h2 id="s3">3. 数据长什么样</h2>
+<p>三个文件，后缀有的叫 <code>.xlsx</code>，有的叫 <code>.csv</code>，<strong>实际全是 Excel（xlsx/zip）</strong>。每个大约 10000 行 × 31 列，两行表头。</p>
+<table>
+  <thead>
+    <tr><th>文件</th><th>抓取日（名为「上架时间」）</th><th class="n">总销量 &gt; 0</th><th class="n">≥ 5 件</th><th class="n">≥ 20 件</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>909.xlsx</td><td>2026-09-09 当天</td><td class="n">20.7%</td><td class="n">7.0%</td><td class="n">1.5%</td></tr>
+    <tr><td>910.csv</td><td>2026-09-10 当天</td><td class="n">21.7%</td><td class="n">6.8%</td><td class="n">1.6%</td></tr>
+    <tr><td>911.csv</td><td>2026-09-11 当天</td><td class="n">28.5%</td><td class="n">8.3%</td><td class="n">1.8%</td></tr>
+  </tbody>
+</table>
+<p>合计 30000 行，唯一商品 ID 29871，跨文件重复 258 行。唯一店铺约 10275 家，平均每店 2.66 个品，最多一家 309 个；75% 的行落在「至少有 2 个品」的店里。所以不按店铺分组切分，模型很容易背店铺。</p>
+<p><strong>「英文标题」这一列有 77%～83% 其实是中文。</strong>旧方案按英文过滤，三万行砍到只剩两成。现在标题优先用中文列，空了才回退英文列。</p>
+
+<h3>观察窗口：推断，不是已核实事实</h3>
+<p><code>收录时间</code> 只有 676 行有值（2.25%），而且这 676 行 100% 都卖出过。在这个偏选子集上，<code>上架时间 − 收录时间</code> 下界卡死在正好 7 天（含首尾 8 天）。分布：恰好 7 天 55.2%，≤ 8 天 74.9%，&gt; 8 天 25.1%，均值 8.5 天，最长 67 天。</p>
+<div class="warn">
+  <strong>推断：</strong>导出条件可能是「收录至少 8 天前」；名为「上架时间」的列可能是抓取时刻。<br>
+  <strong>不能证明：</strong>另外 97.75% 商品的窗口、字段官方含义、<code>总销量</code> 跨行一定可比。<br>
+  曝光天数可能让有的品多卖、有的少卖。方向和大小都未知。
+</div>
+
+<h3>两列绝对不能碰</h3>
+<table>
+  <thead><tr><th>列</th><th class="n">非空行数</th><th class="n">非空 ⇒ 销量 &gt; 0</th></tr></thead>
+  <tbody>
+    <tr><td>收录时间</td><td class="n">676</td><td class="n">100%</td></tr>
+    <tr><td>美区评分</td><td class="n">90</td><td class="n">100%</td></tr>
+  </tbody>
+</table>
+<p>全体基线只有 23.6%。这两列只要「空不空」就能 100% 判出正例。既不能当特征，也不能进 label 分母，更不能用来筛行。</p>
+
+<h2 id="s4">4. 模型在干什么</h2>
+<p>每件商品变成三块信息：</p>
+<ol>
+  <li><strong>主图</strong>：ResNet18 看成 512 个数字（图像指纹）。</li>
+  <li><strong>标题</strong>：中文向量模型 BGE-small-zh 看成 512 个数字（语义指纹）。</li>
+  <li><strong>商品属性</strong>：价格、有没有视频、轮播图张数、标题长度、中文占比、类目等。不含任何店铺信息。</li>
+</ol>
+<p>训练目标不是「卖或不卖」，而是：把总销量先压到训练集的 99.5 分位（大约 46 件），再取 <code>log(销量 + 1)</code>。这样 4900 件那种极端爆款不会把训练带偏。分数越大表示越可能卖得多。使用时按分数从高到低排，取前 5%。</p>
+
+<h2 id="s5">5. 数字怎么读</h2>
+<h3>尺子 A：全量 top 5%（主指标，最稳）</h3>
+<p>按店铺切分：test = 6879 个未见店铺的品，取前 344 个。测试集自己的基线：卖出过 22.1%，卖 ≥ 5 件 7.4%，卖 ≥ 20 件 1.6%。</p>
+<table>
+  <thead>
+    <tr><th>组别</th><th>含义</th><th class="n">前 5% 里卖出过</th><th class="n">相对瞎挑</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>random</td><td>随机打分</td><td class="n">25.3%</td><td class="n">1.14×</td></tr>
+    <tr><td>price_only</td><td>只看价格</td><td class="n">34.6%</td><td class="n">1.56×</td></tr>
+    <tr><td>cat_only</td><td>只看类目</td><td class="n">42.2%</td><td class="n">1.90×</td></tr>
+    <tr><td>tab_only</td><td>只看表格属性</td><td class="n">50.3%</td><td class="n">2.27×</td></tr>
+    <tr><td>title_only</td><td>只看标题</td><td class="n">49.4%</td><td class="n">2.23×</td></tr>
+    <tr><td>image_only</td><td>只看主图</td><td class="n">35.2%</td><td class="n">1.59×</td></tr>
+    <tr class="hl"><td>full</td><td>图 + 标题 + 表格（要用的）</td><td class="n">55.2%</td><td class="n">2.49×</td></tr>
+    <tr><td>LEAK_shop</td><td>full + 店铺规模（诊断）</td><td class="n">60.2%</td><td class="n">2.72×</td></tr>
+  </tbody>
+</table>
+
+<p>精确率 vs 召回率（容易混）。测试集 6879 个品，其中 1523 个卖出过。前 5% = 挑 344 个。</p>
+<table>
+  <thead>
+    <tr><th></th><th class="n">挑中的好品数</th><th class="n">精确率（÷ 344）</th><th class="n">召回率（÷ 1523）</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>随机挑 344 个</td><td class="n">76</td><td class="n">22.1%</td><td class="n">5.0%</td></tr>
+    <tr class="hl"><td>模型挑 344 个</td><td class="n">190</td><td class="n">55.2%</td><td class="n">12.5%</td></tr>
+    <tr><td>倍数</td><td class="n"></td><td class="n">2.49×</td><td class="n">2.49×</td></tr>
+  </tbody>
+</table>
+<p>22% 回答「我挑出来的这堆里有几个是好品」。5% 回答「全场好品我网住了几个」。你每天只看 5%，必然放弃大约 87% 的好品——这是预算，不是模型失灵。</p>
+<table>
+  <thead><tr><th></th><th class="n">瞎挑</th><th class="n">full 前 5%</th><th class="n">倍数</th></tr></thead>
+  <tbody>
+    <tr><td>卖 ≥ 5 件</td><td class="n">7.4%</td><td class="n">28.2%</td><td class="n">3.81×</td></tr>
+    <tr><td>卖 ≥ 20 件</td><td class="n">1.6%</td><td class="n">8.7%</td><td class="n">5.50×</td></tr>
+  </tbody>
+</table>
+
+<h3>尺子 B：slate（面前摆 20 个，挑 5 个）</h3>
+<p>从同一个文件里随机抽 20 个品，模型挑分数最高的 5 个，重复 3000 次。所有对照组必须抽同一批 20 个，否则排名会反。</p>
+<table>
+  <thead><tr><th>组别</th><th class="n">lift@5</th><th class="n">ndcg@5</th><th class="n">hit@5</th></tr></thead>
+  <tbody>
+    <tr><td>random</td><td class="n">0.92</td><td class="n">0.21</td><td class="n">0.25</td></tr>
+    <tr><td>tab_only</td><td class="n">1.35</td><td class="n">0.39</td><td class="n">0.47</td></tr>
+    <tr><td>title_only</td><td class="n">2.07</td><td class="n">0.39</td><td class="n">0.48</td></tr>
+    <tr><td>image_only</td><td class="n">2.28</td><td class="n">0.33</td><td class="n">0.39</td></tr>
+    <tr class="hl"><td>full</td><td class="n">1.98</td><td class="n">0.44</td><td class="n">0.54</td></tr>
+    <tr><td>LEAK_shop</td><td class="n">2.83</td><td class="n">0.46</td><td class="n">0.57</td></tr>
+  </tbody>
+</table>
+<div class="warn">
+  不要看 <code>lift@1</code>。它每个 slate 只取 1 个样本，换随机种子能从 2.3 跳到 4.2。<code>lift@5</code> 也会被 4900 件那种极端值主导。日常看 top 5% 和 ndcg 即可。全测试集 Spearman = <strong>0.3135</strong>。
+</div>
+
+<h2 id="s6">6. 按天切分：更接近你每天要干的事</h2>
+<p>909 + 910 训练，去挑 911 的新品。特征里去掉文件名 <code>source</code>。911 清洗后 9597 行，自己的基线：卖出过 27.5%，≥ 5 件 8.1%。绝对精度会好看，必须看相对基线的倍数。</p>
+<table>
+  <thead>
+    <tr><th>组别</th><th class="n">前 5% 卖出过</th><th class="n">×基线</th><th class="n">卖 ≥ 5 件</th><th class="n">×基线</th><th class="n">Spearman</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>random</td><td class="n">24.2%</td><td class="n">0.88</td><td class="n">8.5%</td><td class="n">1.06</td><td class="n">—</td></tr>
+    <tr><td>tab_only</td><td class="n">44.8%</td><td class="n">1.63</td><td class="n">15.8%</td><td class="n">1.96</td><td class="n">0.171</td></tr>
+    <tr class="hl"><td>full</td><td class="n">54.0%</td><td class="n">1.96</td><td class="n">21.9%</td><td class="n">2.71</td><td class="n">0.244</td></tr>
+  </tbody>
+</table>
+<p>从 911 的 9597 个新品里取前 480 个，大约 <strong>259 个会卖</strong>（54%）；瞎挑大约 132 个（27.5%）。</p>
+
+<h3>必须拿「同一天的商品」比</h3>
+<table>
+  <thead>
+    <tr><th>同为 911 的商品</th><th class="n">旧模型（见过同批数据）</th><th class="n">新模型（纯时间外推）</th><th class="n">保留</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>top 5% ×基线（卖出过）</td><td class="n">2.43</td><td class="n">1.96</td><td class="n">81%</td></tr>
+    <tr><td>Spearman</td><td class="n">0.304</td><td class="n">0.244</td><td class="n">80%</td></tr>
+  </tbody>
+</table>
+<div class="ok">
+  两个独立指标都掉大约 20%。新模型 ×基线的 95% 置信区间大约是 <strong>[1.80, 2.13]</strong>（259/480）。<br>
+  店铺从没在训练集出现过的子集：6566 / 9597 行，×基线仍是 1.95，和全体 1.96 几乎一样。成绩不是靠见过的店铺。<br>
+  <strong>判定 B：明显下滑，但仍能用。</strong>预期从 2.5 倍下调到约 2 倍。
+</div>
+
+<h2 id="s7">7. 能信 / 不能信 / 已知坑</h2>
+<h3>能信</h3>
+<ul>
+  <li>在未见店铺上，比瞎挑强大约 2～2.5 倍。</li>
+  <li>类目内部也比基线强（厨房收纳基线 12%，模型挑中的 94%）。</li>
+  <li>按天外推掉 20%，但没有崩。未见店铺子集几乎不掉。</li>
+  <li>指标偏保守：被丢掉的无图好品没进测试集。</li>
+</ul>
+<h3>不能信</h3>
+<ul>
+  <li>「搬到我店里也会卖。」没有跨店同品证据。</li>
+  <li>「观察窗口已经核实是 8 天。」只有 2.25% 的行能算，而且全是正例。</li>
+  <li>「14% / 43% 就是大店红利。」那是两个模型的预测能力差，不是因果。</li>
+  <li>「外测 80%～86% 说明模型更准。」那个文件本身就有 61% 在卖。相对基线只有约 1.3 倍。</li>
+  <li>文件名 <code>source</code> 当特征：给新一天打分时它是没见过的类别。</li>
+</ul>
+<table>
+  <thead><tr><th>坑</th><th>后果</th><th>日常怎么躲</th></tr></thead>
+  <tbody>
+    <tr><td>主图失败直接丢行</td><td>丢掉动销率 74% 的好品</td><td>拉不到图的单独人工看</td></tr>
+    <tr><td>910.csv / 911.csv 其实是 xlsx</td><td>read_csv 必崩</td><td>三个文件都用 read_excel</td></tr>
+    <tr><td>系统 python 是 CPU 版 PyTorch</td><td>极慢或对不上环境</td><td>必须用 F:\Clip\venv\Scripts\python.exe</td></tr>
+    <tr><td>原始 lift@5 / lift@1</td><td>会被爆款和抽样晃晕</td><td>看 top 5% 和 Spearman</td></tr>
+    <tr><td>LightGBM pickle 在 Windows 上加载不稳</td><td>外测曾每次重训</td><td>优先用原生 booster 文件</td></tr>
+  </tbody>
+</table>
+
+<span class="part" id="p2">Part 2 · 给 Codex</span>
+<h2>下半：复现说明书</h2>
+<p>以下内容足以在同一台机器上从原始三表重训，并核对本报告中的数字。不要参考已作废的 <code>run_hit_experiment.py</code> / <code>run_logistic.py</code>。</p>
+
+<h2 id="s8">8. 目标与禁区</h2>
+<p><strong>任务：</strong>对 SKU 按预期销量排序，支撑「每天从新品里取 top 5% 人工看」。</p>
+<p><strong>训练目标</strong>（必须按这个，不要改成二分类）：</p>
+<pre><code>y = log1p( clip(总销量, 0, p99.5_train) )</code></pre>
+<ul>
+  <li><code>p99.5</code> 只在当前训练集上算。店铺切分时是 46.0；按天切分（909+910）时是 45.63。</li>
+  <li>不要设「销量 &gt; N」当 label。</li>
+  <li>不要用曝光天数去除销量。分子冻结在快照、分母算到「今天」会让同一份数据每天换标签。</li>
+</ul>
+<p><strong>禁止进入 full 的列：</strong>店铺 ID / 店名 / LOGO / 店铺评分 / 店铺总销量 / 粉丝数 / 在售商品数 / 托管模式；总销量、日周月销量、GMV、美区评分、美区评论数；收录时间；名为「上架时间」的抓取时刻；<code>cat_l1</code>（全表常量）。</p>
+<p><code>店铺ID</code> 只允许用于 GroupShuffleSplit 分组。<code>LEAK_shop</code> 可以临时拼上四个店铺规模列，报告必须标明不可部署。</p>
+
+<h2 id="s9">9. 环境（照抄）</h2>
+<pre><code>解释器：F:\Clip\venv\Scripts\python.exe
+不要用系统 python（torch 2.13.0+cpu）。
+
+已验证包：
+  torch 2.5.1+cu121
+  torchvision 0.20.1+cu121
+  transformers 4.57.6
+  sentence_transformers 2.7.0
+  lightgbm 4.7.0
+  sklearn 1.7.2
+  pandas 2.3.3
+  openpyxl 3.1.5
+  aiohttp 3.14.3
+  PIL 12.3.0
+  scipy 1.15.3
+
+环境变量：
+  HF_HOME=F:\Clip\hf-cache
+  HF_HUB_OFFLINE=1
+
+本地权重（不要联网重下）：
+  ResNet18：%USERPROFILE%\.cache\torch\hub\checkpoints\resnet18-f37072fd.pth
+             torchvision.models.ResNet18_Weights.IMAGENET1K_V1
+  文本：BAAI/bge-small-zh-v1.5  （F:\Clip\hf-cache\hub\）
+
+GPU：约 4GB。ResNet batch=32，BGE batch=32，OOM 减半。
+随机种子：全程 42。</code></pre>
+<pre><code>cd C:\Users\ZFGJ-WCH\Desktop\8天前数据
+$env:HF_HOME = "F:\Clip\hf-cache"
+$env:HF_HUB_OFFLINE = "1"
+F:\Clip\venv\Scripts\python.exe rank_products.py all</code></pre>
+<p>分阶段：<code>--stage prep|download|embed|train|eval|all</code>。二次运行应复用 <code>hit_cache\images\</code> 和 <code>artifacts_v2\img.npz</code> / <code>txt.npz</code>。</p>
+
+<h2 id="s10">10. 读表（有坑）</h2>
+<pre><code>df = pd.read_excel(path, sheet_name="sheet", header=[0, 1])
+# 压平 MultiIndex：第二层不是 Unnamed* 就取第二层，否则取第一层</code></pre>
+<p><code>910.csv</code>、<code>911.csv</code> 是 xlsx。<code>pd.read_csv</code> 会 UnicodeDecodeError。</p>
+<p>清洗顺序：三表拼接加 <code>source</code> → 按商品 ID 去重留销量最大 → 丢掉价格缺失或 ≤ 0 → 主图抽第一个 URL → 标题优先中文 → 类目按 <code>/</code> 拆 → <code>shop_group</code> 有店铺 ID 用 <code>shop_{int}</code>，否则 <code>row_{index}</code>。</p>
+<div class="warn">当前实现会在 embed 阶段丢掉主图不可用的行（432 行，动销率 74.3%）。<strong>复现当前数字时保持这个行为</strong>，否则对不上已发表指标。修复是下一轮的事。</div>
+
+<h2 id="s11">11. 特征</h2>
+<h3>图像 — ResNet18</h3>
+<ul>
+  <li>只下主图一张。</li>
+  <li>aiohttp，并发 200，Referer <code>https://www.temu.com/</code>，桌面 Chrome UA，超时 20s，&lt; 1KB 失败。</li>
+  <li>落盘 <code>hit_cache\images\{md5(url)}{ext}</code>。</li>
+  <li><code>resnet18(weights=IMAGENET1K_V1)</code>，<code>fc = Identity()</code>，eval，weights 自带 transforms。</li>
+  <li>输出 512 维，L2 归一化。缓存 <code>artifacts_v2\img.npz</code>（<code>ids</code> + <code>X</code>）。</li>
+</ul>
+<h3>标题 — BGE-small-zh-v1.5</h3>
+<pre><code>SentenceTransformer("BAAI/bge-small-zh-v1.5")
+model.encode(..., normalize_embeddings=True, batch_size=32)</code></pre>
+<p>512 维。缓存 <code>artifacts_v2\txt.npz</code>。</p>
+<h3>表格</h3>
+<table>
+  <thead><tr><th>列</th><th>定义</th></tr></thead>
+  <tbody>
+    <tr><td>log_price</td><td>log1p(美元价格($))</td></tr>
+    <tr><td>has_video</td><td>商品视频非空且不是 "nan" → 1</td></tr>
+    <tr><td>n_gallery</td><td>轮播图 URL 个数</td></tr>
+    <tr><td>title_len</td><td>标题字符数，下限 1</td></tr>
+    <tr><td>title_cjk_ratio</td><td>中文字符占比</td></tr>
+    <tr><td>has_cn_title</td><td>中文标题列是否非空</td></tr>
+    <tr><td>n_tags</td><td>标签解析成 list 的长度</td></tr>
+    <tr><td>has_backend_cat</td><td>后台分类是否非空</td></tr>
+    <tr><td>cat_l2_te</td><td>二级类目目标编码，只在 train_fit 上统计</td></tr>
+    <tr><td>cat_l2</td><td>LightGBM category</td></tr>
+    <tr><td>source</td><td>文件名 category。店铺切分版有；按天验证版必须去掉</td></tr>
+  </tbody>
+</table>
+<pre><code>te = (n * cat_mean + 20 * global_mean) / (n + 20)
+未见类目 → global_mean
+# global_mean 和 cat_mean 都来自 train_fit 的 y（已 winsorize）</code></pre>
+<p><code>full</code> 特征维数 ≈ 9 个数值 + 1～2 个类别 + 512 img + 512 txt。图像列名 <code>img_0..511</code>，文本 <code>txt_0..511</code>。</p>
+
+<h2 id="s12">12. 两种切分</h2>
+<h3>店铺切分（rank_products.py）</h3>
+<pre><code>GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=42, groups=shop_group)
+train 再 GroupShuffleSplit(test_size=0.1, random_state=42) → train_fit / valid</code></pre>
+<p>当前规模：train_fit 19993 / valid 2395 / test 6879。test 近重复剔除：main_url 45、标题 61、图像 cosine&gt;0.98 共 66。<code>y_cap = 46.0</code>。full 的 <code>best_iteration = 337</code>。</p>
+<h3>按天切分（validate_temporal.py）</h3>
+<pre><code>train = source ∈ {909.xlsx, 910.csv}     # 19675
+test  = source == 911.csv               # 9764 → 去重后 9597
+CAT_COLS = ("cat_l2",)                  # 无 source
+y_cap = percentile(train.y_raw, 99.5) = 45.63
+seed = 42</code></pre>
+<p>test 去重：商品 ID 0、main_url 30、标题 50、图像 cosine&gt;0.98 共 87。未见店铺子集 6566 行。图像近重复：分块 256，<code>X_te @ X_tr.T</code>，行最大 cosine &gt; 0.98 则删。</p>
+
+<h2 id="s13">13. LightGBM（不要改参去刷分）</h2>
+<pre><code>LGBMRegressor(
+    n_estimators=1200,
+    learning_rate=0.03,
+    num_leaves=63,
+    min_child_samples=40,
+    subsample=0.8,
+    subsample_freq=1,
+    colsample_bytree=0.5,
+    reg_lambda=5.0,
+    random_state=42,
+    verbose=-1,
+)
+# early_stopping(100)
+# categorical_feature = ["cat_l2"] 或 ["cat_l2","source"]</code></pre>
+<p>按天脚本加了 <code>n_jobs=1</code> 和最多 3 次 OSError 重试。复现时保留。</p>
+<table>
+  <thead><tr><th>组名</th><th>特征</th></tr></thead>
+  <tbody>
+    <tr><td>random</td><td>独立 RNG 均匀随机分，不消耗 slate RNG</td></tr>
+    <tr><td>price_only</td><td>log_price</td></tr>
+    <tr><td>cat_only</td><td>cat_l2_te + 类别列</td></tr>
+    <tr><td>tab_only</td><td>全部表格列</td></tr>
+    <tr><td>title_only</td><td>512 维标题</td></tr>
+    <tr><td>image_only</td><td>512 维图像</td></tr>
+    <tr class="hl"><td>full</td><td>tab + img + txt</td></tr>
+    <tr><td>LEAK_shop</td><td>full + 4 个店铺列</td></tr>
+  </tbody>
+</table>
+<p>按天验证只跑 random / tab_only / full。</p>
+
+<h2 id="s14">14. 评测</h2>
+<pre><code>k = max(1, int(np.ceil(n * 0.05)))
+top = np.argsort(-pred)[:k]
+prec = (sales[top] > 0).mean()
+lift = prec / (sales > 0).mean()</code></pre>
+<p>阈值：<code>&gt;0</code>、<code>&gt;=5</code>、<code>&gt;=20</code>。这些是报告口径，不是训练目标。</p>
+<p>配对 slate：每个 K 只生成一次；只在同一 source 内抽样；所有组共用同一 slates；random 用另一个 <code>default_rng(SEED+1)</code>。断言：同一 K 下所有组的 <code>rand</code> 和 <code>oracle@1</code> 必须精确相同。不要把 <code>random lift@5 ∈ [0.85, 1.15]</code> 当硬门槛。<code>lift@1</code> 可写入 json，不要写进给人看的主表。</p>
+<p>跨组比较必须报「×基线」，禁止只报绝对 P(&gt;0)。</p>
+
+<h2 id="s15">15. 复现命令与期望数字</h2>
+<pre><code>cd C:\Users\ZFGJ-WCH\Desktop\8天前数据
+$env:HF_HOME = "F:\Clip\hf-cache"
+$env:HF_HUB_OFFLINE = "1"
+F:\Clip\venv\Scripts\python.exe rank_products.py all
+F:\Clip\venv\Scripts\python.exe validate_temporal.py</code></pre>
+
+<p><strong>店铺切分 full，对得上才算复现成功：</strong></p>
+<table>
+  <thead><tr><th>指标</th><th class="n">期望值</th></tr></thead>
+  <tbody>
+    <tr><td>test n / top k</td><td class="n">6879 / 344</td></tr>
+    <tr><td>P(&gt;0)</td><td class="n">0.5523（基线 0.2214，× 2.49）</td></tr>
+    <tr><td>P(≥5)</td><td class="n">0.2820（基线 0.0740，× 3.81）</td></tr>
+    <tr><td>P(≥20)</td><td class="n">0.0872（基线 0.0158，× 5.50）</td></tr>
+    <tr><td>Spearman</td><td class="n">0.3135</td></tr>
+    <tr><td>slate K=20 lift@5</td><td class="n">1.981（各组 rand 必须 = 5.28025）</td></tr>
+    <tr><td>slate K=20 ndcg@5</td><td class="n">0.435</td></tr>
+    <tr><td>y_cap</td><td class="n">46.0</td></tr>
+    <tr><td>full best_iteration</td><td class="n">337</td></tr>
+  </tbody>
+</table>
+<p>允许微小浮点差异；P(&gt;0) 应落在 0.54～0.56，Spearman 应落在 0.30～0.33。差更多说明切分、去重或特征错了。</p>
+<p><strong>按天切分 full：</strong></p>
+<table>
+  <thead><tr><th>指标</th><th class="n">期望值</th></tr></thead>
+  <tbody>
+    <tr><td>test n / top k</td><td class="n">9597 / 480</td></tr>
+    <tr><td>基线 P(&gt;0)</td><td class="n">0.275</td></tr>
+    <tr><td>P(&gt;0)</td><td class="n">0.540（× 1.96）</td></tr>
+    <tr><td>P(≥5)</td><td class="n">0.219（× 2.71）</td></tr>
+    <tr><td>Spearman</td><td class="n">0.244</td></tr>
+    <tr><td>未见店铺</td><td class="n">6566 行，×基线 1.95</td></tr>
+    <tr><td>相对 2.49 的保留率</td><td class="n">约 79%（同 population 911 对照约 81%）</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s16">16. 产物清单</h2>
+<table>
+  <thead><tr><th>路径</th><th>作用</th></tr></thead>
+  <tbody>
+    <tr><td>rank_products.py</td><td>主流水线</td></tr>
+    <tr><td>validate_temporal.py</td><td>按天验证</td></tr>
+    <tr><td>artifacts_v2/dataset.csv</td><td>清洗后行级表</td></tr>
+    <tr><td>artifacts_v2/img.npz / txt.npz</td><td>特征缓存</td></tr>
+    <tr><td>artifacts_v2/split.json</td><td>切分与 y_cap</td></tr>
+    <tr><td>artifacts_v2/metrics_top5pct.json</td><td>主指标</td></tr>
+    <tr><td>artifacts_v2/metrics_topk.json</td><td>配对 slate</td></tr>
+    <tr><td>artifacts_v2/test_scores.npz</td><td>各组预测分</td></tr>
+    <tr><td>artifacts_v2/top_picks.csv</td><td>test 上 full 分数最高 200 个</td></tr>
+    <tr><td>artifacts_v2/temporal_metrics.json</td><td>按天结果</td></tr>
+    <tr><td>hit_cache/images/</td><td>主图磁盘缓存</td></tr>
+  </tbody>
+</table>
+<p>按天验证只新增 <code>temporal_*</code>，不要改写主流水线产物。</p>
+
+<h2 id="s17">17. 硬性验收</h2>
+<ol>
+  <li>同一 K 下所有组 <code>rand</code>、<code>oracle@1</code> 精确相同。</li>
+  <li><code>y</code> 的构造含 <code>clip(..., p99.5)</code>，分位数来自当前 train。</li>
+  <li><code>full</code> 特征里没有店铺列、没有收录时间、没有美区评分、没有销量/GMV。</li>
+  <li><code>cat_l1</code> 不在特征里。</li>
+  <li>给人看的表没有 <code>lift@1</code>；第一张表是全量 top 5%，且带 ×基线。</li>
+  <li>按天跑时 <code>CAT_COLS</code> 不含 <code>source</code>。</li>
+  <li>打印无图丢弃行数，以及有图/无图的销量&gt;0 率。</li>
+</ol>
+
+<h2 id="s18">18. 明确不要做的事</h2>
+<ul>
+  <li>不要把外测文件的绝对 P(&gt;0) 和域内 55% 并列成「外测更好」。</li>
+  <li>不要写「大店红利 = XX%」或「搬店后不会复现 XX%」。</li>
+  <li>不要把 676 行子集的窗口分布写成全量事实。</li>
+  <li>不要为了让 random lift 落进某个区间去换种子。</li>
+  <li>不要在复现当前数字的同时「顺手」改丢图逻辑、加校准、改 LightGBM 参数。</li>
+</ul>
+
+<h2>附录</h2>
+<p><strong>版本对照（不要混读旧文件）：</strong>第 1 轮有 slate 不同组 bug，lift@5 2.90 作废，在 <code>_round1/</code>。第 2 轮店铺切分 ×基线 2.49、lift@5 1.981。按天 1.96。同 population：旧模型只看其 test 里的 911 是 2.43，用来和 1.96 比，不要和 2.49 比。<code>metrics_topk_paired.json</code> 是第 1 轮配对审计，不是第 2 轮。</p>
+<p>数字与 <code>artifacts_v2/metrics_*.json</code>、<code>temporal_metrics.json</code> 冲突时，以 JSON 为准并在报告里标注。</p>
+
+<footer>
+  上半给人决定怎么用。下半给 Codex 复现。同内容 Markdown：选品模型完整报告.md
+</footer>
+</div>
+</body>
+</html>

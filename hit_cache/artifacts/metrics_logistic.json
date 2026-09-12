@@ -1,0 +1,44 @@
+{
+  "note": "同一划分；StandardScaler + Logistic(class_weight=balanced, C=0.3)",
+  "results": [
+    {
+      "name": "title_only",
+      "model": "logistic",
+      "train_auc": 0.8542827970297029,
+      "train_prauc": 0.6724306956934345,
+      "test_auc": 0.5713861777895014,
+      "test_prauc": 0.34553950269585204,
+      "test_pos_rate": 0.275974025974026,
+      "train_n": 2808,
+      "train_pos": 808,
+      "test_n": 1232,
+      "test_pos": 340
+    },
+    {
+      "name": "image_only",
+      "model": "logistic",
+      "train_auc": 0.8321444925742573,
+      "train_prauc": 0.6316748417489116,
+      "test_auc": 0.5735887628594039,
+      "test_prauc": 0.3441715198959335,
+      "test_pos_rate": 0.275974025974026,
+      "train_n": 2808,
+      "train_pos": 808,
+      "test_n": 1232,
+      "test_pos": 340
+    },
+    {
+      "name": "joint",
+      "model": "logistic",
+      "train_auc": 0.9664888613861387,
+      "train_prauc": 0.8991372775577509,
+      "test_auc": 0.5955585597467687,
+      "test_prauc": 0.3709836473918584,
+      "test_pos_rate": 0.275974025974026,
+      "train_n": 2808,
+      "train_pos": 808,
+      "test_n": 1232,
+      "test_pos": 340
+    }
+  ]
+}

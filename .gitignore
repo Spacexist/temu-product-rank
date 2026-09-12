@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.venv/
+venv/
+
+# 原始日报（体积大、含业务数据，本地自备）
+909.xlsx
+910.csv
+911.csv
+
+# 图像缓存与向量（可重新 download/embed 生成）
+hit_cache/images/
+artifacts_v2/img.npz
+artifacts_v2/txt.npz
+artifacts_v2/test_scores.npz
+artifacts_v2/lgbm_full.pkl
+artifacts_v2/dataset_embedded.csv
+artifacts_v2/dataset.csv
+
+# 运行产物
+_screener_pkg/output/*
+!_screener_pkg/output/.gitkeep
+_screener_pkg/cache/images/*
+!_screener_pkg/cache/images/.gitkeep
+*.log
+*_out.txt
+facts_out.txt
+audit*.txt
+baseline_out.txt
+nullity_out.txt
+age_out.txt
+inspect_out.txt
+collect_out.txt
+
+# 临时导出
+_screener_bundle/
+F:/Clip/screener_*/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# 微信词表源路径不入库（工具包内 words/ 已有一份）
+xwechat_files/

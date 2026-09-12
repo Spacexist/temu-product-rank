@@ -1,0 +1,10 @@
+{
+  "n_train_fit": 19993,
+  "n_valid": 2395,
+  "n_test": 6879,
+  "dedupe_removed_from_test": {
+    "main_url": 45,
+    "title": 61,
+    "image_cosine": 66
+  }
+}

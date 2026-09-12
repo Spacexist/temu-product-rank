@@ -1,0 +1,13 @@
+{
+  "embed_cache_art_dir": "../artifacts_v2",
+  "inference_source": "911.csv",
+  "download_concurrency": 200,
+  "seed": 42,
+  "image_cache_dirs": [
+    "../hit_cache/images",
+    "cache/images"
+  ],
+  "lgb_model_ascii_fallback": "F:/Clip/screener_lgb_export/lgbm_full.txt",
+  "hf_model": "BAAI/bge-small-zh-v1.5",
+  "embed_batch": 32
+}

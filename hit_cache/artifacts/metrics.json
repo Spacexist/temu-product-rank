@@ -1,0 +1,45 @@
+{
+  "device": "cuda",
+  "note": "店铺分组切分；测试集保持自然正例比例；特征不含店铺/时间/销量/GMV",
+  "results": [
+    {
+      "name": "title_only",
+      "train_auc": 0.8920631188118813,
+      "train_prauc": 0.752946695759893,
+      "test_auc": 0.5999868108678448,
+      "test_prauc": 0.3759916675148416,
+      "test_pos_rate": 0.275974025974026,
+      "train_n": 2808,
+      "train_pos": 808,
+      "test_n": 1232,
+      "test_pos": 340,
+      "epochs_ran": 40
+    },
+    {
+      "name": "image_only",
+      "train_auc": 0.9945764232673266,
+      "train_prauc": 0.98602124239752,
+      "test_auc": 0.5580123977842258,
+      "test_prauc": 0.3226848365793874,
+      "test_pos_rate": 0.275974025974026,
+      "train_n": 2808,
+      "train_pos": 808,
+      "test_n": 1232,
+      "test_pos": 340,
+      "epochs_ran": 40
+    },
+    {
+      "name": "joint",
+      "train_auc": 0.9961194306930693,
+      "train_prauc": 0.9885996918680711,
+      "test_auc": 0.58006462674756,
+      "test_prauc": 0.3752128474306178,
+      "test_pos_rate": 0.275974025974026,
+      "train_n": 2808,
+      "train_pos": 808,
+      "test_n": 1232,
+      "test_pos": 340,
+      "epochs_ran": 40
+    }
+  ]
+}

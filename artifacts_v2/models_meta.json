@@ -1,0 +1,23 @@
+{
+  "price_only": {
+    "best_iteration": 17
+  },
+  "cat_only": {
+    "best_iteration": 58
+  },
+  "tab_only": {
+    "best_iteration": 94
+  },
+  "title_only": {
+    "best_iteration": 199
+  },
+  "image_only": {
+    "best_iteration": 263
+  },
+  "full": {
+    "best_iteration": 337
+  },
+  "LEAK_shop": {
+    "best_iteration": 347
+  }
+}

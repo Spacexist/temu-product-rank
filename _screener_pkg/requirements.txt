@@ -1,0 +1,11 @@
+pandas
+numpy
+lightgbm
+torch
+torchvision
+sentence-transformers
+aiohttp
+Pillow
+scipy
+zhconv
+openpyxl
