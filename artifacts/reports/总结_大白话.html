@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>选品模型 — 大白话总结</title>
+  <style>
+    :root {
+      --bg: #faf9f6;
+      --card: #fff;
+      --text: #222;
+      --soft: #666;
+      --green: #1a6b4a;
+      --green-bg: #e8f5ee;
+      --orange: #b45309;
+      --orange-bg: #fff7ed;
+      --line: #e8e4dc;
+    }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    h1 { font-size: 1.6rem; margin: 0 0 0.5rem; font-weight: 700; }
+    .tag { display: inline-block; background: var(--green-bg); color: var(--green); padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; margin-bottom: 1rem; }
+    .lead { color: var(--soft); font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .box h2 { font-size: 1.05rem; margin: 0 0 0.6rem; color: var(--green); }
+    .box.warn { background: var(--orange-bg); border-color: #fcd9b8; }
+    .box.warn h2 { color: var(--orange); }
+    .big { font-size: 1.8rem; font-weight: 800; color: var(--green); }
+    .big small { font-size: 0.95rem; font-weight: 500; color: var(--soft); }
+    ul { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+    li { margin: 0.35rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 0.5rem; }
+    th, td { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--line); text-align: left; }
+    th { color: var(--soft); font-weight: 600; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    tr.hl td { background: var(--green-bg); font-weight: 600; }
+    .foot { font-size: 0.85rem; color: var(--soft); margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>这套选品模型到底行不行？</h1>
+    <span class="tag">第 2 轮 · 已修评测 bug · 2026-09</span>
+    <p class="lead">
+      一句话：在「家居厨房」这批货里，模型帮你<strong>从 6000 多个测试商品里挑出分数最高的约 344 个（前 5%）</strong>，
+      里面大约<strong>一半多真的卖出去了</strong>；比闭着眼睛乱挑强一截，但<strong>比不上「知道这是大店」那种作弊信息</strong>——而这正是我们想要的。
+    </p>
+
+    <div class="box warn">
+      <h2>先看范围，别误用</h2>
+      <ul>
+        <li>数据<strong>全是「家居厨房用品」</strong>，不是全站通吃。</li>
+        <li>表里的「上架时间」其实是<strong>爬虫抓取那天</strong>，真实观察窗口大约 <strong>8 天上下</strong>（有的更长）。</li>
+        <li>第一轮报告里「full 比泄露模型还好」是<strong>评测抽批次不一致</strong>造成的，已修正。</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h2>你最该看的一个数：挑前 5% 准不准</h2>
+      <p>测试集 6879 个商品，模型打分取最高的 <strong>344 个</strong>：</p>
+      <p class="big">55% <small>至少卖出 1 件</small></p>
+      <p>全池随便挑只有 <strong>22%</strong> 有销量 → 大约 <strong>2.5 倍</strong>。</p>
+      <p>若要求「卖得还行」（≥5 件）：前 5% 里约 <strong>28%</strong> 达标，乱挑只有 <strong>7%</strong> → 大约 <strong>3.8 倍</strong>。</p>
+    </div>
+
+    <div class="box">
+      <h2>和几种「对照」比一比（人话版）</h2>
+      <table>
+        <thead>
+          <tr><th>谁在做决定</th><th class="num">前5%里有销量的比例</th><th class="num">前5%里≥5件的比例</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>乱猜</td><td class="num">25%</td><td class="num">9%</td></tr>
+          <tr><td>只看价格 / 类目 / 表格</td><td class="num">35%～50%</td><td class="num">15%～23%</td></tr>
+          <tr class="hl"><td>图 + 标题 + 表格（正式模型 full）</td><td class="num">55%</td><td class="num">28%</td></tr>
+          <tr><td>如果偷偷加上「店铺多大」（LEAK，不能上线）</td><td class="num">60%</td><td class="num">30%</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:0.75rem;font-size:0.92rem;color:var(--soft)">
+        LEAK 只高一点，说明大店流量能再多捞一点，但<strong>搬到你自己的店复现不了</strong>。
+        正式模型故意不用店铺信息，分数略低是<strong>正常、正确</strong>的。
+      </p>
+    </div>
+
+    <div class="box">
+      <h2>模拟「每天 20 个新品里挑 5 个」</h2>
+      <p>在同一批随机场景里比（修了 bug 以后大家抽的是同一批货）：</p>
+      <ul>
+        <li><strong>full</strong>：挑的 5 个平均销量 ≈ 乱挑的 <strong>2.0 倍</strong>（lift@5 = 1.98）</li>
+        <li><strong>只信表格</strong>：约 <strong>1.35 倍</strong></li>
+        <li><strong>加上店铺信息（LEAK）</strong>：约 <strong>2.8 倍</strong> — 多出来的就是「大店红利」</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h2>模型有没有偷偷偏向大店？</h2>
+      <p>预测分和「店铺总销量」相关性很低（Spearman ≈ <strong>0.12</strong>），没有明目张胆跟大店走。</p>
+      <p>但按店铺大小分三档看「前 5% 里≥5件」的比例：<strong>中店档最高（约 39%）</strong>，小店、大店略低。
+        说明还会沾一点店铺环境，用时建议<strong>自己再扫一眼是不是超大店专属款</strong>。</p>
+    </div>
+
+    <div class="box">
+      <h2>图和标题有没有用？</h2>
+      <ul>
+        <li>单用标题或单用图，在「20 个里挑 5 个」这种玩法里有时很猛，但<strong>全量前 5% 不如 full 稳</strong>。</li>
+        <li><strong>full = 图 + 标题 + 价格类目等表格</strong>，综合最好，也比只信表格再强一截。</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h2>你可以怎么用</h2>
+      <ul>
+        <li>打开 <code>top_picks.csv</code>：模型在测试集里认为最值得搬的 200 个（带真实销量方便核对）。</li>
+        <li>日常：按分数排序，优先看前 5%～10%，别迷信第 1 名（销量长尾，单个名次波动大）。</li>
+        <li>技术细节、对照表：<code>report.md</code>；旧版结果在 <code>_round1\</code> 文件夹。</li>
+      </ul>
+    </div>
+
+    <p class="foot">
+      训练：销量做了封顶（train 上 99.5% 分位 ≈ 46 件），避免个别爆款把模型带偏。
+      店铺 ID 只用来划分训练/测试，不进正式特征。
+    </p>
+  </div>
+</body>
+</html>

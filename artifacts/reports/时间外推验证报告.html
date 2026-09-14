@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>时间外推验证 — 909+910 → 911</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --ink: #e8edf4;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --accent2: #10b981;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --line: #2d3a4f;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .hero {
+      padding: 2.2rem 1.5rem 1.8rem;
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f1419 55%);
+      border-bottom: 1px solid var(--line);
+    }
+    .hero h1 { margin: 0 0 0.35rem; font-size: 1.65rem; font-weight: 700; }
+    .hero .lead { color: #b8c5d9; max-width: 54rem; margin: 0; font-size: 0.95rem; }
+    .verdict-pill {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+    .grade-a { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--accent2); color: #6ee7b7; }
+    .grade-b { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warn); color: #fcd34d; }
+    .grade-c { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    .grid {
+      display: grid;
+      gap: 0.85rem;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      margin: 1.25rem 0;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+    }
+    .kpi .t { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .kpi .v { font-size: 1.75rem; font-weight: 700; margin: 0.15rem 0; color: var(--accent2); }
+    .kpi .v.warn { color: var(--warn); }
+    .kpi .v.blue { color: #60a5fa; }
+    .kpi .s { font-size: 0.8rem; color: var(--muted); margin: 0; }
+    section { margin-bottom: 2rem; }
+    section h2 {
+      font-size: 1.1rem;
+      margin: 0 0 0.75rem;
+      padding-left: 0.6rem;
+      border-left: 4px solid var(--accent);
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 0.85rem;
+    }
+    .card p { margin: 0.35rem 0; color: #c5d0e0; font-size: 0.92rem; }
+    .alert {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .alert strong { color: #93c5fd; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    th, td { padding: 0.5rem 0.6rem; text-align: right; border-bottom: 1px solid var(--line); }
+    th:first-child, td:first-child { text-align: left; }
+    th { background: var(--surface2); color: var(--muted); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    tr.highlight { background: rgba(59, 130, 246, 0.12); }
+    .chart-row { display: flex; align-items: flex-end; gap: 10px; height: 150px; margin: 1rem 0 0.5rem; }
+    .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .chart-bar {
+      width: 100%;
+      max-width: 56px;
+      border-radius: 6px 6px 2px 2px;
+      min-height: 4px;
+    }
+    .chart-bar.shop { background: linear-gradient(180deg, #94a3b8, #64748b); }
+    .chart-bar.temp { background: linear-gradient(180deg, #60a5fa, #2563eb); }
+    .chart-label { font-size: 0.68rem; color: var(--muted); text-align: center; line-height: 1.2; }
+    .chart-val { font-size: 0.72rem; color: #94a3b8; }
+    .legend { display: flex; gap: 1rem; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+    code { background: var(--surface2); padding: 0.12rem 0.4rem; border-radius: 4px; font-size: 0.85em; color: #93c5fd; }
+    .foot { font-size: 0.78rem; color: var(--muted); margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+    ul { margin: 0.4rem 0; padding-left: 1.2rem; color: #c5d0e0; font-size: 0.92rem; }
+    .delta { color: #f87171; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <h1>时间外推验证（909+910 → 911）</h1>
+    <p class="lead">
+      用前两天训练、在第三天新品上测 Top 5% · 特征 <code>full</code>（表 + ResNet + BGE），<code>CAT_COLS</code> 仅 <code>cat_l2</code>（无 <code>source</code>）·
+      脚本 <code>validate_temporal.py</code>
+    </p>
+    <span class="verdict-pill grade-b">结论 B · 保留 79%</span>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <div class="kpi">
+        <div class="t">full · P(&gt;0) ×基线</div>
+        <div class="v warn">1.96×</div>
+        <p class="s">按店铺切分 2.49×</p>
+      </div>
+      <div class="kpi">
+        <div class="t">full · Top5% 有销量</div>
+        <div class="v">54.0%</div>
+        <p class="s">911 基线 27.5%</p>
+      </div>
+      <div class="kpi">
+        <div class="t">911 test（清洗后）</div>
+        <div class="v blue">9597</div>
+        <p class="s">剔除 商品ID 0 · main_url 30 · title 50 · image_cosine 87</p>
+      </div>
+      <div class="kpi">
+        <div class="t">Spearman · lift@5</div>
+        <div class="v blue">0.244</div>
+        <p class="s">lift@5 1.942</p>
+      </div>
+    </div>
+
+    <div class="alert">
+      <strong>铁律：</strong>911 动销基线（27.5%）高于混合 test，<strong>禁止只看绝对 P(&gt;0)</strong>。
+      主表每一档精度都要看 <strong>×基线</strong>。主图未进缓存的 SKU 不在本次样本内，指标偏保守
+    </div>
+
+    <section>
+      <h2>设定摘要</h2>
+      <div class="card">
+        <p>train：909.xlsx + 910.csv · 拟合 17858 · valid 1817</p>
+        <p>y = log1p(clip(销量, 0, 45.6)) · seed 42 · 耗时 151s</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>911 test 基线</h2>
+      <table>
+        <thead><tr><th>口径</th><th>全 test 比例</th></tr></thead>
+        <tbody>
+          <tr><td>有销量 (&gt;0)</td><td>27.5%</td></tr>
+          <tr><td>≥ 5</td><td>8.1%</td></tr>
+          <tr><td>≥ 20</td><td>1.7%</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>主表 · Top 5%（含 ×基线）</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>组别</th>
+            <th>P(&gt;0)</th>
+            <th>×基线</th>
+            <th>P(≥5)</th>
+            <th>×基线</th>
+            <th>P(≥20)</th>
+            <th>×基线</th>
+            <th>Spearman</th>
+            <th>lift@5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="">
+            <td><strong>random</strong></td>
+            <td>24.2%</td>
+            <td>0.88×</td>
+            <td>8.5%</td>
+            <td>1.06×</td>
+            <td>1.0%</td>
+            <td>0.61×</td>
+            <td>—</td>
+            <td>0.988</td>
+          </tr>
+          <tr class="">
+            <td><strong>tab_only</strong></td>
+            <td>44.8%</td>
+            <td>1.63×</td>
+            <td>15.8%</td>
+            <td>1.96×</td>
+            <td>3.5%</td>
+            <td>2.07×</td>
+            <td>0.171</td>
+            <td>1.559</td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>full</strong></td>
+            <td>54.0%</td>
+            <td>1.96×</td>
+            <td>21.9%</td>
+            <td>2.71×</td>
+            <td>6.2%</td>
+            <td>3.66×</td>
+            <td>0.244</td>
+            <td>1.942</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>对比 · full：按店铺切分 vs 按天切分（看 ×基线）</h2>
+      <div class="legend">
+        <span><span class="dot" style="background:#64748b"></span>按店铺（现有）</span>
+        <span><span class="dot" style="background:#2563eb"></span>按天（本次）</span>
+      </div>
+      <div class="chart-row">
+        <div class="chart-col">
+          <div class="chart-val">2.49×</div>
+          <div class="chart-bar shop" style="height:62.34626578359445px"></div>
+          <div class="chart-val">1.96×</div>
+          <div class="chart-bar temp" style="height:49.03932835261882px"></div>
+          <div class="chart-label">P(&gt;0)<br>×基线</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-val">3.81×</div>
+          <div class="chart-bar shop" style="height:95.23809523809524px"></div>
+          <div class="chart-val">2.71×</div>
+          <div class="chart-bar temp" style="height:67.69736051746874px"></div>
+          <div class="chart-label">P(≥5)<br>×基线</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-val">0.314</div>
+          <div class="chart-bar shop" style="height:7.83479120783602px"></div>
+          <div class="chart-val">0.244</div>
+          <div class="chart-bar temp" style="height:6.099320077466657px"></div>
+          <div class="chart-label">Spearman</div>
+        </div>
+        <div class="chart-col">
+          <div class="chart-val">1.981</div>
+          <div class="chart-bar shop" style="height:49.507883198478964px"></div>
+          <div class="chart-val">1.942</div>
+          <div class="chart-bar temp" style="height:48.537925557591144px"></div>
+          <div class="chart-label">lift@5</div>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr><th>指标</th><th>按店铺切分</th><th>按天切分</th><th>变化</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>P(&gt;0) ×基线</td>
+            <td>2.49</td>
+            <td>1.96</td>
+            <td class="delta">-0.53</td>
+          </tr>
+          <tr>
+            <td>P(≥5) ×基线</td>
+            <td>3.81</td>
+            <td>2.71</td>
+            <td class="delta">-1.10</td>
+          </tr>
+          <tr>
+            <td>Spearman</td>
+            <td>0.3135</td>
+            <td>0.2441</td>
+            <td>-0.0694</td>
+          </tr>
+          <tr>
+            <td>lift@5（截尾）</td>
+            <td>1.981</td>
+            <td>1.942</td>
+            <td>-0.039</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>店铺未在 train 出现（新店铺子集）</h2>
+      <div class="card">
+        <p>行数 <strong>6566</strong> · full P(&gt;0) ×基线 <strong>1.95×</strong>（全 test 1.96×）·
+        P(≥5) ×基线 <strong>2.67×</strong>（全 test 2.71×）</p>
+        <p>两数接近 → 时间外推下滑<strong>不主要</strong>来自「见过店铺」。</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>结论 · B</h2>
+      <div class="card">
+        <p>明显下滑（50%–80%）→ 能用但需下调预期</p>
+        <p>full P(&gt;0) ×基线 = <strong>1.96×</strong>，为按店铺切分 2.49× 的 <strong>79%</strong>。</p>
+      </div>
+      <ul>
+        <li>未改动 <code>rank_products.py</code>；指标来自缓存对齐样本。</li>
+        <li>配套 Markdown：<code>temporal_validation.md</code> · JSON：<code>temporal_metrics.json</code></li>
+      </ul>
+    </section>
+
+    <p class="foot">运行 <code>python build_temporal_validation_html.py</code> 可在重跑验证后刷新本页。</p>
+  </div>
+</body>
+</html>

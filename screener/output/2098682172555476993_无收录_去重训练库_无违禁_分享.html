@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>选品 Top5%</title>
+<style>
+body { margin:0; font-family:"PingFang SC","Microsoft YaHei",sans-serif; background:#f4f4f5; }
+.hdr { background:#fff; padding:12px 16px; border-bottom:1px solid #e8e8e8; position:sticky; top:0; z-index:10; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+.hdr h1 { margin:0; font-size:15px; }
+.hdr p { margin:6px 0 0; font-size:12px; color:#777; }
+.bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px; font-size:13px; }
+.bar input { width:4.5rem; padding:4px 6px; border:1px solid #ddd; border-radius:6px; }
+.bar button { background:#fb7701; color:#fff; border:none; border-radius:6px; padding:5px 12px; cursor:pointer; }
+#stats { margin-top:8px; font-size:12px; color:#666; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(168px,1fr)); gap:10px; padding:12px; max-width:1400px; margin:0 auto; }
+.card { background:#fff; border-radius:10px; overflow:hidden; border:1px solid #e8e8e8; text-decoration:none; color:inherit; display:block; }
+.card.is-hidden { display:none !important; }
+.card:hover { box-shadow:0 4px 14px rgba(0,0,0,.1); }
+.thumb { position:relative; aspect-ratio:1; background:#ececec; }
+.thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.ph { display:flex; align-items:center; justify-content:center; height:100%; color:#999; font-size:13px; }
+.badge { position:absolute; top:6px; left:6px; background:rgba(0,0,0,.72); color:#fff; font-size:10px; padding:3px 6px; border-radius:4px; }
+.body { padding:8px; }
+.price { color:#fb7701; font-weight:700; font-size:1.05rem; }
+.title { font-size:12px; line-height:1.35; margin-top:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.1em; }
+.cate { font-size:11px; color:#888; margin-top:4px; }
+</style>
+</head>
+<body>
+<header class="hdr">
+  <h1>选品 Top5%</h1>
+  <p>模型 Top 5% · 本页 219 条 · 主图 https 直链（需联网）</p>
+  <div class="bar">
+    <label>最低价 $<input type="number" id="pmin" step="0.01" placeholder="不限"/></label>
+    <label>最高价 $<input type="number" id="pmax" step="0.01" placeholder="不限"/></label>
+    <button type="button" id="applyPrice">筛选价格</button>
+  </div>
+  <div id="stats"></div>
+</header>
+<div class="grid" id="grid">
+<a class="card" data-price="1.0200" href="https://www.temu.com/search_result.html?search_key=605773392409873&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#1 · 1.61</span><img src="https://img.kwcdn.com/product/open/7a65c993f03e46b9bed96807011f0184-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.02</div>
+    <div class="title">4个装床单床垫固定器沙发垫毯子固定器防滑通用贴片家居抓地板夹</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="19.4200" href="https://www.temu.com/search_result.html?search_key=607661886113224&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#2 · 1.59</span><img src="https://img.kwcdn.com/product/open/a7b31418ff034bf8892b36fd4818abfa-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>19.42</div>
+    <div class="title">Dream Net Wind Chime Pendant, Indoor Outdoor Decorative Wall Hanging for Living Room, Bedroom, And Terrace - Sun Catcher Wall Ornament Crystal Gravel Pendant</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="8.1200" href="https://www.temu.com/search_result.html?search_key=606723637086069&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#3 · 1.58</span><img src="https://img.kwcdn.com/product/fancy/25a13e22-7a74-4ea0-94ec-c4fe509078b2.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.12</div>
+    <div class="title">jit 1pc，弹性边缘设计桌布，可伸缩桌布 - 露营风格装饰，适合户外活动和家庭聚会，适用于各种家居装饰及餐饮场景，野餐配件，室内/户外使用，不含桌子</div>
+    <div class="cate">家居厨房用品/餐厨布艺</div>
+  </div>
+</a>
+<a class="card" data-price="1.4000" href="https://www.temu.com/search_result.html?search_key=606906777203392&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#4 · 1.53</span><img src="https://img.kwcdn.com/product/fancy/b5a24bc6-c3a6-4e96-9c50-ea8c6e8a6b11.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.40</div>
+    <div class="title">多功能加厚深粉色一次性丁腈手套：适用于汽车内饰清洁、庭院维护及宠物区域卫生，为家庭用户、租客、宠物爱好者和季节性清洁工设计</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="0.7900" href="https://www.temu.com/search_result.html?search_key=607621218152522&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#5 · 1.51</span><img src="https://img.kwcdn.com/product/open/5119f3525f444c878de6d310d7ab56c6-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>0.79</div>
+    <div class="title">Sticker, 1pc Stitch And Annie Themed Sticker, Suitable for Bedroom, Living Room, Bathroom, Kitchen Switch Decoration, Modern Style, with Glow-In-Dark Effect, Indoor And Outdoor Use, Ideal for Holiday Or Birthday Gifts</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="0.9500" href="https://www.temu.com/search_result.html?search_key=607258964496767&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#6 · 1.46</span><img src="https://img.kwcdn.com/product/open/e9e72da4dae94ce89ae0da58a6b31da0-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>0.95</div>
+    <div class="title">2pcs（1个挂钩+1个无痕胶垫）拖把夹无痕免打孔挂钩卫生间浴室墙面承重固定防水扫把壁挂收纳架</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="10.8900" href="https://www.temu.com/search_result.html?search_key=607505119838848&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#7 · 1.46</span><img src="https://img.kwcdn.com/product/fancy/e2a2fda2-2563-418b-b2db-2b9dd4dc0dd1.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>10.89</div>
+    <div class="title">4件套手工编织仿藤椭圆形收纳篮套装 - 乡村农舍风格，适用于家居、厨房及餐厅整理，浅棕色敞口篮带耐用包边，节省空间的置物架装饰，多功能篮可收纳毯子、用作置物架篮</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="37.7000" href="https://www.temu.com/search_result.html?search_key=601101415616500&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#8 · 1.46</span><img src="https://img.kwcdn.com/product/open/1ca3eda9565c4938a144e141a1a1ce35-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>37.70</div>
+    <div class="title">定制3件套透气涤纶“Where is Chicky”床上用品 - 柔软被罩+2个枕套，可机洗，四季适用0526049</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="4.7500" href="https://www.temu.com/search_result.html?search_key=606153044001802&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#9 · 1.45</span><img src="https://img.kwcdn.com/product/open/6a8fb3448efa44cdad8947a5596c16e2-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.75</div>
+    <div class="title">【JIT】Jane Eyre Vintage Book Cover设计装饰性图案抱枕套,适用于客厅、沙发、床铺、办公室、庭院及户外装饰,客厅艺术家居点缀装饰 ,四季通用不含芯</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="3.7000" href="https://www.temu.com/search_result.html?search_key=607294666448270&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#10 · 1.44</span><img src="https://img.kwcdn.com/product/open/d650bd29247b4a229aef6b10fbfe65d7-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.70</div>
+    <div class="title">Multi-Layer Jewelry Storage Box | Can Store Necklaces, Earrings, Keys, Perfumes, Lipsticks, Glasses, Watches, Durable Plastic Material, Space-Saving Multifunctional Design, Suitable for Small Living Rooms | Jewelry Storage Box, Jewelry Organizer</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="12.3300" href="https://www.temu.com/search_result.html?search_key=607009051146122&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#11 · 1.43</span><img src="https://img.kwcdn.com/product/fancy/498fbdf2-84cf-4b9b-8d66-ab03235a6795.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>12.33</div>
+    <div class="title">1pc Full-Coverage Stretch Sofa Slipcover, Dark Brown Solid Color, Snug Fit, Universal Multi-Size Model, All-Purpose Non-Slip Sofa Cover, Cat-Scratch Resistant and Machine Washable Furniture Protector, Available in 1/2/3/4-Seater Options, Dust-Proof</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.6600" href="https://www.temu.com/search_result.html?search_key=607029653537182&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#12 · 1.42</span><img src="https://img.kwcdn.com/product/open/6f844c85623e47c8a4f037866b94e0f6-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.66</div>
+    <div class="title">2D平面 - 1件装，2D平面印花，异想天开的复古风格植物和青蛙设计枕套，单面印花，无刺绣，不含枕芯</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.5300" href="https://www.temu.com/search_result.html?search_key=607398550934800&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#13 · 1.42</span><img src="https://img.kwcdn.com/product/fancy/55ef40d0-b0e6-4e18-8199-5345f4b27193.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.53</div>
+    <div class="title">2D平面 4件时尚热带叶纹亚克力杯垫 防滑耐热易清洗 咖啡杯垫 颜色款式随机 非常适合乔迁赠送家人 朋友</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.3400" href="https://www.temu.com/search_result.html?search_key=605924991277635&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#14 · 1.42</span><img src="https://img.kwcdn.com/product/open/2024-08-08/1723089329288-6b17e5e7e85e4d4bbfed18e4578b13e6-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.34</div>
+    <div class="title">未漂白烘焙纸卷 - 多用途，适用于烹饪、烘焙、烧烤和空气炸锅 - 餐厅级 - 1卷</div>
+    <div class="cate">家居厨房用品/烘焙用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.1900" href="https://www.temu.com/search_result.html?search_key=606788397186587&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#15 · 1.42</span><img src="https://img.kwcdn.com/product/open/a2102d021a8f4aa8b523dcfa1d2f0518-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.19</div>
+    <div class="title">1pc Women&#x27;s Quick-Dry Hair Towel - Coral Color Absorbent Shower Cap Style Head Wrap, Soft Light Green and Pink, Modern Bathroom Accessory, Suitable for Post-Shower Hair Care, Christmas Gift</div>
+    <div class="cate">家居厨房用品/毛巾浴巾</div>
+  </div>
+</a>
+<a class="card" data-price="1.4500" href="https://www.temu.com/search_result.html?search_key=606906642976409&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#16 · 1.42</span><img src="https://img.kwcdn.com/product/fancy/5a22ab7b-d171-4453-8ced-6b533b24cc26.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.45</div>
+    <div class="title">7pcs魔力擦海绵，适用于除水雾水垢，个面除垢，可重复使用。适用于清洁水族馆、窗户、镜子、瓷砖和水槽清洁</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.6200" href="https://www.temu.com/search_result.html?search_key=607308088241087&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#17 · 1.42</span><img src="https://img.kwcdn.com/product/open/f6a8191b1dba4cbead4cc5bdce114de9-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.62</div>
+    <div class="title">6件套不锈钢小号蘸料碟 - 迷你浅圆设计，小巧便携，单手握持舒适，酱油、芥末、醋及蘸料的完美分量，避免浪费。多场景通用</div>
+    <div class="cate">家居厨房用品/杯具</div>
+  </div>
+</a>
+<a class="card" data-price="6.9800" href="https://www.temu.com/search_result.html?search_key=607413851806193&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#18 · 1.41</span><img src="https://img.kwcdn.com/product/fancy/97165226-e8d4-401f-b18f-9b5c2735dfcd.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.98</div>
+    <div class="title">哥特巨龙废墟展示底座，桌面RPG与微缩模型微缩场景底台，暗黑奇幻桌面收纳小饰品托盘，3D打印</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.8200" href="https://www.temu.com/search_result.html?search_key=606684781081296&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#19 · 1.41</span><img src="https://img.kwcdn.com/product/fancy/e2778b06-cdef-4ca1-ab86-d5c6df68101b.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.82</div>
+    <div class="title">2件套洗衣袋套装，带拉链的胸罩洗衣袋+一个挂钩，采用蜂窝状织物材料，能有效过滤杂质，支撑框架可有效防止洗涤过程中变形，适合洗涤胸罩、内衣、轻薄围巾和袜子</div>
+    <div class="cate">家居厨房用品/衣橱收纳</div>
+  </div>
+</a>
+<a class="card" data-price="1.3700" href="https://www.temu.com/search_result.html?search_key=607073878276800&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#20 · 1.40</span><img src="https://img.kwcdn.com/product/fancy/43d84dde-55bc-4d85-8135-b9d8cd9de923.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.37</div>
+    <div class="title">Disney Mickey and Minnie Cute Cartoon Mouthwash Cup, Suitable for Family Use, Couples, Modern Bathroom, Hygienic Dental Tool Storage, Minimalist Style, Essential Multi-purpose Container for Small Spaces</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.3200" href="https://www.temu.com/search_result.html?search_key=607104614156931&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#21 · 1.40</span><img src="https://img.kwcdn.com/product/fancy/dcebdb80-0940-48e0-9dc5-d70b25b43ba0.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.32</div>
+    <div class="title">789根 1毫米哑光花心花蕊人造石膏哑光花 花瓣 玫瑰百合花等 材料</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="6.8100" href="https://www.temu.com/search_result.html?search_key=606843023798771&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#22 · 1.39</span><img src="https://img.kwcdn.com/product/open/2f1aa8f57cb24e418fe4f81c2155c38f-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.81</div>
+    <div class="title">2D平面一件式凤凰金属墙饰，时尚升火鸟牌匾，独特耐用金属装饰，适用于客厅卧室家庭办公室，优雅的乔迁礼物，周年纪念礼物，送给家人和朋友</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.7900" href="https://www.temu.com/search_result.html?search_key=605841709194838&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#23 · 1.39</span><img src="https://img.kwcdn.com/product/algo_check/auto/05a3552b493e36d576d4568a79807b1f_1776584942657.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.79</div>
+    <div class="title">2D Flat 1pc, &quot;Street Fighter &#x27;97 Metal Art Wall Decor – Vintage Arcade Style Iron Painting for Gamers And Collectors&quot; 20.32×30.48 cm</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.3700" href="https://www.temu.com/search_result.html?search_key=606614719448662&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#24 · 1.38</span><img src="https://img.kwcdn.com/product/fancy/4a72d7f2-1fe4-457d-bcc6-fceb51b9ba8f.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.37</div>
+    <div class="title">22件装一次性静电除尘掸带手柄 - 无绒超细纤维垫，适用于家庭、汽车清洁、吸尘器替换头，可静电吸附家具、键盘、地板及护理用品</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="14.7400" href="https://www.temu.com/search_result.html?search_key=606770412013830&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#25 · 1.38</span><img src="https://img.kwcdn.com/product/open/0abb9351bbc14be2a0c1fbbd9bc1c2eb-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>14.74</div>
+    <div class="title">1Pcs 波西米亚风【流波】毛绒沙发巾，提花设计舒棉绒沙发套，柔软舒适盖毯，水波纹，强烈的立体感，卧室办公室客厅家具家居装饰</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.6300" href="https://www.temu.com/search_result.html?search_key=607061664437898&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#26 · 1.37</span><img src="https://img.kwcdn.com/product/open/19e90b4d992a4599a3493820e5b9f5f5-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.63</div>
+    <div class="title">浴室和厨房防堵塞器，水槽/厨房水槽排水篮/塞子/塞，厨房水槽排水网，厨房水槽过滤器，水槽排水篮，不锈钢网，垃圾孔</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="15.4100" href="https://www.temu.com/search_result.html?search_key=607189976594636&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#27 · 1.37</span><img src="https://img.kwcdn.com/product/open/efcc1ef9b52b4e448d6ea78b2ca9a4dc-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>15.41</div>
+    <div class="title">3件套哑光纹理3D打印艺术花瓶套装，不规则纹理装饰花瓶，极简主义窄口PLA塑料花瓶，适用于家居客厅入口装饰，干花摆件花瓶，适合家居装饰</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="20.3100" href="https://www.temu.com/search_result.html?search_key=607180447132245&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#28 · 1.36</span><img src="https://img.kwcdn.com/product/fancy/f5fb6925-a58b-40ac-9861-88e81b759eb3.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>20.31</div>
+    <div class="title">3pcs Microfiber Sheet Sets, Double Brush, Super Soft And Fade Resistant Bed Sheets for Bedroom, Guest Room And Hotel (1 Fitted Sheet And 2 Pillowcases - Without Pillow Core)</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="8.1700" href="https://www.temu.com/search_result.html?search_key=606681559865725&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#29 · 1.36</span><img src="https://img.kwcdn.com/product/open/e71d418f000c4248926be2fb276b9b4d-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.17</div>
+    <div class="title">哥特式大教堂拱门墙面置物架，黑金塑料悬浮搁板，适用于水晶、雕像摆件，暗黑学院风家居墙面装饰品</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="4.9100" href="https://www.temu.com/search_result.html?search_key=601099592122499&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#30 · 1.36</span><img src="https://img.kwcdn.com/product/open/2024-06-12/1718175134276-9502dbeb69504db3bd0cb0da5e5b8e26-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.91</div>
+    <div class="title">Supercar Alloy Model Simulation Alloy Pull-Back Sports Car Model Ornament Exquisite Gift Cake Decoration</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="9.4000" href="https://www.temu.com/search_result.html?search_key=607073475624307&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#31 · 1.36</span><img src="https://img.kwcdn.com/product/open/35ef9a26166f46c787c05169d01a8302-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.40</div>
+    <div class="title">7块大型绘画石，5-8厘米，平面石，用于平滑绘画，艺术和手工制作用平滑绘画石，手工礼品用多色绘画石，河石绘画石</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.6100" href="https://www.temu.com/search_result.html?search_key=605951901973253&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#32 · 1.36</span><img src="https://img.kwcdn.com/product/open/93f830dad58b440d968f16880bbc80e3-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.61</div>
+    <div class="title">1pc Watercolor Cute Little Elephant Blowing Bubbles Wall Sticker, Irregular Cartoon Animal Decoration, Removable PVC Material, Suitable for Room Wall Art, School Decor</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="8.9700" href="https://www.temu.com/search_result.html?search_key=607079918097478&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#33 · 1.36</span><img src="https://img.kwcdn.com/product/fancy/94161669-a2ad-49c5-a2fc-48feb857029b.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.97</div>
+    <div class="title">双层编织绳壁挂式收纳篮 - 双格现代置物架带悬挂搁板，节省空间的储物筐适用于卧室、浴室、厨房、宿舍 - 装饰性布艺篮，可收纳化妆品、毛巾、餐具、置物架篮</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="1.6100" href="https://www.temu.com/search_result.html?search_key=607004219264521&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#34 · 1.35</span><img src="https://img.kwcdn.com/product/fancy/5f3070a1-3199-4c09-9e95-13c398c35682.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.61</div>
+    <div class="title">万圣节蚂蚁牙签，水果甜点叉子可重复使用蚂蚁食物叉动物开胃叉，适用于点心蛋糕甜点，厨房派对，万圣节圣诞节</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.1000" href="https://www.temu.com/search_result.html?search_key=606862888029737&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#35 · 1.35</span><img src="https://img.kwcdn.com/product/open/11417f68be7f4285a028efd53955c397-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.10</div>
+    <div class="title">1pc Christmas Light Switch Sticker, Wall Decal, Christmas Decor, Santa Claus Snowflake Letter Pattern Sticker, Seasonal Switch Wall Sticker Flower, Holiday Room Decoration, Compact Switch Decoration, Room Accent Decor, Winter Room Decor, Wall Art</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="14.3200" href="https://www.temu.com/search_result.html?search_key=607356943439966&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#36 · 1.35</span><img src="https://img.kwcdn.com/product/fancy/fa51fedc-2baf-473b-80a1-79614735df5c.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>14.32</div>
+    <div class="title">Wood Key Holder Box with Built-In Hook &amp; Door Storage - Contemporary Entryway Organizer Suitable for Living Room Desk, Door-Mounted Jewelry Box, Key Organizer for Small Items, Wood for Décor (No Revision)</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="5.8400" href="https://www.temu.com/search_result.html?search_key=606756587577922&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#37 · 1.35</span><img src="https://img.kwcdn.com/product/fancy/8641f28d-e714-4963-b606-60f3ff2ec503.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.84</div>
+    <div class="title">3D Internally Carved Tennis Player Crystal Ball Ornament with Metal Stand, Creative Commemorative Birthday Gift for Male Tennis Lovers</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="9.2800" href="https://www.temu.com/search_result.html?search_key=607499684002381&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#38 · 1.35</span><img src="https://img.kwcdn.com/product/fancy/796cb620-dd05-4658-b188-e1cdf8778c5a.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.28</div>
+    <div class="title">1件WB超人主题卡通印花毯，柔软舒适法兰绒材质，非常适合卧室、客厅沙发、办公室午睡和旅行，是绝佳的日常家庭礼物</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="10.3700" href="https://www.temu.com/search_result.html?search_key=607391705842853&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#39 · 1.34</span><img src="https://img.kwcdn.com/product/fancy/b8a1b117-0bf0-4ef4-b541-2b2e9a09dc4d.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>10.37</div>
+    <div class="title">4件装现代简约风时尚几何十字花纹抱枕套拉链闭合卧室沙发客厅办公室餐厅装饰无枕芯</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.3400" href="https://www.temu.com/search_result.html?search_key=606813361656638&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#40 · 1.33</span><img src="https://img.kwcdn.com/product/open/df3a517b9aa2422991289e7c784db9fd-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.34</div>
+    <div class="title">现代紧凑型钥匙托盘，多功能装饰收纳盘，适用于玄关钥匙、化妆品、桌面文具及硬币，优雅桌面整理盘，适用于家庭与办公，非食品接触用途</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="20.6000" href="https://www.temu.com/search_result.html?search_key=607100050763445&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#41 · 1.33</span><img src="https://img.kwcdn.com/product/open/0b21e7bdc61141f991bf726a0670e161-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>20.60</div>
+    <div class="title">未来感赛尔跑车主题床笠（不含枕套），科幻车辆主题，现代汽车设计床上用品，柔软透气，2D平面印花</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="3.1200" href="https://www.temu.com/search_result.html?search_key=607071059699278&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#42 · 1.33</span><img src="https://img.kwcdn.com/product/fancy/74bc4912-dd6b-43b3-b094-10c0e0358d6a.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.12</div>
+    <div class="title">1个装，婴儿小熊木托盘（非食品接触），可爱小熊主题木质托盘，生日快乐派个装饰，性别揭示派个桌面装饰，庆祝迎婴派个用品，活动派个装饰托盘（非食品接触）</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.0900" href="https://www.temu.com/search_result.html?search_key=601102164069671&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#43 · 1.33</span><img src="https://img.kwcdn.com/product/fancy/f0d86d44-6a4a-4e9a-b0ba-3bbbe014b854.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.09</div>
+    <div class="title">2D平面 - 圆形，风化锡标牌，描绘了拉萨罗特和科斯塔·特吉西斯的海滩景观，非常适合装饰家庭、咖啡馆或海滨主题空间</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.4600" href="https://www.temu.com/search_result.html?search_key=606657065138329&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#44 · 1.33</span><img src="https://img.kwcdn.com/product/open/6b2385af78b94f0b930232251b36bacd-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.46</div>
+    <div class="title">Multi-functional Dessert Spatula and Serving Spoon, Suitable for Dessert Making, Catering Services, Home Use, Cafes, Restaurants, and Daily Food Portioning in RV Kitchens</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="3.0300" href="https://www.temu.com/search_result.html?search_key=607616252134860&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#45 · 1.33</span><img src="https://img.kwcdn.com/product/open/d49e350e8ef64174a20e18eb8980f34a-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.03</div>
+    <div class="title">1pc Growth Mindset Wall Decals, Kids Reading Book Ladder Inspirational Quote Wall Stickers, Colorful Children Decor for Classroom Playroom</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="6.0200" href="https://www.temu.com/search_result.html?search_key=607002071810207&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#46 · 1.33</span><img src="https://img.kwcdn.com/product/open/c6f6685b708f45209754bf4030f7ee07-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.02</div>
+    <div class="title">18.5英寸三层星星主题蛋糕架，适用于生日派对和公主主题派对的派对塔，万圣节派对装饰，非食品接触甜点展示托盘，可盛放果酱，也适用于节日装饰</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="4.8200" href="https://www.temu.com/search_result.html?search_key=606731488880215&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#47 · 1.33</span><img src="https://img.kwcdn.com/product/fancy/3c64232b-896f-42bb-a767-7108f9f459ff.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.82</div>
+    <div class="title">4件组合套装（3件可爱双色桌用挂钩+1件赠品小黄鸭收纳袋）桌面固定式 书包挂钩 小巧便携 厚度可调 防碰撞 多功能挂钩【颜色随机】</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="3.1500" href="https://www.temu.com/search_result.html?search_key=606877517715785&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#48 · 1.33</span><img src="https://img.kwcdn.com/product/open/1fdcea8ef2004de8a76dda97e0139f69-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.15</div>
+    <div class="title">木制婴儿衣柜分隔板双面彩色图案月份装饰标牌幼儿房间可爱动物挂饰新生儿成长记录墙饰</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="8.7600" href="https://www.temu.com/search_result.html?search_key=606924091288505&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#49 · 1.32</span><img src="https://img.kwcdn.com/product/fancy/bd301d89-29e6-49fb-a553-6176ff56395f.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.76</div>
+    <div class="title">1个万圣节粉色可爱骷髅南瓜印花收纳篮 - 可折叠脏衣篮 - 适用于卧室和浴室衣物收纳 - 洗衣篮 - 万圣节礼物 - 礼品篮 - 收纳架篮</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="2.4100" href="https://www.temu.com/search_result.html?search_key=607094950436840&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#50 · 1.32</span><img src="https://img.kwcdn.com/product/open/5c50696197b9463fbcac3dfc9b195229-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.41</div>
+    <div class="title">抱羊耶稣雕塑摆件，3D 打印复古古典艺术桌面陈设工艺品，居家桌台展示装饰，艺术收藏家居软装，适配生日、圣诞、感恩节、母亲节、父亲节、乔迁、复活节节日送礼</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.9500" href="https://www.temu.com/search_result.html?search_key=606968987146466&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#51 · 1.32</span><img src="https://img.kwcdn.com/product/open/51c05407681a42299b9868470c8e5b99-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.95</div>
+    <div class="title">2D平面秋季插画南瓜抱枕套 1件装 黑色枕套 单面印花 不含枕芯 沙发床装饰 客厅卧室适用</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="17.3100" href="https://www.temu.com/search_result.html?search_key=606777928205297&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#52 · 1.32</span><img src="https://img.kwcdn.com/product/fancy/6a103ea8-ac1c-4527-8c7c-1d4139a19c68.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>17.31</div>
+    <div class="title">Wooden Key Tray with Hooks, Entryway Organizer, for Keys, Jewelry And Small Items. Wooden Base with 4 Hooks, Keeping Daily Essentials Tidy And Organized, Easy to Place on Tabletop, Ideal for Home Entryway, Bedroom, Or Office</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="8.8900" href="https://www.temu.com/search_result.html?search_key=605649240988166&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#53 · 1.32</span><img src="https://img.kwcdn.com/product/open/fae9a3812ab24c4c8fb9c2db86f0e0eb-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.89</div>
+    <div class="title">10个装优雅珠宝盒 - 坚固的纸板珠宝套装盒，带开口槽，适用于项链、手链、耳环 - 情人节、婚礼、生日、周年纪念日</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.3900" href="https://www.temu.com/search_result.html?search_key=607181923525373&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#54 · 1.32</span><img src="https://img.kwcdn.com/product/fancy/13b20ac3-012c-4ced-9eef-396ba12e5a94.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.39</div>
+    <div class="title">1pc 15-Inch Round Placemat, Washable Table Mat, Heat-Resistant And Durable Table Runner, Protecting Kitchen And Dining Table Surfaces; Suitable for Family Gatherings, BBQ Parties, And Various Holiday Celebrations (National Day, Thanksgiving, Easter</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="5.5500" href="https://www.temu.com/search_result.html?search_key=607014956671517&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#55 · 1.32</span><img src="https://img.kwcdn.com/product/fancy/cf1165a5-2c0c-42f8-a0d0-6e180e449997.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.55</div>
+    <div class="title">1件纯色羊羔毛防滑秋冬保暖沙发垫毛球装饰</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="8.5400" href="https://www.temu.com/search_result.html?search_key=605732724392969&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#56 · 1.31</span><img src="https://img.kwcdn.com/product/21140d68f10/27e6b2ef-ef84-4541-9f88-12b5e4fa1721_800x800.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.54</div>
+    <div class="title">1PC 2D[Flat] Metal sign 复古铁皮画《霓虹恐龙》8x12英寸/20x30厘米，描绘了一只色彩斑斓的恐龙在夕阳下的热带风光中，适合节日装饰如万圣节、派个或家居装饰，增添独特艺术氛围。</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="15.2900" href="https://www.temu.com/search_result.html?search_key=607419958713076&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#57 · 1.31</span><img src="https://img.kwcdn.com/product/217a7c6402/64024b13-07bc-48fd-bf83-585e56a875f4_1340x1340.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>15.29</div>
+    <div class="title">开放式储物箱，猫咪图案2D印花，带滚轮可移动带把手落地杂物收纳筐，敞口开放式拿取物品无需开盖，版型挺括不易软塌，适配卧室、书房、卫生间收纳，颜值治愈百搭</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="3.7500" href="https://www.temu.com/search_result.html?search_key=606439733084129&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#58 · 1.31</span><img src="https://img.kwcdn.com/product/21140d65358/ac81b261-093c-4dff-82f1-5862537d9412_800x800.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.75</div>
+    <div class="title">1件，街道上的五彩房屋，方形彩色装饰抱枕套，适用于卧室和客厅，拉链封口，适用于客厅、卧室、门廊、露台装饰 - 现代风格（个面印刷，不含枕芯）</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="5.1500" href="https://www.temu.com/search_result.html?search_key=601105268633708&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#59 · 1.31</span><img src="https://img.kwcdn.com/product/open/606ed80ded0f4223972919fa4adf466a-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.15</div>
+    <div class="title">一款迷人的泰迪熊，躺在一个敞开式纸板盒中。这款1个装的纸巾盒架可用作多功能餐巾分配器，适合家庭、派对和汽车装饰。它优雅地整理纸巾，使其成为您的收藏的完美补充。</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="4.3100" href="https://www.temu.com/search_result.html?search_key=606858727244345&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#60 · 1.31</span><img src="https://img.kwcdn.com/product/open/cc45c990fb8542b3a2e4d27e4ef5fede-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.31</div>
+    <div class="title">2D平面1片烧焦木纹墙面装饰，乡村风格自粘墙纸，焦痕图案贴纸装饰，暗棕色树皮贴纸艺术，贴纸装饰，适用于门厅、门廊、客厅、卧室、办公室、家庭</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="12.3000" href="https://www.temu.com/search_result.html?search_key=607126223174117&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#61 · 1.31</span><img src="https://img.kwcdn.com/product/fancy/812f264c-af6c-4899-a3e2-95e96c38c786.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>12.30</div>
+    <div class="title">1pc Printed Skirted Full-Wrap Stretch Sofa Cover, Sofa Slipcover, Sofa Protector, Fits 3.12meter Single-Seat Sofa,, Elastic All-in-One Full-Coverage Sofa Protector, Living Room Home Decor</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.2600" href="https://www.temu.com/search_result.html?search_key=606611364010696&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#62 · 1.31</span><img src="https://img.kwcdn.com/product/open/a4c0347d1d4b44be896cc6dd2f1e64dc-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.26</div>
+    <div class="title">圣诞猫咪马桶贴纸 可爱戴帽小猫抱球装饰贴 Baja la Tapa提示语 卫生间防水墙贴 节日氛围布置</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="15.1900" href="https://www.temu.com/search_result.html?search_key=605675950334614&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#63 · 1.30</span><img src="https://img.kwcdn.com/product/open/4080aece6cde46b4922e5d38c06eb623-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>15.19</div>
+    <div class="title">Putuo Decorative Abstract Picasso Wall Art, 3 Sets of Wooden Modern Minimalist Bohemian Wall Decor, Mid-Century Aesthetic Style for Living Room and Bedroom</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="8.7100" href="https://www.temu.com/search_result.html?search_key=607171186145551&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#64 · 1.30</span><img src="https://img.kwcdn.com/product/fancy/d92fa969-4144-48cd-b667-b1d7f7498283.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.71</div>
+    <div class="title">透明简约亚克力纸巾盒 - 简约设计，适用于浴室和客厅装饰</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="7.5700" href="https://www.temu.com/search_result.html?search_key=607646719523338&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#65 · 1.30</span><img src="https://img.kwcdn.com/product/open/d9ef393e0309495fbc1484ae2faeef6c-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.57</div>
+    <div class="title">2D平面4件套万圣节秘教骷髅头抱枕套 黑色枕套 单面印花 不含枕芯 沙发床装饰 卧室客厅适用</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.9900" href="https://www.temu.com/search_result.html?search_key=605675681841373&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#66 · 1.30</span><img src="https://img.kwcdn.com/product/fancy/82901344-eccb-4c94-b5e1-e2caad13678b.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.99</div>
+    <div class="title">2D 冲浪者与海鸥在冲浪板上夏日海滨度假风1pc抱枕套适用于客厅沙发卧室床户外装饰不含枕芯</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="5.9400" href="https://www.temu.com/search_result.html?search_key=605950106818190&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#67 · 1.30</span><img src="https://img.kwcdn.com/product/open/83af809e632e4ea39c9d0d2aa9f63559-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.94</div>
+    <div class="title">2 件，抱枕套，抽象渐变绿色波浪纹理图案装饰靠枕套，现代艺术主题，清新绿系设计，单面印刷，拉链闭合可机洗，装饰性抱枕套，适用于家居厨房沙发、客厅、卧室、床品节日装饰，无枕芯，有多种尺寸可供选择</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="5.7800" href="https://www.temu.com/search_result.html?search_key=606163160661700&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#68 · 1.30</span><img src="https://img.kwcdn.com/product/fancy/7922b48e-991d-438a-9a49-12856e38601f.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.78</div>
+    <div class="title">360 ° 旋转储物架浴室托盘化妆品整理托盘厨房搁板，适用于办公用品、浴室托盘用品、厨房香料、梳妆台化妆品、艺术工具等，即时整理桌面、厨房、梳妆台的旋转储物工具，也适用于节日装饰品</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="11.7600" href="https://www.temu.com/search_result.html?search_key=607235610642208&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#69 · 1.30</span><img src="https://img.kwcdn.com/product/fancy/0be42a88-17f6-40fc-b7c7-35156bcdc264.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>11.76</div>
+    <div class="title">19件装塑料药水瓶，圆形，银色，带铝盖</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="5.0900" href="https://www.temu.com/search_result.html?search_key=606981872020273&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#70 · 1.30</span><img src="https://img.kwcdn.com/product/fancy/3cf68f3c-2d23-4663-b91c-64f55557f511.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.09</div>
+    <div class="title">1pc Fall Maple Minimal Pumpkin Wreath Round Tablecloth Autumn Thanksgiving Decoration Fall Decor Harvest Table Cover for Party Picnic Dinner Fall Decor 91.44x91.44cm, 152.4X152.4cm, 177.8X177.8cm</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.7500" href="https://www.temu.com/search_result.html?search_key=605675077924117&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#71 · 1.30</span><img src="https://img.kwcdn.com/product/open/bae01042e7dd4701bdbfe1605534154f-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.75</div>
+    <div class="title">2D平面 1件装 秋季橙色南瓜抱枕套 单面印花 不含枕芯 适用于沙发床装饰 卧室客厅 2D平面</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="10.1400" href="https://www.temu.com/search_result.html?search_key=607046632096254&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#72 · 1.30</span><img src="https://img.kwcdn.com/product/fancy/378a922e-b9b6-4f79-a4b2-2360d6bfd133.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>10.14</div>
+    <div class="title">蓝橙撞色纸灯笼 20 个套装 多尺寸折叠纸灯笼套装 节日派对悬挂装饰灯笼 25cm/20cm/15cm 三色混装，附赠 10 个金属挂钩，可折叠收纳便携省空间，，适合生日派对、节庆活动、商场橱窗、门店美陈、户外庭院、聚会婚礼布置，蓝橙清新撞色氛围感十足，DIY 手工装饰道具</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.3900" href="https://www.temu.com/search_result.html?search_key=601102159074965&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#73 · 1.29</span><img src="https://img.kwcdn.com/product/fancy/f472fb4b-39b3-479d-8f50-f18063a4c2aa.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.39</div>
+    <div class="title">2D平面圆形复古锡制金属标志，描绘加纳库马西市场场景，适合家居墙面装饰，完美的房间装饰品</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="6.6100" href="https://www.temu.com/search_result.html?search_key=607499214229397&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#74 · 1.29</span><img src="https://img.kwcdn.com/product/open/cbe40176384b4fda81e5955429afcb01-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.61</div>
+    <div class="title">Bilateral Support Life Tree Intaglio Crystal Ball Ornament, Light Luxury Metal Base, Natural Meaning Collection Piece, Healing Atmosphere Gift Small Item</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="7.1700" href="https://www.temu.com/search_result.html?search_key=607047303152716&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#75 · 1.29</span><img src="https://img.kwcdn.com/product/open/d9e667b421434ec7a47d7c33b8284b8e-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.17</div>
+    <div class="title">[Custom] 1pc Sleeping Teddy Bear on Cloud Metal Wall Art, Star Pendant Hollow-Out Iron Wall Sign for Nursery Baby Bedroom Decor</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.1000" href="https://www.temu.com/search_result.html?search_key=607130115490614&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#76 · 1.29</span><img src="https://img.kwcdn.com/product/fancy/a24c9d9f-c91a-4461-bcf0-53edc2acfdf4.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.10</div>
+    <div class="title">5PCS多功能金属围巾&amp;T恤夹 - 轻松打结和收腰配件，适用于衣物免缝固定长短，衣角打结</div>
+    <div class="cate">家居厨房用品/衣橱收纳</div>
+  </div>
+</a>
+<a class="card" data-price="4.3400" href="https://www.temu.com/search_result.html?search_key=607654906843106&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#77 · 1.29</span><img src="https://img.kwcdn.com/product/fancy/c979e1d4-1cca-40bb-9340-4fc0fb81b15a.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.34</div>
+    <div class="title">猫咪首饰托盘，珠宝收纳盒，卧室梳妆台家居装饰，戒指项链托盘，桌面珠宝收纳架。</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="9.6300" href="https://www.temu.com/search_result.html?search_key=606617538013374&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#78 · 1.29</span><img src="https://img.kwcdn.com/product/open/4a76a774f4324440b2ef734b38c2f4de-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.63</div>
+    <div class="title">Storage Box with Lock, Password Storage Item, Thickened Plastic, Waterproof And Dustproof Cozy Christmas, Heartwarming Design, Lighting Festive Atmosphere. Bedroom Desktop, Office. Travel, Private Item Storage, Daily Home Use</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="7.4900" href="https://www.temu.com/search_result.html?search_key=605985993249688&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#79 · 1.29</span><img src="https://img.kwcdn.com/product/fancy/60f2c99a-1d63-4def-9aef-d9623db3a138.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.49</div>
+    <div class="title">2D Flat, 1pc Flat Metal Wall Art, Classic Mario Statue Mural, Perfect for Room, Gaming Room, Home Decor, Birthday Party Decor, Ideal Gift for Gamers</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="7.4500" href="https://www.temu.com/search_result.html?search_key=605653334594065&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#80 · 1.29</span><img src="https://img.kwcdn.com/product/fancy/342e24bf-1778-41a7-91fd-2069fd604925.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.45</div>
+    <div class="title">6pcs Set of Retro Housewife And Kitchen-Themed Wooden Signs, Retro Coffee Roasting Humorous Wooden Plates, Fun Restaurant And Baking Wall Decoration Set, Retro Kitchen Coffee House Wall Art, 8X12 Inches</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.0900" href="https://www.temu.com/search_result.html?search_key=606907850952596&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#81 · 1.28</span><img src="https://img.kwcdn.com/product/open/aa20129090ee4ac7b8a94e44e56df587-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.09</div>
+    <div class="title">2D平面 - 1个2D平面亚克力圣诞悬挂装饰品，展示了水彩风格的圣诞树和雪林设计（带红色悬挂绳）；也可作为现金持有者 - 非常适合圣诞树装饰或作为节日礼物</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="8.8400" href="https://www.temu.com/search_result.html?search_key=607124679672655&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#82 · 1.28</span><img src="https://img.kwcdn.com/product/open/99337f35e2b84873acc205cb9f06a7e3-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.84</div>
+    <div class="title">1pc波西米亚几何印花沙发垫，民族风复古图腾沙发罩，三色仿麻防滑沙发保护套，宠物友好防污耐磨沙发软垫，适用于客厅卧室多种空间软装，适配各类沙发：双人座、三人座、四人座沙发</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.6500" href="https://www.temu.com/search_result.html?search_key=606652568854265&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#83 · 1.28</span><img src="https://img.kwcdn.com/product/open/2023-11-23/1700723419364-5b3c607bacfe45c9a8e0eaa78c7f71db-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.65</div>
+    <div class="title">【通用锅盖手柄】3个装可替换通用锅盖手柄，防烫锅盖手柄，玻璃锅盖盖子，厨房必备，锅盖盖子顶部珠</div>
+    <div class="cate">家居厨房用品/厨房炊具</div>
+  </div>
+</a>
+<a class="card" data-price="9.0900" href="https://www.temu.com/search_result.html?search_key=601101854050402&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#84 · 1.28</span><img src="https://img.kwcdn.com/product/open/e8a245323a164a4f99c56e8386ad03ef-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.09</div>
+    <div class="title">4件套家居甜蜜之家爱生活在此格子南瓜蝴蝶结秋季农舍感恩节装饰抱枕套 卧室沙发靠垫套</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="25.1700" href="https://www.temu.com/search_result.html?search_key=606917514657665&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#85 · 1.28</span><img src="https://img.kwcdn.com/product/open/1d94872b123142e79ad67268cb4168d3-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>25.17</div>
+    <div class="title">1套，大容量厨房垃圾桶，分类垃圾桶，多个内桶组合的垃圾箱，带轮，防臭，垃圾干湿分离垃圾箱-4091</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="3.7900" href="https://www.temu.com/search_result.html?search_key=607075086233907&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#86 · 1.28</span><img src="https://img.kwcdn.com/product/open/59a503dd40434ecb8fc8bd533b79f70e-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.79</div>
+    <div class="title">6件套（1个清洁刷+5个海绵）木柄锅刷 厨房强力去污清洁刷 长柄不沾手 铁锅炒锅去油污不伤面</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="4.2100" href="https://www.temu.com/search_result.html?search_key=607401637952375&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#87 · 1.28</span><img src="https://img.kwcdn.com/product/fancy/141d37b3-6402-49fb-b4f0-bb8c1d8ab7e2.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.21</div>
+    <div class="title">24pcs Anti-Insect Wall Stickers, Suitable for Windows, Walls, Cabinet Doors, And Various Indoor Environments</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.4300" href="https://www.temu.com/search_result.html?search_key=606980060106001&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#88 · 1.28</span><img src="https://img.kwcdn.com/product/fancy/b515f10f-d8e0-4f27-8c1a-92a7396f2fee.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.43</div>
+    <div class="title">1pc 树脂松鼠橡果园艺摆件 感恩字母庭院阳台草坪造景装饰工艺品</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.8500" href="https://www.temu.com/search_result.html?search_key=606698337062222&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#89 · 1.28</span><img src="https://img.kwcdn.com/product/fancy/630a5499-67fe-47b6-8481-02d6cecea699.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.85</div>
+    <div class="title">&quot;Shining&quot; 17pcs Starry Sky Glass Marble Set - Home, Fireplace, And RV Decoration, Garden Decoration, Fireplace Decor, Patio Decor, Potted Plant Decor (Non-Porous)</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="16.8000" href="https://www.temu.com/search_result.html?search_key=606991871244380&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#90 · 1.28</span><img src="https://img.kwcdn.com/product/fancy/adfbaa25-f00e-41eb-9c2b-0cc22152c54b.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>16.80</div>
+    <div class="title">1PC 藤条麻花 短毛绒沙发垫套罩靠背巾，防滑可水洗家居宠物狗友好，家具保护垫，卧室、办公室、客厅家居装饰</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="20.2100" href="https://www.temu.com/search_result.html?search_key=606641562984259&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#91 · 1.27</span><img src="https://img.kwcdn.com/product/open/096acb355d9a4eda8aa884c1589b07cd-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>20.21</div>
+    <div class="title">1 件装 冬季牛奶绒床笠，纯色牛奶绒床垫保护套，超柔软保暖毛绒面料，加深床兜贴合设计，抗起球、温暖透气床品，可机洗，不含枕套</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="2.3500" href="https://www.temu.com/search_result.html?search_key=606716456491959&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#92 · 1.27</span><img src="https://img.kwcdn.com/product/open/113eb732a8a84350b009fe8344f03478-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.35</div>
+    <div class="title">壁挂式发饰收纳架，自粘式发圈发带挂架，免钻孔发圈发带头箍收纳挂钩，适用于卧室浴室梳妆台衣柜的首饰项链手链展示挂钩，多功能挂钩</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="3.3800" href="https://www.temu.com/search_result.html?search_key=606821951578649&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#93 · 1.27</span><img src="https://img.kwcdn.com/product/21152340f68/7277c3ac-b6ab-439b-94e2-770f05a867b6_800x800.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.38</div>
+    <div class="title">2D Flat, 2D Flat - 8 Inch Round Aluminum Wall Round Sign 1pc, Curiosity Is Good Work Science Lab Quote Sign Educational Classroom Decor Chemistry Biology Wall Art for Kids Room Teacher Gift, 2D Flat</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.2500" href="https://www.temu.com/search_result.html?search_key=607276412851777&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#94 · 1.27</span><img src="https://img.kwcdn.com/product/fancy/03e013e2-a79c-4552-a63a-d91ba35c5842.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.25</div>
+    <div class="title">1个 2D平面抱枕套 秋收南瓜蕨类花卉线条艺术 棕白乡村风装饰抱枕 柔软丝绒可水洗图案枕套 客厅卧室办公室装饰 单面印花 不含枕芯 2D平面</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.0000" href="https://www.temu.com/search_result.html?search_key=601102165015081&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#95 · 1.27</span><img src="https://img.kwcdn.com/product/fancy/bea00421-d292-459d-bbb9-d171f776255e.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.00</div>
+    <div class="title">2D平面 - 一款圆形金属标牌，采用复古设计，描绘了毛里求斯的海岸风景，非常适合装饰家庭墙壁或咖啡馆</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.0300" href="https://www.temu.com/search_result.html?search_key=606691760397586&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#96 · 1.27</span><img src="https://img.kwcdn.com/product/21f0661d10/6aa493a0-2540-4abf-befa-582155b4b38c_800x800.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.03</div>
+    <div class="title">2D Flat, 1pc 2D Flat Tapestry Classic Snakes and Ladders Game Board with Colorful Squares and Intertwined Snakes and Ladders, 2D Flat</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="33.6300" href="https://www.temu.com/search_result.html?search_key=607424052297742&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#97 · 1.27</span><img src="https://img.kwcdn.com/product/fancy/bdb8809c-0eb2-4aca-81a2-6eca0c53e777.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>33.63</div>
+    <div class="title">8pcs开槽装饰毛毡板照片墙免打孔背胶安装毛毡墙贴定制创意照片墙背景板高级感墙面装饰家庭相册墙展示墙留言板</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="21.7400" href="https://www.temu.com/search_result.html?search_key=601099960871514&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#98 · 1.27</span><img src="https://img.kwcdn.com/product/open/7f8045ed90e646bf811907309507cf2f-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>21.74</div>
+    <div class="title">秋季森林鹿浴帘 – 壮丽的瀑布和充满活力的树叶设计，聚酯纤维布料，包括 12 个挂钩，70.8x70.8 英寸，自然风浴室|秋季森林主题|详细艺术品</div>
+    <div class="cate">家居厨房用品/毛巾浴巾</div>
+  </div>
+</a>
+<a class="card" data-price="2.6500" href="https://www.temu.com/search_result.html?search_key=607434252907456&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#99 · 1.27</span><img src="https://img.kwcdn.com/product/fancy/d132f8b7-04c4-42a0-84ff-c0ba8332fcd5.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.65</div>
+    <div class="title">马桶清洁泡沫 - 用于马桶内胆、表面和日常浴室护理的清洁泡沫</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="8.2600" href="https://www.temu.com/search_result.html?search_key=606938586839474&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#100 · 1.26</span><img src="https://img.kwcdn.com/product/open/f3269d285da344eb8e7d1a98191ff989-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.26</div>
+    <div class="title">不锈钢鸭嘴勺，带长柄，耐刮耐用烹饪用具，符合人体工程学握把和光滑表面，非常适合火锅、蒜和酱料</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="16.1300" href="https://www.temu.com/search_result.html?search_key=606857653489201&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#101 · 1.26</span><img src="https://img.kwcdn.com/product/21f0664dd0/b02ad0e3-d2eb-4ffc-a1ee-cecf6b238f20_1300x1300.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>16.13</div>
+    <div class="title">2/3pcs Light Blue Translucent Maple Leaf Print Fitted Sheet Set (1 Fitted Sheet And 1/ 2 Pillowcases), Deep Pocket, Non-Slip, Minimalist Natural Style, Smooth Comfortable, Bedroom Decor Bed</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="7.3100" href="https://www.temu.com/search_result.html?search_key=606701558273049&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#102 · 1.26</span><img src="https://img.kwcdn.com/product/open/0c01f7d202184692b96d110d73172daf-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.31</div>
+    <div class="title">1pc紫砂壶厂家小横把如意壶 功夫茶壶</div>
+    <div class="cate">家居厨房用品/咖啡用品</div>
+  </div>
+</a>
+<a class="card" data-price="7.8900" href="https://www.temu.com/search_result.html?search_key=607402711696472&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#102 · 1.26</span><img src="https://img.kwcdn.com/product/open/312ab348053e459394b94824d664f39e-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.89</div>
+    <div class="title">1pc紫砂壶厂家小横把如意壶 功夫茶壶</div>
+    <div class="cate">家居厨房用品/咖啡用品</div>
+  </div>
+</a>
+<a class="card" data-price="9.2300" href="https://www.temu.com/search_result.html?search_key=607397208787424&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#104 · 1.26</span><img src="https://img.kwcdn.com/product/fancy/7df16bf5-1bf8-46f7-a0c7-e2c2734be60b.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.23</div>
+    <div class="title">3D Laser Engraved Praying Angel Crystal Ornament Christian Religious Gift Desktop Paperweight</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.7100" href="https://www.temu.com/search_result.html?search_key=605653267499919&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#105 · 1.26</span><img src="https://img.kwcdn.com/product/open/9c8a294dc89d422c977b6229542205aa-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.71</div>
+    <div class="title">1件装 双面印花短毛绒抱枕套 复古澳大利亚凯尔皮狗印花披肩套，18x18英寸，机洗可水洗涤，拉链闭合，适用于门廊、露台、沙发、软垫和户外区域的家居装饰。 不含枕芯</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="7.8000" href="https://www.temu.com/search_result.html?search_key=607235610609103&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#106 · 1.26</span><img src="https://img.kwcdn.com/product/fancy/0543f549-213f-4bb2-b090-a096ff6149e3.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.80</div>
+    <div class="title">浴室旋转置物架卫生间托盘厕所收纳架</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="22.0800" href="https://www.temu.com/search_result.html?search_key=606816851348876&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#107 · 1.26</span><img src="https://img.kwcdn.com/product/21f0661a40/3e3f3fd1-6576-47d6-bd98-6a5fa9a72475_800x800.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>22.08</div>
+    <div class="title">3pcs Christmas Reindeer Wreath Bedspread &amp; Pillowcase Suitable for Hotels, Guesthouses, Bedrooms - Quilted Patchwork Bedspread with Reindeer Wreath, Breathable Bedding, Machine Washable Suitable for All Seasons, Holiday Gift</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="18.7800" href="https://www.temu.com/search_result.html?search_key=607016298863914&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#108 · 1.26</span><img src="https://img.kwcdn.com/product/open/5840a6689e74436bb3131048803355f2-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>18.78</div>
+    <div class="title">2D平面印花民族几何床笠三件套（1个床笠和2个枕套，无芯），图案床笠植物纤维，3件套，床笠，枕套，无芯床上用品，床垫保护套柔软透气</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="2.3900" href="https://www.temu.com/search_result.html?search_key=606887852498118&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#109 · 1.26</span><img src="https://img.kwcdn.com/product/open/11fefc253a1047609cf0fe69eb072c53-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.39</div>
+    <div class="title">1pc，it&#x27;s always tea time茶壶茶杯墙贴，墙面装饰高级感，pvc自粘可移除，适用于卧室，客厅，餐厅，浴室，家居墙壁装饰，房间装饰等</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.2800" href="https://www.temu.com/search_result.html?search_key=607493308659161&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#110 · 1.26</span><img src="https://img.kwcdn.com/product/open/3a843294baba49feb302bd37de03c139-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.28</div>
+    <div class="title">暗黑风蜘蛛网杯垫 镂空设计隔热防烫垫 咖啡杯水杯防滑垫 小众个性桌面装饰</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="16.1300" href="https://www.temu.com/search_result.html?search_key=606808261364692&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#111 · 1.26</span><img src="https://img.kwcdn.com/product/21f0664f60/edcb9d7f-0b47-4653-a959-06790c031df8_1300x1300.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>16.13</div>
+    <div class="title">2/3pcs Vintage Golden Clock Pine Branch Star Print Fitted Sheet Set (1 Fitted Sheet + 1/2 Pillowcases), Deep Pocket, All-Around Elastic, Comfortable and Breathable, Vintage Aesthetic Bedding, for Bedroom Home Decor</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="0.8900" href="https://www.temu.com/search_result.html?search_key=607588871722009&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#112 · 1.26</span><img src="https://img.kwcdn.com/product/fancy/122af1a1-a354-4bb7-8654-e2fec59bd274.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>0.89</div>
+    <div class="title">2个装玻璃水垢魔术清洁刷 - 强力工具，去除水渍、水垢和水垢污渍 - 可重复使用的玻璃和瓷砖清洁工具</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="6.5600" href="https://www.temu.com/search_result.html?search_key=607639069141139&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#113 · 1.26</span><img src="https://img.kwcdn.com/product/open/38bbc55815444c5a9068b64f12dbc95c-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.56</div>
+    <div class="title">Clear Crystal Ball 3D Carved And Statuette with Metal Stand Home Desktop Blessing Decor</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="22.0800" href="https://www.temu.com/search_result.html?search_key=606924225496494&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#114 · 1.25</span><img src="https://img.kwcdn.com/product/algo_check/auto/561b360979611b98b9d876fdbf06d058_1787814508232.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>22.08</div>
+    <div class="title">18片拼图组合毛毡板照片墙背景板挂墙面粘相片框展示毡版墙贴软木板免打孔愿景拍立得墙壁装饰创意书桌文化留言板，送图钉送随机色图钉（多色可选）</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.0000" href="https://www.temu.com/search_result.html?search_key=606863022249059&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#115 · 1.25</span><img src="https://img.kwcdn.com/product/fancy/8b7fe5c5-5178-4af4-8f3f-e86e212b446f.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.00</div>
+    <div class="title">Washing Machine Cleaner Tablets 80pcs, Deep Clean and Deodorize for Front Load Top Load HE, 80pcs</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="3.7900" href="https://www.temu.com/search_result.html?search_key=601102564272721&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#116 · 1.25</span><img src="https://img.kwcdn.com/product/fancy/b92447a9-5e66-4eb0-96b9-4f9e1152df7e.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.79</div>
+    <div class="title">2D平面圆形锈蚀金属限速45标志 家居车库或咖啡馆墙面装饰 2D平面款</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="8.6200" href="https://www.temu.com/search_result.html?search_key=607696245850200&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#117 · 1.25</span><img src="https://img.kwcdn.com/product/open/0e3c5e9185074001b9c0d1b664219005-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.62</div>
+    <div class="title">2D平面4片/8片圆形餐垫 - 绿色设计藤编餐垫，平面印花涤纶纤维，适用于节日聚会、多功能餐饮装饰、派个场合 - 万圣节、感恩节、圣诞节、秋收礼物</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="7.3200" href="https://www.temu.com/search_result.html?search_key=607293324234643&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#118 · 1.25</span><img src="https://img.kwcdn.com/product/fancy/7a007efd-20f7-4cd7-9865-b111e9286774.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.32</div>
+    <div class="title">In- Car Center Console with Retractable Fashion Glasses Holder &amp; Covered Storage Box - Multi-Functional Dashboard Shelf Suitable for Phones, Keys, Fashion Glasses, Small Items - Plastic for Vehicle Interior Organization System, Shelf Baskets</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="16.1300" href="https://www.temu.com/search_result.html?search_key=607461096429203&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#119 · 1.25</span><img src="https://img.kwcdn.com/product/21f0664f60/48df7932-c334-433c-9069-dd8a41dd77bd_1300x1300.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>16.13</div>
+    <div class="title">2/3pcs Vintage Brown Beige Patchwork Paisley Plaid Polka Dot Fitted Sheet Set (1 Fitted Sheet And 1/ 2 Pillowcases), Deep Pocket, Elastic All Around, Breathable, Comfortable, Decorative Bedding for Home Bedroom, Hotel</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.5100" href="https://www.temu.com/search_result.html?search_key=607266883354161&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#120 · 1.25</span><img src="https://img.kwcdn.com/product/fancy/65c18918-0d6d-4868-ae00-8b6ef802a792.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.51</div>
+    <div class="title">两件套淋浴地漏盖套装 | 1 个地漏盖 + 1 个毛发收集器，适用于 2.76 英寸淋浴地漏，配备自动开关功能和内置过滤器，防异味浴室地漏芯，防止浴室地漏堵塞</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="7.0300" href="https://www.temu.com/search_result.html?search_key=607100319183821&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#121 · 1.25</span><img src="https://img.kwcdn.com/product/open/18d9908d3828408fa7c5fc4baa904661-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.03</div>
+    <div class="title">1个创意大猩猩造型装饰托盘 | 多功能收纳整理盒，适用于珠宝、化妆品、钥匙和日常用品 | 时尚桌面和家居装饰点缀 | 卧室、客厅和玄关的实用装饰品，珠宝托盘</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="6.0400" href="https://www.temu.com/search_result.html?search_key=601102988484709&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#122 · 1.25</span><img src="https://img.kwcdn.com/product/open/4be17320d3ea4b6abeab561eba91512d-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.04</div>
+    <div class="title">红雀松树雪花圣诞节抱枕套2个装床上用品适用于床卧室沙发室内外派对装饰</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.0300" href="https://www.temu.com/search_result.html?search_key=607123673022655&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#123 · 1.25</span><img src="https://img.kwcdn.com/product/fancy/03de930f-e9e5-4f9c-b847-51b8757a903e.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.03</div>
+    <div class="title">2D平面，1件凯尔特乌鸦亚克力墙饰 - 凯尔特绳结与乌鸦面板，适用于客厅、卧室、办公室装饰，现代凯尔特乌鸦艺术家居装饰，复古亚克力挂饰，2D平面</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.0900" href="https://www.temu.com/search_result.html?search_key=606416966401824&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#124 · 1.25</span><img src="https://img.kwcdn.com/product/open/2493df6217c1492a80a180c6fbdf169d-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.09</div>
+    <div class="title">2D Flat Printing Wall Sticker, 1pc Refrigerator Sticker, Iced Beer Pouring into a Glass Design, Self-Adhesive Wall Decal Wallpaper, Suitable for Cabinets and Wardrobes, Modern Kitchen Decor Home Sticker, Residue-Free and Easy to Peel and Stick Home</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.8400" href="https://www.temu.com/search_result.html?search_key=606035855147008&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#125 · 1.25</span><img src="https://img.kwcdn.com/product/open/b0a05f0313584d8195d4d25cc3c7d435-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.84</div>
+    <div class="title">1件装 彩色乘法口诀表1-12印花抱枕套，双面装饰靠垫套，多种规格可选，欢乐学习主题家居饰品，适用于沙发、卧室及客厅装饰</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="2.0100" href="https://www.temu.com/search_result.html?search_key=607281513124342&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#126 · 1.25</span><img src="https://img.kwcdn.com/product/fancy/80d239d5-e3cd-4a96-b54c-23081248a34c.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.01</div>
+    <div class="title">2 件 15 厘米、1.5mm 加厚圆形金色亚克力装饰托盘镜面，带防滑垫的防碎非玻璃镜面板，多功能镜面托盘，适用于婚礼、派对餐桌中央摆饰以及家居墙面装饰</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="17.4300" href="https://www.temu.com/search_result.html?search_key=601100313148888&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#127 · 1.25</span><img src="https://img.kwcdn.com/product/fancy/290a2b80-96e9-4ec4-8b3f-da8875c38a05.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>17.43</div>
+    <div class="title">1件 白色和米色迷你金毛犬幼犬浴帘，带塑料挂钩，尺寸为70.8英寸 x 70.8英寸，采用耐用涤纶纤维制成，易于清洁，非常适合浴室、浴缸或窗户家居装饰</div>
+    <div class="cate">家居厨房用品/毛巾浴巾</div>
+  </div>
+</a>
+<a class="card" data-price="4.6300" href="https://www.temu.com/search_result.html?search_key=605816962825745&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#128 · 1.24</span><img src="https://img.kwcdn.com/product/open/2ebd0fe35bd1454da22487154f9327e5-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.63</div>
+    <div class="title">1pc 黄底红羊卡通插画抱枕套，一件装饰艺术风格单面枕套，适用于沙发、床铺、客厅及办公室装饰（不含枕芯），复古风格装饰。</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.7300" href="https://www.temu.com/search_result.html?search_key=606863022201217&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#129 · 1.24</span><img src="https://img.kwcdn.com/product/open/b0be57df8ec047b7a7c407fbc58905d3-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.73</div>
+    <div class="title">Bat Shaped Mini Baseball Display Stand with Motherboard Base- Desktop Sports Souvenir Stand, Used to Store Commemorative Baseball and Provide Plastic Sculpture Gifts for Baseball Fans Used as a Display Stand to Commemorate Baseball</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.3900" href="https://www.temu.com/search_result.html?search_key=606032566817227&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#130 · 1.24</span><img src="https://img.kwcdn.com/product/fmket/b0caee0069aeeb26887ce4fdef80baea.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.39</div>
+    <div class="title">【JIT】1pc枕套，波西米亚风枕套，图案为小女孩和小男孩，单面印刷图案，带拉链封口，短毛绒靠垫套，可机洗，涤纶纤维材质，非常适合家庭、办公室、沙发、床。不包含抱枕芯</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.7600" href="https://www.temu.com/search_result.html?search_key=606117392426317&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#131 · 1.24</span><img src="https://img.kwcdn.com/product/open/4f28cee14aef482cbab5d0adb9529f8f-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.76</div>
+    <div class="title">一个各种不同形状硅胶糖果模具，树叶南瓜橡果形状 18腔饼干硅胶模具，巧克力模具，可用于制作蛋糕装饰，巧克力，糖果，DIY小饼干，小面包</div>
+    <div class="cate">家居厨房用品/烘焙用品</div>
+  </div>
+</a>
+<a class="card" data-price="3.4300" href="https://www.temu.com/search_result.html?search_key=607420025784971&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#132 · 1.24</span><img src="https://img.kwcdn.com/product/fancy/b77b4338-d724-40c6-8893-77361b2b67b6.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.43</div>
+    <div class="title">3pcs Household Fan Dusting Brush Set, Suitable for Cleaning Fans, Air Conditioners, Blinds, and Window Tracks. Also Ideal for Use in the Living Room, Bedroom, Bathroom, and Car</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="15.4000" href="https://www.temu.com/search_result.html?search_key=607620010206748&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#133 · 1.24</span><img src="https://img.kwcdn.com/product/open/d425f470cef346f196e4d3066bdec65a-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>15.40</div>
+    <div class="title">拼图组合毛毡墙贴餐厅客厅书房免打孔照片墙留言板家居装饰品墙面装饰自粘装饰性布告栏墙贴</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.4900" href="https://www.temu.com/search_result.html?search_key=607400564250377&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#134 · 1.24</span><img src="https://img.kwcdn.com/product/open/8ded5f2e6fa24ae0b1260c07c9747842-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.49</div>
+    <div class="title">14pcs Star-Shaped Glass Marbles: Fun Marble Game And Additions, Suitable for Home, Living Room, And Office Decoration, Gifts for Mother&#x27;S Day, Thanksgiving, Christmas, New Year, And Easter, Handmade Landscape Decorations</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.7000" href="https://www.temu.com/search_result.html?search_key=606399383853298&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#135 · 1.24</span><img src="https://img.kwcdn.com/product/open/083ace372b194d8799741c40d17c2c6f-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.70</div>
+    <div class="title">1个 2D平面印花双面抱枕套（不含枕芯），复古沙龙女性图案，44.98×44.98厘米，时尚家居装饰，适用于客厅、卧室、沙发，拉链开合，可机洗，2D平面</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="4.6300" href="https://www.temu.com/search_result.html?search_key=601105065303449&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#136 · 1.24</span><img src="https://img.kwcdn.com/product/open/c166870a485e4b9ab26b2a86b830fc9a-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.63</div>
+    <div class="title">2D平面 - 双面短毛绒枕套，复古森林猫头鹰设计，灵感来源于威廉·莫里斯，采用现代涤纶制成。带拉链封口，适合客厅或卧室使用。可机洗</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.5200" href="https://www.temu.com/search_result.html?search_key=607405664483733&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#137 · 1.24</span><img src="https://img.kwcdn.com/product/open/da62dce51e8b414e9c02039045c31da0-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.52</div>
+    <div class="title">2D平面设计，单件，复古仙女风彩绘亚克力捕捉挂饰，仙女装饰（8英寸 X 8英寸），优雅梦幻家居装饰，窗户装饰，捕捉挂饰，室内装饰</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.7400" href="https://www.temu.com/search_result.html?search_key=606904898168424&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#138 · 1.23</span><img src="https://img.kwcdn.com/product/open/d71ec80fb9724144abadf0ac6a368c44-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.74</div>
+    <div class="title">魔力超细纤维抹布——无痕不留痕，柔软至极！适用于厨房、汽车、眼镜及电子设备——可水洗，持久耐用</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="11.1300" href="https://www.temu.com/search_result.html?search_key=606938855237707&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#139 · 1.23</span><img src="https://img.kwcdn.com/product/open/d9faed0c6a13404dba39213facd8dcef-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>11.13</div>
+    <div class="title">2pcs【2个紫砂茶壶】紫砂壶厂家小横把如意壶 功夫茶壶</div>
+    <div class="cate">家居厨房用品/咖啡用品</div>
+  </div>
+</a>
+<a class="card" data-price="3.6400" href="https://www.temu.com/search_result.html?search_key=606537896541731&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#140 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/7e0c59e6-ee5c-4d88-8de3-cab53cabeae1.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.64</div>
+    <div class="title">14 X 18 Cm Size, Capacity for 100pcs 6-Inch Photos with Plastic Cover, Brown Kraft Colored Hollow Photo Album, Colorful Footprint, Colorful Whale, Colorful Giraffe, Colorful Christmas, Colorful Bear, Colorful Tower Cover</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.7500" href="https://www.temu.com/search_result.html?search_key=605608505908250&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#141 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/99a51942-095c-450d-b8dd-a20148d31988.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.75</div>
+    <div class="title">1个乡村暗哥特维多利亚风格植物花卉枕套 18X18英寸 带拉链 非常适合客厅沙发办公室餐厅卧室装饰，不含枕芯，单面印花</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="14.4100" href="https://www.temu.com/search_result.html?search_key=601105004521570&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#142 · 1.23</span><img src="https://img.kwcdn.com/product/open/152590a255f74bb797389a6cf5ca32f6-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>14.41</div>
+    <div class="title">4条装 18*26 英寸 圣诞节斗牛犬厨房巾，餐盘，适合斗牛犬爱好者，茶巾，厨房用品，节日冬季圣诞狗狗装饰用手巾，浴室清洁布/洗碗布/清洁垫/懒人抹布；</div>
+    <div class="cate">家居厨房用品/餐厨布艺</div>
+  </div>
+</a>
+<a class="card" data-price="37.8200" href="https://www.temu.com/search_result.html?search_key=607386672703575&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#143 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/e32e7894-2270-4c2c-80e9-8b41b82a56d8.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>37.82</div>
+    <div class="title">Glass Rinser for Kitchen Sink, SUS304 Stainless Steel Built-in High Pressure Cup Washer, Bar Glass Rinser for Coffee Cups, Home &amp; Commercial Nut for G3/8(BSPP)</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="5.5500" href="https://www.temu.com/search_result.html?search_key=607021399146762&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#144 · 1.23</span><img src="https://img.kwcdn.com/product/open/d0d8098c645d4f2aa23a83fa750b9445-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.55</div>
+    <div class="title">1pc Specialty&amp; Novelty Cake Pans Large Heart-shaped Silicone Cake Mold, Multi-hole Handmade Soap Mold, Baking and Craft Supplies</div>
+    <div class="cate">家居厨房用品/烘焙用品</div>
+  </div>
+</a>
+<a class="card" data-price="23.5100" href="https://www.temu.com/search_result.html?search_key=606730616467285&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#145 · 1.23</span><img src="https://img.kwcdn.com/product/217a7c03fc/207b298d-6b7d-4bc0-bfd0-475e87acd871_1000x1000.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>23.51</div>
+    <div class="title">3件套秋季南瓜床罩枕套套装 适用于床上用品 - 秋收水彩花卉被套 带拉链封口 透气可机洗涤纶床单 四季通用被套 适用于房间或装饰 2D平面印花</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="6.9700" href="https://www.temu.com/search_result.html?search_key=606326369394928&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#146 · 1.23</span><img src="https://img.kwcdn.com/product/open/78bcfd5dffce494b9defc7d253cd02b5-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.97</div>
+    <div class="title">尖叫枕头，面部支撑枕，物理治疗枕，现代家居主题氛围，双面印花枕套，舒适现代风格融合 18X18 英寸</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.8200" href="https://www.temu.com/search_result.html?search_key=607280170918142&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#147 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/f5d79a2b-9a23-47a0-a26a-05de7294473a.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.82</div>
+    <div class="title">200ml Bathroom Shower Wall Cleaner, Multi-Purpose Cleaner, Powerful Stain Removal and Deodorizing, Quick Cleaner for Walls, Floors, Toilets, and Sinks, Wall Care Spray, Wall Stain Remover, Multi-Purpose Bathroom Cleaner</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="18.4800" href="https://www.temu.com/search_result.html?search_key=601102891554316&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#148 · 1.23</span><img src="https://img.kwcdn.com/product/algo_check/auto/669970e0e713d43bafa915e0fe56d52a_1755009523967.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>18.48</div>
+    <div class="title">1件独立日主题的浴帘，采用小鹿设计，采用涤纶面料制成。这款浴室装饰品展示了美国国旗和自然主题，尺寸为70.8英寸 x 70.8英寸</div>
+    <div class="cate">家居厨房用品/毛巾浴巾</div>
+  </div>
+</a>
+<a class="card" data-price="6.5100" href="https://www.temu.com/search_result.html?search_key=606365644852160&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#149 · 1.23</span><img src="https://img.kwcdn.com/product/open/16a8138988364b45bb55d7cbc6c1b3a3-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.51</div>
+    <div class="title">4件套，鲸鱼墙饰海滩帆船海边主题木质鱼群挂饰湖畔房屋海洋装饰复古摆件适用于家居浴室卧室</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="5.4200" href="https://www.temu.com/search_result.html?search_key=606092964809646&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#150 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/f506e67b-3cb7-43a2-824d-81f72bb257c3.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.42</div>
+    <div class="title">1个复古棕绿撞色条纹枕套 - 美式复古风枕套，45.72 X 45.72 Cm，个面印花，拉链封口，机洗，适用于客厅/书房/民宿装饰（不含枕芯）</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.9900" href="https://www.temu.com/search_result.html?search_key=606888657798116&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#151 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/907989d2-94d8-42bf-baac-74112cee06c6.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.99</div>
+    <div class="title">2D Flat, 2D Flat Surface, 1 Set of Christmas Wooden Decorative Plaque, Party Decoration, Perfect Holiday Gift, Home Wall Decor, Welcome Sign, Desktop Office Decorative Ornament, Halloween Decoration, Suitable for All Scenarios, Vintage, Rustic</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="8.4800" href="https://www.temu.com/search_result.html?search_key=607144074138440&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#152 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/848077c9-1791-4c40-b804-4f6ad09ed605.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.48</div>
+    <div class="title">天然相思木圆形托盘，直径 20.5cm，纹理自然清晰。边缘加高防洒设计，质地坚固耐用，表面顺滑易擦洗。可作为早餐餐盘、水果零食盘、咖啡饮品收纳盘，也适合浴室置物、下午茶摆盘，适配家庭餐桌、民宿、咖啡馆，复古原木风，实用美观，居家多场景通用实木收纳摆盘托盘。</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="2.4300" href="https://www.temu.com/search_result.html?search_key=607383250129739&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#153 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/ddd035da-406d-40a8-9c6f-ba124c0a1b22.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.43</div>
+    <div class="title">一个祈祷女孩白色塑料雕塑摆件</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.4200" href="https://www.temu.com/search_result.html?search_key=605623806738772&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#154 · 1.23</span><img src="https://img.kwcdn.com/product/fancy/c786b011-3e4f-4e57-ba5b-fae220add957.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.42</div>
+    <div class="title">1pc Science-Themed Table Runner with Chemistry Lab Design - Suitable for Weddings, Parties, Home Decor | Durable Polyester Rectangular Banner for Dining Tables, Coffee Tables | Science Party Decoration for, 2D Flat</div>
+    <div class="cate">家居厨房用品/餐厨布艺</div>
+  </div>
+</a>
+<a class="card" data-price="17.5800" href="https://www.temu.com/search_result.html?search_key=606814703828695&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#155 · 1.22</span><img src="https://img.kwcdn.com/product/open/dba665e9736848fbb90260e526b2515d-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>17.58</div>
+    <div class="title">3pcs Scale Set, Scale And 2pcs Stands, Convenient Storage, Space-Saving, Ready to Use, Precise Measurement, Record Your Healthy Life</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="19.9100" href="https://www.temu.com/search_result.html?search_key=607061127618520&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#156 · 1.22</span><img src="https://img.kwcdn.com/product/fancy/e8c88fb6-d221-4ac7-836d-93a9cec28c85.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>19.91</div>
+    <div class="title">6件装超大号重型搬家包——带把手和拉链的防水收纳袋，可折叠用于大学宿舍，粉色收纳</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="7.2100" href="https://www.temu.com/search_result.html?search_key=607097232187180&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#157 · 1.22</span><img src="https://img.kwcdn.com/product/open/41cbd0b96d7e4c179f07f0dd6ea6e79a-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.21</div>
+    <div class="title">Brass Pop Up Drain Stopper Universal Bathroom Sink Basin Drain Core Replacement with Anti Odor Seal for Washbasin Vanity and Kitchen Sink</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="2.2400" href="https://www.temu.com/search_result.html?search_key=606855237631156&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#158 · 1.22</span><img src="https://img.kwcdn.com/product/2123a66064/feb99a29-b677-4982-999d-d93e4e8bdadb_800x800.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.24</div>
+    <div class="title">2D Flat 1pc Wooden Sign, Wall Art with Pomeranian, Security Theme Decor, Retro Style Home Decor, Suitable for Living Room And Office, Safety Rounded Corners, Easy to Hang, Windproof And Durable, 2D Flat</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.7200" href="https://www.temu.com/search_result.html?search_key=601102164724071&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#159 · 1.22</span><img src="https://img.kwcdn.com/product/fancy/71ea79bd-ff5c-42a4-8288-f88dc6a063fe.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.72</div>
+    <div class="title">复古威尼斯意大利金属墙饰 - 复古旅行海报装饰，展示里亚尔托桥与贡多拉船 - 意大利城市锡制标志，适用于家居、咖啡馆、办公室 - 易悬挂室内装饰 - 威尼斯建筑风格，文艺复兴时期艺术，咖啡厅装饰，乡村风格，做旧效果，手工制作外观，2D平面设计，完美房间装饰</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="5.8000" href="https://www.temu.com/search_result.html?search_key=607640948196846&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#160 · 1.22</span><img src="https://img.kwcdn.com/product/open/e295dcf0723e47f4ac3bcdade4ebaa3d-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.80</div>
+    <div class="title">2件4腔体甜甜圈硅胶糖果模具，硅胶甜甜圈模具套装，空气炸锅不粘烘焙模具，适用于贝果和甜甜圈蛋糕盘，用于糖果巧克力蛋糕装饰，完美甜甜圈蛋糕饼干贝果松饼，可重复使用且易于清洁，非常适合烘焙甜甜圈和百吉饼</div>
+    <div class="cate">家居厨房用品/烘焙用品</div>
+  </div>
+</a>
+<a class="card" data-price="6.9500" href="https://www.temu.com/search_result.html?search_key=606655387397218&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#161 · 1.22</span><img src="https://img.kwcdn.com/product/open/93594cc8ccbd4c7fa35a58a545cec645-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.95</div>
+    <div class="title">1PC卡通腊肠狗沙发垫，四季通用，波浪花边防滑雪尼尔坐垫，可机洗沙发保护套，用于1/2/3/4人座沙发，客厅与卧室装饰，家居必备</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="15.7900" href="https://www.temu.com/search_result.html?search_key=607063811958922&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#162 · 1.22</span><img src="https://img.kwcdn.com/product/open/5a591f134d8c426da16a5aff5424ea49-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>15.79</div>
+    <div class="title">粉彩彩虹梦幻花朵饺子紫色绽放2D平面印花造型填充靠垫，非常适合沙发卧室客厅舒适家居装饰，适用于办公室和汽车，靠垫礼物</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="5.6300" href="https://www.temu.com/search_result.html?search_key=607423515447613&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#163 · 1.22</span><img src="https://img.kwcdn.com/product/open/30aafcf76eba42c3a960e349ae9e3d92-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.63</div>
+    <div class="title">Positive Grim Reaper Jar - Emotional Support Grim Reaper - 60 Dark Humor Cards Spooky Gifts for Women Men Coworkers Friends Funny Halloween Gifts, Boo Basket Stuffers, Horror Gift, Gothic Decor</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="14.4900" href="https://www.temu.com/search_result.html?search_key=601101201731455&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#164 · 1.22</span><img src="https://img.kwcdn.com/product/open/69ae7ffb834e4c2085fcc22516fc299c-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>14.49</div>
+    <div class="title">一款军犬背景的美国国旗淋浴帘，配有12个挂钩，尺寸为71X71英寸，采用聚酯材质，适用于家庭浴室装饰，时尚分隔，适用于所有浴室和杆，适合所有季节，室内外均可使用。</div>
+    <div class="cate">家居厨房用品/毛巾浴巾</div>
+  </div>
+</a>
+<a class="card" data-price="4.0200" href="https://www.temu.com/search_result.html?search_key=601102829581790&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#165 · 1.22</span><img src="https://img.kwcdn.com/product/open/e6276b95174347fe9c41e7170648a953-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.02</div>
+    <div class="title">1块雪景浴室防滑垫 - 可机洗法兰绒，采用冬季雪山和松树设计，1.19厘米厚，非常适合客厅、浴室和洗衣房，增强房间装饰和地板保护</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="33.6800" href="https://www.temu.com/search_result.html?search_key=605655817638197&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#166 · 1.22</span><img src="https://img.kwcdn.com/product/21137b28e02/ce517022-af5e-49cb-acb7-6b28d609b1f0_1024x1024.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>33.68</div>
+    <div class="title">2/3pcs 2D平面新款几何花卉艺术床盖套装（1*床盖+1/2*枕套，无填充物）,透气凉感被毯,适用于卧室客房,适合各年龄段性别,轻薄平铺床盖套装,皇后与国王尺寸可选,母亲节春夏全季节版!</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.7900" href="https://www.temu.com/search_result.html?search_key=607647055096978&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#167 · 1.22</span><img src="https://img.kwcdn.com/product/open/528d4ba2803c41ce892386f80ae18ed5-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.79</div>
+    <div class="title">抛光不锈钢大号平口服务勺 餐饮宴会饭勺 餐厅用餐具</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.3800" href="https://www.temu.com/search_result.html?search_key=606021376403521&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#168 · 1.22</span><img src="https://img.kwcdn.com/product/open/b3507343c4964fbb9288ef70ef2c292c-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.38</div>
+    <div class="title">幸运四叶草圣帕特里克节门框装饰 - 乡村风格木质角饰，易安装家居点缀</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="12.2400" href="https://www.temu.com/search_result.html?search_key=606814838085184&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#169 · 1.22</span><img src="https://img.kwcdn.com/product/fancy/0d3b4fa6-999a-4213-9ea7-affa63f0f104.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>12.24</div>
+    <div class="title">艺术感镂空陶瓷皂液器，抽象雕塑造型，两种款式可选，浴室台面放洗手液，实用同时还能当软装装饰。</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="3.5800" href="https://www.temu.com/search_result.html?search_key=601101625729335&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#170 · 1.22</span><img src="https://img.kwcdn.com/product/algo_check/auto/0dc7022f360e84492b5009e5ec3bbfc5_1756776617512.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.58</div>
+    <div class="title">1件超吸水脚垫彩绘骷髅三部曲主题， 超强吸水矽藻土浴室垫 (19.7x31.5/15.7x23.5英寸) - 快干防滑矩形地毯，适用于客厅、卧室、浴室、厨房、阳台、露台、洗衣房、房车和入口 - 柔软，可机洗家居装饰地垫</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="2.6900" href="https://www.temu.com/search_result.html?search_key=606089340890425&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#171 · 1.22</span><img src="https://img.kwcdn.com/product/open/72081809b1bf4e6e9bc8b6c05e663ae0-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.69</div>
+    <div class="title">1pc Rabbit and Pink Flower Hot Air Balloon Decorative Wall Sticker, Pink Butterfly and Little Bird Wall Sticker, Spring Decoration, Home Decor, Accent Wall Decoration, Self-Adhesive and Removable, for Decorating Rooms, Bathrooms, Living Rooms</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.5400" href="https://www.temu.com/search_result.html?search_key=607438480715842&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#172 · 1.21</span><img src="https://img.kwcdn.com/product/fmket/559ab21b1ec0d7dd1227354966bd8f50.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.54</div>
+    <div class="title">【】1pc枕套，苏格兰驯鹿角2D平面设计抱枕套，柔软舒适的聚酯短绒面料，单面印花，（不包含抱枕芯）多尺寸选择：18*18英寸16*16英寸，机洗，拉链闭合，织物聚酯装饰靠垫套，用于家居，沙发，卧室和办公室装饰</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.1600" href="https://www.temu.com/search_result.html?search_key=607127699581420&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#173 · 1.21</span><img src="https://img.kwcdn.com/product/fancy/f1143adc-05a2-4633-a8d4-d7510c9e3845.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.16</div>
+    <div class="title">一件 2D 平面萌宠厨房主题装饰木牌，“斯塔福犬厨师趣味标语款 复古做旧风格” 可爱狗狗搭配厨房元素，适配家庭厨房、铲屎官家居空间、美食爱好者角落布置，传递厨房的萌趣生活氛围，</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.6100" href="https://www.temu.com/search_result.html?search_key=606734978547639&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#174 · 1.21</span><img src="https://img.kwcdn.com/product/open/53d9726124be461b87385977414b80bb-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.61</div>
+    <div class="title">行走持卷轴耶稣雕塑摆件，3D 打印复古古典艺术桌面陈设工艺品，居家桌台展示装饰，艺术收藏家居软装，适配生日、圣诞、感恩节、母亲节、父亲节、乔迁、复活节节日送礼</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="11.8300" href="https://www.temu.com/search_result.html?search_key=605716148531631&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#175 · 1.21</span><img src="https://img.kwcdn.com/product/fancy/ab00d5e7-6988-4101-8789-e1f48d8d403e.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>11.83</div>
+    <div class="title">1pc, Creative Owl Framed Wall Clock, Can Be Placed, Dual-purpose Clock, Fashionable Home Decoration, Silent Clock. Suitable for Living Room, Bedroom, Kitchen, Office and Shop Decoration. Birthday, Housewarming Gifts.</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="6.6900" href="https://www.temu.com/search_result.html?search_key=607467270457577&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#176 · 1.21</span><img src="https://img.kwcdn.com/product/open/7af771c54dea4ee094924c0b44a694d9-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.69</div>
+    <div class="title">Guardian Deity General Laser Interior Carved Transparent Crystal Ball 2.36inch with Carved Metal Stand Home Desktop Placement Housewarming Gift</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="5.5800" href="https://www.temu.com/search_result.html?search_key=605922374050783&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#177 · 1.21</span><img src="https://img.kwcdn.com/product/fancy/673a8e42-79df-458a-af6f-5be1ab446230.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.58</div>
+    <div class="title">1件 定制 DIY 2D 精美亚克力照片-个性化照片定制-亚克力，照片、宠物、婚礼、风景 。家庭团聚，成人定制，聚会，尺寸为：14.5x19.5cm，记录家人幸福时刻，记念收藏</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.2200" href="https://www.temu.com/search_result.html?search_key=606790209093281&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#178 · 1.21</span><img src="https://img.kwcdn.com/product/open/509dc22e3f1c4a0095ac5d4327ba1f74-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.22</div>
+    <div class="title">1个豹纹跳跃图案的软绒抱枕套，尺寸为12X20英寸/30X50厘米，个面印刷，适合客厅沙发/沙发床/卧室的装饰，适用于多种房间风格（不包括填充物）</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="1.0600" href="https://www.temu.com/search_result.html?search_key=607145416351186&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#179 · 1.21</span><img src="https://img.kwcdn.com/product/open/db4c30b7b17c4eeb90eaf25d61541270-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.06</div>
+    <div class="title">3pcs 仿真乌鸦头骨微缩模型，桌面装饰模型摆件，适合微景观造景模型//盆景/车载摆件/收藏爱好，树脂材质。</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.9000" href="https://www.temu.com/search_result.html?search_key=606696592261962&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#180 · 1.21</span><img src="https://img.kwcdn.com/product/open/0245db8419434987ac37a5fc4fbfd616-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.90</div>
+    <div class="title">32片可移除亚克力镜面墙贴 - 大小圆形镜片，适用于浴室、卧室、客厅、电视背景墙、天花板和墙面的光泽贴纸 - 易撕易贴镜面贴片套装</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.9400" href="https://www.temu.com/search_result.html?search_key=607280707819968&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#181 · 1.21</span><img src="https://img.kwcdn.com/product/fancy/aa5294ff-2b97-4b30-89d4-4d2d0037deac.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.94</div>
+    <div class="title">1pc Easy Line Jacquard Fleece Barstool Cover, Rotating Bar Chair Protector, Bar Stool Cover</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="7.4700" href="https://www.temu.com/search_result.html?search_key=601099668533164&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#182 · 1.21</span><img src="https://img.kwcdn.com/product/open/2024-09-12/1726122557751-bec6b73e97f84609a39afae000fcabde-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.47</div>
+    <div class="title">可客制化波士顿名称金属摩托车墙艺术 - 复古风格铁艺装饰标志，适用于家庭和车库，送给骑车人和爱好者的完美礼物，摩托车配件</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="9.1000" href="https://www.temu.com/search_result.html?search_key=607006903660378&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#183 · 1.21</span><img src="https://img.kwcdn.com/product/open/b55b79ef30c84ddb93d649b23f4a470e-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.10</div>
+    <div class="title">1pc Bohemian Dinosaur Print Floor Pillow - Round Soft Microfiber Insert, Machine Washable Multi-Purpose Decorative for Living Room &amp; Bedroom Decor, Dinosaur Room Decor, Mat Accessory, Vibrant Pattern, Durable Fabric, Sizes: 40X40Cm Or 45X45Cm</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="14.6700" href="https://www.temu.com/search_result.html?search_key=606727193866199&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#184 · 1.21</span><img src="https://img.kwcdn.com/product/21f0661450/369dc188-f0d9-402a-b101-ed93ef0a875b_800x800.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>14.67</div>
+    <div class="title">3pcs Quilted Bedspread with Comforter Pink Bow Striped Pattern (Includes 1 Quilt 2 Pillowcases, No Fillers), Romantic Theme, Colorful Bedding, Soft, Breathable Skin-friendly, Comfortable, and Features a Fresh Design.</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="16.3500" href="https://www.temu.com/search_result.html?search_key=601101779319229&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#185 · 1.20</span><img src="https://img.kwcdn.com/product/open/911b03df50204275918c9d36f07d7202-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>16.35</div>
+    <div class="title">1件 棕褐色驼鹿浴帘 带宁静湖景倒影与松林背景 适用于乡村小屋主题家居装饰的浴室帘</div>
+    <div class="cate">家居厨房用品/毛巾浴巾</div>
+  </div>
+</a>
+<a class="card" data-price="10.8900" href="https://www.temu.com/search_result.html?search_key=606356299973145&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#186 · 1.20</span><img src="https://img.kwcdn.com/product/open/8d582949dce24eb6af32bdb2df6c3778-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>10.89</div>
+    <div class="title">4件装鲜艳的鸟类和花卉装饰枕套，17.7 英寸方形，柔软聚酯纤维，拉链腰垫套，适用于沙发和客厅装饰 - 可手洗，单面印花（不含插入物），装饰腰部支撑|艺术鸟设计|拉链闭合</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="17.4100" href="https://www.temu.com/search_result.html?search_key=601101180623499&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#187 · 1.20</span><img src="https://img.kwcdn.com/product/fancy/e2891fb5-0004-45f6-9acb-3d3e7dde7ea3.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>17.41</div>
+    <div class="title">1件装，夏季浴帘，鹿和熊图案搭配松树浴帘，含塑料挂钩，70.8X70.8英寸，耐用涤纶纤维，易于清洁，适用于浴室、浴缸、窗户家居装饰_Bbaiytb0509090</div>
+    <div class="cate">家居厨房用品/毛巾浴巾</div>
+  </div>
+</a>
+<a class="card" data-price="19.1600" href="https://www.temu.com/search_result.html?search_key=601102371193662&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#188 · 1.20</span><img src="https://img.kwcdn.com/product/open/55866f6740b7492ea85fd63d322e2103-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>19.16</div>
+    <div class="title">1件牛仔靴淋浴帘 青绿色鞋履星图案 向日葵马车轮乡村西部主题 现代时尚家居浴室装饰配件 带12个挂钩 70.8X70.8英寸</div>
+    <div class="cate">家居厨房用品/毛巾浴巾</div>
+  </div>
+</a>
+<a class="card" data-price="9.5600" href="https://www.temu.com/search_result.html?search_key=607403248596223&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#189 · 1.20</span><img src="https://img.kwcdn.com/product/open/0f182e0ff18d495da50f1eeee75a21f4-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.56</div>
+    <div class="title">2.36inch Crystal Ball with 3D Laser-Engraved Multi-Armed Deity, for Lotus Throne, for Lotus Dharma Vessel, and Beaded Crown Patterns. Features a Vintage Carved Metal Stand in South Asian Religious Art Style. A Desktop Decorative Ornament and a Niche</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.2800" href="https://www.temu.com/search_result.html?search_key=606638744404004&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#190 · 1.20</span><img src="https://img.kwcdn.com/product/open/09cac685f058428cba7aeb572d0e6bf7-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.28</div>
+    <div class="title">2D 2件咖色渐变波浪抱枕套，单面印花，多尺寸可选，桃皮绒面料，拉链闭合，可机洗，不含枕芯。深浅咖米渐变，搭配层叠流动的曲面波纹图案，并非真实刺绣，色调沉稳高级，富有艺术质感，现代抽象流体印花风格，适配沙发、客厅、卧室、飘窗装饰。</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.5200" href="https://www.temu.com/search_result.html?search_key=607400966900861&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#191 · 1.20</span><img src="https://img.kwcdn.com/product/fancy/59ef91ab-7b8b-47eb-96b9-16e61535c407.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.52</div>
+    <div class="title">不锈钢淋浴门挂钩+墙面挂钩，防锈耐用适合潮湿卫浴环境，多功能浴室辅助挂钩释放台面空间，挂放各类卫浴杂物，安装便捷牢固可靠，居家浴室厨房都可用的家居收纳挂钩</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="8.3200" href="https://www.temu.com/search_result.html?search_key=607384055419319&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#192 · 1.20</span><img src="https://img.kwcdn.com/product/2115234276c/2c48fcf2-073a-4f05-aa39-9e81dc35496a_1200x1200.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.32</div>
+    <div class="title">1pc 11oz Ceramic Coffee Mug, Pink Female Motorcycle Rider Printed Tea Cup, Dishwasher Safe Kitchen Espresso Mug, Ideal  Gift for Women Biker Lovers Family Friends, Perfect for Birthday Christmas Holiday Party Tazas Para Cafe Bonitas</div>
+    <div class="cate">家居厨房用品/杯具</div>
+  </div>
+</a>
+<a class="card" data-price="44.3700" href="https://www.temu.com/search_result.html?search_key=601099965221264&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#193 · 1.20</span><img src="https://img.kwcdn.com/product/open/d1ff7cb601c84274b0166907f218c65c-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>44.37</div>
+    <div class="title">3件套定制堪萨斯城球迷被套套装（1被套+2枕套，不含枕芯）宿舍适用，适合四季卧室装饰，生日礼物</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="2.9600" href="https://www.temu.com/search_result.html?search_key=607628600164266&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#194 · 1.20</span><img src="https://img.kwcdn.com/product/open/97a2d2d41ff741e5905e828867b48f97-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.96</div>
+    <div class="title">40件装甜品专用金色勺子 布丁冰淇淋沙拉勺 甜品勺 慕斯勺 婚庆节日派对氛围餐具</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="12.6300" href="https://www.temu.com/search_result.html?search_key=606769539578392&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#195 · 1.20</span><img src="https://img.kwcdn.com/product/fancy/cc340692-59b4-44e4-89a5-799fcfb61c31.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>12.63</div>
+    <div class="title">2pcs Bed Pillow Cushions - White Solid Color Pillows with Pillowcases, Ultra Soft, All-Season, Durable and Soft Solid Color Rectangular Pillows, Sofa Throw Pillows, Car Pillows, Comfortable and Breathable, Suitable for Home, Bedroom, or Hotel</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="8.9200" href="https://www.temu.com/search_result.html?search_key=601104603114001&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#196 · 1.20</span><img src="https://img.kwcdn.com/product/open/1dd44d3c25e7415d9608e476f0aa9095-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.92</div>
+    <div class="title">A Table Covering Designed for Christmas And Easter Celebrations, Featuring a Cross And The Phrase &quot;He Is Risen, &quot; Adorned with Butterflies And a Floral Wreath. Perfect for Family Gatherings, Dining Areas, Kitchens, And Festive Occasions</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.7100" href="https://www.temu.com/search_result.html?search_key=607156556417172&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#197 · 1.20</span><img src="https://img.kwcdn.com/product/open/84c755b119c446d291d348b94441ceb8-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.71</div>
+    <div class="title">2D平面1件装万圣节节日幽灵抱枕套 黑色枕套 单面印花 不含枕芯 沙发床装饰 适用于卧室客厅</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.8900" href="https://www.temu.com/search_result.html?search_key=607299162761501&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#198 · 1.20</span><img src="https://img.kwcdn.com/product/fancy/62ee6c2b-7c1f-4d35-a026-4409836584ba.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.89</div>
+    <div class="title">一款带有围巾的鹿图案靠垫套，双面印花，可机洗，带拉链封口，由柔软的涤纶面料制成（不含枕芯）</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.6200" href="https://www.temu.com/search_result.html?search_key=607318423001682&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#199 · 1.20</span><img src="https://img.kwcdn.com/product/open/57ebb788c7a94559b2c5384c6eab7fc3-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.62</div>
+    <div class="title">// Modern Jute Placemats Suitable for Formal &amp; Everyday Dining, Beige &amp; Brown Table, Machine Washable Square Table Protectors, Wedding, Party Decor, for Home Table Setting</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="5.3700" href="https://www.temu.com/search_result.html?search_key=607641485026066&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#200 · 1.19</span><img src="https://img.kwcdn.com/product/open/d2aef4249baf4bdfb678e48505e095be-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>5.37</div>
+    <div class="title">410 Stainless Steel Knight Cutlery Set (3pcs) Features a Sturdy, Corrosion-resistant Material with a High-gloss Polish for a Premium, Lustrous Finish. The Set Includes a Sharp Steak Knife, a Fork, and a Spoon, All Crafted in an Elegant and Stylish</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="7.4400" href="https://www.temu.com/search_result.html?search_key=601103366205361&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#201 · 1.19</span><img src="https://img.kwcdn.com/product/open/37f424a173204a93805dc36bf3f86bea-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.44</div>
+    <div class="title">红色圣诞树雪花星星白色背景圣诞节抱枕套2个装床上用品适用于床卧室沙发室内外派对装饰</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="9.4500" href="https://www.temu.com/search_result.html?search_key=607335468631795&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#202 · 1.19</span><img src="https://img.kwcdn.com/product/open/673c49fde6a64313a4c207fff5b52794-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.45</div>
+    <div class="title">YXMX Shower Extension Arm, 360° Adjustable Shower Head Extension Rod - Classic Gear-Style Extendable Arm, Easy-to-Install Bathroom Accessory, Ideal Christmas/Halloween Gift, Shower Fixture,for Shower Use Only</div>
+    <div class="cate">家居厨房用品/浴室用品</div>
+  </div>
+</a>
+<a class="card" data-price="18.0400" href="https://www.temu.com/search_result.html?search_key=606698739699760&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#203 · 1.19</span><img src="https://img.kwcdn.com/product/open/4015ddfcaedb40e1881a5285b8e5469a-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>18.04</div>
+    <div class="title">多功能毛毡照片墙背景板房间卧室客厅墙面装饰自粘相片毛毡墙贴 装饰性布告栏（免费送钉子）</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="14.0000" href="https://www.temu.com/search_result.html?search_key=607114277844991&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#203 · 1.19</span><img src="https://img.kwcdn.com/product/open/cd8946eedd2641f38bd9df7f7ef94513-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>14.00</div>
+    <div class="title">多功能毛毡照片墙背景板房间卧室客厅墙面装饰自粘相片毛毡墙贴 装饰性布告栏（免费送钉子）</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="19.9900" href="https://www.temu.com/search_result.html?search_key=607303256390680&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#203 · 1.19</span><img src="https://img.kwcdn.com/product/open/bfef278d2d4f4609b848279f19414cbe-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>19.99</div>
+    <div class="title">多功能毛毡照片墙背景板房间卧室客厅墙面装饰自粘相片毛毡墙贴 装饰性布告栏（免费送钉子）</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="3.9200" href="https://www.temu.com/search_result.html?search_key=607337616115664&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#206 · 1.19</span><img src="https://img.kwcdn.com/product/open/fb247e77584544fb9d8494d3a94794be-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>3.92</div>
+    <div class="title">1件水彩彩虹爪印围裙，耐用易清洁，可调节腰带，涤纶材质，适用于厨房烹饪、园艺、果园采摘、圣诞节万圣节</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="7.9500" href="https://www.temu.com/search_result.html?search_key=605855667850694&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#207 · 1.19</span><img src="https://img.kwcdn.com/product/fancy/faec5551-ad40-4838-bdc3-279630b44f61.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.95</div>
+    <div class="title">Healing Dreamy Castle Crystal Ball Ornament Laser Inner Carving Process Night Light Housewarming Birthday Gift Warm Desktop Decorations</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="34.7500" href="https://www.temu.com/search_result.html?search_key=605603338516426&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#208 · 1.19</span><img src="https://img.kwcdn.com/product/open/904962f7a7394c5fb30a1c63684f7db4-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>34.75</div>
+    <div class="title">2/3件套优雅花卉图案被套组，奢华金色黄色海军蓝色玫瑰牡丹绣球花设计，经典波斯花卉风格床罩，适用于卧室客厅沙发，柔软轻盈的盖毯家居装饰</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="4.8700" href="https://www.temu.com/search_result.html?search_key=607686313772955&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#209 · 1.19</span><img src="https://img.kwcdn.com/product/open/be0905d6ff7d41f1bbe53c7529acb7d1-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.87</div>
+    <div class="title">2D平面单片复古树皮墙贴，苔藓覆盖贴纸装饰，自然纹理自粘墙纸，大地风设计墙面装饰，家居装饰贴纸可用于卧室、客厅、橱柜贴纸</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="7.1400" href="https://www.temu.com/search_result.html?search_key=606990931716471&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#210 · 1.19</span><img src="https://img.kwcdn.com/product/open/86f691699bdd4b6ca004af5ebab1514f-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.14</div>
+    <div class="title">2.36inch Crystal Ball with 3D Laser-Engraved Forest Deity Deer, Leaves, Antlers, Mushrooms, Tree Roots, and Floral Patterns. Features a Vintage Carved Metal Base in a Forest-Themed Fantasy Style. A Desktop Decorative Ornament and Artistic Atmosphere</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="4.5100" href="https://www.temu.com/search_result.html?search_key=606673372602508&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#211 · 1.19</span><img src="https://img.kwcdn.com/product/21f0663a20/6ad23a6d-6430-4e46-a202-77dcd6e7ed26_800x800.png" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>4.51</div>
+    <div class="title">4pcs,2d flat printing,水彩风足球主题沙发靠抱枕套,单面印花,现代时尚装饰枕套,涤纶材质,多尺寸,拉链封口,可机洗,适用于沙发,客厅、沙发、户外、装饰枕套,适用于日常/节日的家庭装饰,(不含枕芯,无刺绣)</div>
+    <div class="cate">家居厨房用品/沙发装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.7700" href="https://www.temu.com/search_result.html?search_key=605631205490519&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#212 · 1.19</span><img src="https://img.kwcdn.com/product/fancy/5650bd55-28b1-4f20-8f4b-5bafd4bf0983.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.77</div>
+    <div class="title">椭圆形塑料托盘 | 鲜艳色彩，光滑易清洁表面 | 可用洗碗机清洗，轻便易携带 | 可重复使用的多用途托盘，适用于厨房、浴室、梳妆台、办公室和派对上菜</div>
+    <div class="cate">家居厨房用品/餐厅用品</div>
+  </div>
+</a>
+<a class="card" data-price="8.4600" href="https://www.temu.com/search_result.html?search_key=607335468643848&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#213 · 1.19</span><img src="https://img.kwcdn.com/product/open/519672e5c3f74ccc84e780b940e263de-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>8.46</div>
+    <div class="title">3D Laser Engraving Magic Book Flying Broom Star Moon Stars Pattern, Artificial Crystal Material. This Halloween Magic Theme Crystal Decoration with Metal Display Bracket, Mysterious Retro, Suitable for Lovers Who Love Mysterious R</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="2.5900" href="https://www.temu.com/search_result.html?search_key=607138638348599&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#214 · 1.19</span><img src="https://img.kwcdn.com/product/open/7ac68a2296404c919a1ec6d3dbf11ca2-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>2.59</div>
+    <div class="title">家具橱柜桌子门地板及木质表面保养用木蜡喷雾</div>
+    <div class="cate">家居厨房用品/清洁用品</div>
+  </div>
+</a>
+<a class="card" data-price="6.5300" href="https://www.temu.com/search_result.html?search_key=607639069100963&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#215 · 1.19</span><img src="https://img.kwcdn.com/product/open/254db43cbebf4aff9c4eebb1c5a18ef1-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>6.53</div>
+    <div class="title">3D Carved Christmas Bell Crystal Ball with Metal Base, High-Transparency Synthetic Crystal, Desktop Christmas Ambiance Decor Gift Ornament</div>
+    <div class="cate">家居厨房用品/家居装饰</div>
+  </div>
+</a>
+<a class="card" data-price="9.5200" href="https://www.temu.com/search_result.html?search_key=607506193596475&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#216 · 1.19</span><img src="https://img.kwcdn.com/product/open/16f8f5c8976e4e1bb8bf54dd301e0bcc-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>9.52</div>
+    <div class="title">7件套亚克力L型首饰收纳架 - 黑色项链和耳环架，耐用省空间吊坠链展示架，适用于精品店，防缠绕收纳，项链和耳环展示架，时尚外观，首饰塔</div>
+    <div class="cate">家居厨房用品/家庭收纳</div>
+  </div>
+</a>
+<a class="card" data-price="31.9500" href="https://www.temu.com/search_result.html?search_key=605691200785576&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#217 · 1.19</span><img src="https://img.kwcdn.com/product/open/0401d278650844b2bcc9a4ae87af1ed8-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>31.95</div>
+    <div class="title">Set of 3 Floral Design Fitted Sheets for Spring And Summer (Includes 1 Fitted Sheet And 2 Pillowcases, Coreless), Daily Use Theme, Flower Pattern Bedding Collection, Soft And Breathable Mattress Protector</div>
+    <div class="cate">家居厨房用品/床上用品</div>
+  </div>
+</a>
+<a class="card" data-price="1.7300" href="https://www.temu.com/search_result.html?search_key=607308088188475&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#218 · 1.19</span><img src="https://img.kwcdn.com/product/open/078b5daa1bad490d9e32fcf84104b301-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>1.73</div>
+    <div class="title">5pcs可替换通用锅盖子把手防烫锅盖手柄玻璃锅盖头厨房配件锅盖帽顶珠</div>
+    <div class="cate">家居厨房用品/厨房炊具</div>
+  </div>
+</a>
+<a class="card" data-price="7.9700" href="https://www.temu.com/search_result.html?search_key=605832649533441&amp;search_method=user" target="_blank" rel="noopener">
+  <div class="thumb"><span class="badge">#219 · 1.19</span><img src="https://img.kwcdn.com/product/open/71f64d9cd5c44cf59e9366435e99875c-goods.jpeg" alt="" loading="lazy" referrerpolicy="no-referrer" decoding="async" onerror="this.outerHTML='<div class=ph>无图</div>'"/></div>
+  <div class="body">
+    <div class="price"><small>$</small>7.97</div>
+    <div class="title">1pc Black Background White Space Blue Ink Mountain And Cloud National Style Pattern, 350Ml Handleless Egg-Shaped Whiskey Glass, High-Temperature Resistant And Dishwasher Safe, Tea Room Tea Drinking, National Style Souvenir, Home Juice Cup</div>
+    <div class="cate">家居厨房用品/杯具</div>
+  </div>
+</a>
+</div>
+<script>
+(function() {
+  const TOTAL = 219;
+  function apply() {
+    const pmin = parseFloat(document.getElementById('pmin').value);
+    const pmax = parseFloat(document.getElementById('pmax').value);
+    const cards = document.querySelectorAll('.card');
+    let vis = 0, lo = Infinity, hi = -Infinity;
+    cards.forEach(el => {
+      const p = parseFloat(el.getAttribute('data-price'));
+      let ok = true;
+      if (!isNaN(pmin) && p < pmin) ok = false;
+      if (!isNaN(pmax) && p > pmax) ok = false;
+      el.classList.toggle('is-hidden', !ok);
+      if (ok) {
+        vis++;
+        if (p < lo) lo = p;
+        if (p > hi) hi = p;
+      }
+    });
+    const range = vis ? ('$' + lo.toFixed(2) + ' – $' + hi.toFixed(2)) : '—';
+    document.getElementById('stats').textContent =
+      '可见 ' + vis + ' / ' + TOTAL + ' · 当前价格区间 ' + range;
+  }
+  document.getElementById('applyPrice').addEventListener('click', apply);
+  document.getElementById('pmin').addEventListener('change', apply);
+  document.getElementById('pmax').addEventListener('change', apply);
+  apply();
+})();
+</script>
+</body>
+</html>

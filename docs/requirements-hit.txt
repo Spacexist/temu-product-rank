@@ -1,0 +1,9 @@
+torch
+torchvision
+sentence-transformers
+scikit-learn
+pandas
+openpyxl
+pillow
+aiohttp
+numpy

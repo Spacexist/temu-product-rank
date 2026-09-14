@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>外测评估 — 831-910 抽样 2000</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #fff;
+      --ink: #1a1a1a;
+      --muted: #5a6270;
+      --blue: #1d4ed8;
+      --blue-bg: #eff6ff;
+      --green: #047857;
+      --green-bg: #ecfdf5;
+      --line: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 1.75rem 1.25rem 2.5rem; }
+    h1 { font-size: 1.55rem; margin: 0 0 0.25rem; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem; }
+    .grid { display: grid; gap: 0.85rem; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-bottom: 1.25rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+    }
+    .card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+    .card .val { font-size: 1.65rem; font-weight: 700; color: var(--blue); margin: 0.2rem 0; }
+    .card .val.good { color: var(--green); }
+    .card p { margin: 0; font-size: 0.85rem; color: var(--muted); }
+    section { margin-bottom: 1.5rem; }
+    section h2 { font-size: 1.05rem; margin: 0 0 0.6rem; padding-left: 0.55rem; border-left: 4px solid var(--blue); }
+    .note {
+      background: var(--blue-bg);
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--line); font-size: 0.88rem; }
+    th, td { padding: 0.5rem 0.65rem; text-align: right; border-bottom: 1px solid var(--line); }
+    th:first-child, td:first-child { text-align: left; }
+    th { background: #f8fafc; color: var(--muted); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    tr.hl { background: var(--green-bg); font-weight: 600; }
+    .bar-wrap { margin-top: 0.35rem; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+    .bar { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); border-radius: 4px; }
+    ul { margin: 0.4rem 0 0; padding-left: 1.15rem; }
+    .top-table { font-size: 0.8rem; }
+    .top-table td { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .foot { font-size: 0.8rem; color: var(--muted); margin-top: 1.5rem; }
+    code { background: #f1f5f9; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.85em; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>外测评估报告</h1>
+    <p class="sub">
+      文件 <code>2097863420316155906.csv</code>（831-910 批次）· 随机抽 <strong>2000</strong> 条（seed=42）·
+      模型为 909–911 上训练的 <strong>full</strong>（图+标题+表格，未用店铺特征）
+    </p>
+
+    <div class="note">
+      <strong>怎么读这份报告：</strong>主图已下载到 <code>hit_cache\images</code>，能完整打分的 <strong>1949</strong> 条。
+      模型按分数取最高的前 <strong>5%（98 个）</strong>，看里面有多少真的卖得好（用表里的「总销量」验收，仅作评估，训练时没用）。
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="label">Top 5% 有销量</div>
+        <div class="val good">80.6%</div>
+        <p>全样本基线 60.7%</p>
+        <div class="bar-wrap"><div class="bar" style="width:80.6%"></div></div>
+      </div>
+      <div class="card">
+        <div class="label">Top 5% ≥5 件</div>
+        <div class="val good">60.2%</div>
+        <p>全样本基线 40.6%</p>
+        <div class="bar-wrap"><div class="bar" style="width:60.2%"></div></div>
+      </div>
+      <div class="card">
+        <div class="label">Top 5% ≥20 件</div>
+        <div class="val">28.6%</div>
+        <p>全样本基线 13.9%</p>
+      </div>
+      <div class="card">
+        <div class="label">Spearman</div>
+        <div class="val">0.37</div>
+        <p>预测分 vs 总销量</p>
+      </div>
+    </div>
+
+    <section>
+      <h2>和主实验 test 比（同口径：前 5%）</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>数据集</th>
+            <th>样本</th>
+            <th>前5%个数</th>
+            <th>P(有销量)</th>
+            <th>P(≥5)</th>
+            <th>基线有销量</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>909–911 test（域内）</td>
+            <td>6,879</td>
+            <td>344</td>
+            <td>55.2%</td>
+            <td>28.2%</td>
+            <td>22.1%</td>
+          </tr>
+          <tr class="hl">
+            <td>831-910 外测（本文件）</td>
+            <td>1,949</td>
+            <td>98</td>
+            <td>80.6%</td>
+            <td>60.2%</td>
+            <td>60.7%</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:0.88rem;color:var(--muted);margin-top:0.6rem">
+        外测「前 5% 里好品比例」更高， partly 因为<strong>这批货整体更好卖</strong>（60% 已有销量 vs 主 test 22%），不是单看比例就能说模型变神了。
+        更有用的是：<strong>前 5% 比同池随机基线仍明显更集中好品</strong>（80.6% vs 60.7% 有销量；60.2% vs 40.6% 为 ≥5）。
+      </p>
+    </section>
+
+    <section>
+      <h2>数据与流程</h2>
+      <ul>
+        <li>抽样 2000 → 清洗后 2000 → 主图可用 1950（97.5%）→ 解码成功打分 <strong>1949</strong></li>
+        <li>主图下载：落盘 <code>hit_cache\images\{md5}.jpg</code>，与主实验共用缓存</li>
+        <li>特征：ResNet18 主图 + BGE 标题 + 价格/类目等表格；<code>cat_l2</code> 目标编码来自主实验 train</li>
+        <li>耗时约 <strong>167 秒</strong>（含重拟合 full 用于打分）</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>模型推荐 Top 15（验货用）</h2>
+      <table class="top-table">
+        <thead>
+          <tr><th>#</th><th>预测分</th><th>销量</th><th>价格$</th><th>标题</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>1.43</td><td>7</td><td>3.58</td><td>2D平面秋季松鼠枕套…</td></tr>
+          <tr><td>2</td><td>1.38</td><td>44</td><td>33.36</td><td>2件套高品质全包沙发套…</td></tr>
+          <tr><td>3</td><td>1.32</td><td>7</td><td>27.61</td><td>新款青棱纹提花沙发套…</td></tr>
+          <tr><td>4</td><td>1.32</td><td>2</td><td>31.23</td><td>加厚提花弹力全包沙发套…</td></tr>
+          <tr><td>5</td><td>1.30</td><td>0</td><td>22.85</td><td>MOKALALA 波西米亚风薄被…</td></tr>
+          <tr><td>6</td><td>1.29</td><td>4</td><td>2.80</td><td>无框宁静瀑布帆布印刷…</td></tr>
+          <tr><td>7</td><td>1.26</td><td>11</td><td>2.42</td><td>可定制名字薰衣草枕套…</td></tr>
+          <tr><td>8</td><td>1.25</td><td>0</td><td>10.31</td><td>牛奶绒床笠…</td></tr>
+          <tr><td>9</td><td>1.24</td><td>1</td><td>27.75</td><td>杏叶暗纹全包沙发套…</td></tr>
+          <tr><td>10</td><td>1.23</td><td>0</td><td>24.78</td><td>水莲高弹力沙发套…</td></tr>
+          <tr><td>11</td><td>1.23</td><td>20</td><td>14.22</td><td>奇异海滩海鸥帆布墙画…</td></tr>
+          <tr><td>12</td><td>1.22</td><td>8</td><td>5.09</td><td>学院风粉色豹纹抱枕套…</td></tr>
+          <tr><td>13</td><td>1.21</td><td>13</td><td>7.01</td><td>抽象椭圆形靠垫套2件套…</td></tr>
+          <tr><td>14</td><td>1.21</td><td>11</td><td>2.58</td><td>weirdo复古条纹抱枕套…</td></tr>
+          <tr><td>15</td><td>—</td><td>—</td><td>—</td><td>完整 200 条见 CSV</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>一句话结论</h2>
+      <div class="card" style="border-color:#86efac;background:var(--green-bg)">
+        <p style="margin:0;color:var(--ink)">
+          在 831-910 新表、2000 条抽样上，模型<strong>能把更好卖的货往前排</strong>：前 5% 里约 8 成有销量、6 成卖到 ≥5 件；
+          排序和销量相关性 <strong>0.37</strong>，外推可用。Top 榜里沙发套/抱枕/床品居多，前几名有 7～44 件销量，也有 0 件需人工筛。
+        </p>
+      </div>
+    </section>
+
+    <p class="foot">
+      原始指标：<code>external_2097863420316155906.json</code> ·
+      清单：<code>external_2097863420316155906.top200.csv</code> ·
+      主实验报告：<code>总结_大白话.html</code> / <code>report.md</code>
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "spearman_pred_full_vs_shop_total_sales": 0.1151263839814008,
+  "shop_sales_tertiles": [
+    419.0,
+    13000.0
+  ],
+  "top5pct_by_shop_tier": {
+    "low": {
+      "top_k": 117,
+      "n": 2331,
+      "prec_sale_gt0": 0.41025641025641024,
+      "rec_sale_gt0": 0.14678899082568808,
+      "base_sale_gt0": 0.1402831402831403,
+      "prec_sale_gt0_lift_vs_base": 2.924488355681016,
+      "prec_sale_ge5": 0.19658119658119658,
+      "rec_sale_ge5": 0.22115384615384615,
+      "base_sale_ge5": 0.04461604461604462,
+      "prec_sale_ge5_lift_vs_base": 4.406065088757396,
+      "prec_sale_ge20": 0.10256410256410256,
+      "rec_sale_ge20": 0.4444444444444444,
+      "base_sale_ge20": 0.011583011583011582,
+      "prec_sale_ge20_lift_vs_base": 8.854700854700855
+    },
+    "mid": {
+      "top_k": 123,
+      "n": 2444,
+      "prec_sale_gt0": 0.7235772357723578,
+      "rec_sale_gt0": 0.1444805194805195,
+      "base_sale_gt0": 0.2520458265139116,
+      "prec_sale_gt0_lift_vs_base": 2.870816175694225,
+      "prec_sale_ge5": 0.3902439024390244,
+      "rec_sale_ge5": 0.2171945701357466,
+      "base_sale_ge5": 0.09042553191489362,
+      "prec_sale_ge5_lift_vs_base": 4.315638450502152,
+      "prec_sale_ge20": 0.11382113821138211,
+      "rec_sale_ge20": 0.3333333333333333,
+      "base_sale_ge20": 0.01718494271685761,
+      "prec_sale_ge20_lift_vs_base": 6.623306233062331
+    },
+    "high": {
+      "top_k": 106,
+      "n": 2104,
+      "prec_sale_gt0": 0.5,
+      "rec_sale_gt0": 0.09137931034482759,
+      "base_sale_gt0": 0.27566539923954375,
+      "prec_sale_gt0_lift_vs_base": 1.8137931034482757,
+      "prec_sale_ge5": 0.2169811320754717,
+      "rec_sale_ge5": 0.125,
+      "base_sale_ge5": 0.08745247148288973,
+      "prec_sale_ge5_lift_vs_base": 2.4811320754716983,
+      "prec_sale_ge20": 0.03773584905660377,
+      "rec_sale_ge20": 0.1,
+      "base_sale_ge20": 0.019011406844106463,
+      "prec_sale_ge20_lift_vs_base": 1.9849056603773585
+    }
+  }
+}

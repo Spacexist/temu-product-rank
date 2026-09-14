@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>选品排序评估报告 — 909–911 训练 · 831-910 外测</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --ink: #e8edf4;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --accent2: #10b981;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --line: #2d3a4f;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .hero {
+      padding: 2.2rem 1.5rem 1.8rem;
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f1419 55%);
+      border-bottom: 1px solid var(--line);
+    }
+    .hero h1 { margin: 0 0 0.35rem; font-size: 1.65rem; font-weight: 700; letter-spacing: -0.02em; }
+    .hero .lead { color: #b8c5d9; max-width: 52rem; margin: 0; font-size: 0.95rem; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    .grid {
+      display: grid;
+      gap: 0.85rem;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      margin: 1.25rem 0;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+    }
+    .kpi .t { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .kpi .v { font-size: 1.75rem; font-weight: 700; margin: 0.15rem 0; color: var(--accent2); }
+    .kpi .v.blue { color: #60a5fa; }
+    .kpi .v.warn { color: var(--warn); }
+    .kpi .s { font-size: 0.8rem; color: var(--muted); margin: 0; }
+    section { margin-bottom: 2rem; }
+    section h2 {
+      font-size: 1.1rem;
+      margin: 0 0 0.75rem;
+      padding-left: 0.6rem;
+      border-left: 4px solid var(--accent);
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      margin-bottom: 0.85rem;
+    }
+    .card p { margin: 0.35rem 0; color: #c5d0e0; font-size: 0.92rem; }
+    .alert {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .alert strong { color: #fcd34d; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    th, td { padding: 0.5rem 0.6rem; text-align: right; border-bottom: 1px solid var(--line); }
+    th:first-child, td:first-child { text-align: left; }
+    th { background: var(--surface2); color: var(--muted); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    tr.danger { background: rgba(239, 68, 68, 0.08); }
+    tr.highlight { background: rgba(59, 130, 246, 0.1); }
+    .bar-cell { min-width: 120px; }
+    .bar-bg { height: 7px; background: var(--surface2); border-radius: 4px; margin-top: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .bar-fill.muted { background: #64748b; }
+    .chart-row { display: flex; align-items: flex-end; gap: 6px; height: 140px; margin: 1rem 0 0.5rem; padding: 0 0.25rem; }
+    .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .chart-bar {
+      width: 100%;
+      max-width: 48px;
+      border-radius: 6px 6px 2px 2px;
+      background: linear-gradient(180deg, #60a5fa, #2563eb);
+      min-height: 4px;
+    }
+    .chart-bar.base { background: linear-gradient(180deg, #64748b, #475569); opacity: 0.85; }
+    .chart-label { font-size: 0.65rem; color: var(--muted); }
+    .chart-val { font-size: 0.7rem; color: #94a3b8; }
+    .legend { display: flex; gap: 1rem; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+    code { background: var(--surface2); padding: 0.12rem 0.4rem; border-radius: 4px; font-size: 0.85em; color: #93c5fd; }
+    .foot { font-size: 0.78rem; color: var(--muted); margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+    ul { margin: 0.4rem 0; padding-left: 1.2rem; color: #c5d0e0; font-size: 0.92rem; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <h1>选品排序评估报告</h1>
+    <p class="lead">
+      训练集 909.xlsx + 910/911.csv（约 2.9 万 SKU）· 模型 <strong>full</strong>（ResNet18 主图 + BGE 标题 + 表格特征，不含店铺泄漏）·
+      外测文件 <code>2097863420316155906.csv</code>（831-910）· 生成 2026-09-12
+    </p>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <div class="kpi">
+        <div class="t">域内 test · Top5% 有销量</div>
+        <div class="v">55.2%</div>
+        <p class="s">基线 22.1% · lift 2.49×</p>
+      </div>
+      <div class="kpi">
+        <div class="t">外测 · 随机 2000 条</div>
+        <div class="v blue">80.6%</div>
+        <p class="s">Spearman 0.37 · n=1949</p>
+      </div>
+      <div class="kpi">
+        <div class="t">Label 0% 压力</div>
+        <div class="v warn">0%</div>
+        <p class="s">top5% 预测仍 ≈0.94</p>
+      </div>
+      <div class="kpi">
+        <div class="t">店铺规模相关</div>
+        <div class="v blue">0.12</div>
+        <p class="s">pred vs 店铺总销量 Spearman</p>
+      </div>
+    </div>
+
+    <div class="alert">
+      <strong>怎么用这个报告：</strong>「Top 5%」= 按模型分取最高的 5% SKU，看其中「总销量&gt;0 / ≥5 / ≥20」的比例（precision）。
+      外测与压力测试每次会<strong>内存重训</strong> full 模型（与主实验配置一致），标签仅用于验收，不进特征。
+    </div>
+
+    <section>
+      <h2>一、域内 test（909–911 切分，paired slate 已修）</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>模型</th>
+            <th>n</th>
+            <th>P(有销量)</th>
+            <th>基线</th>
+            <th>lift</th>
+            <th>P(≥5)</th>
+            <th>P(≥20)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td><strong>full</strong></td>
+            <td>6879</td>
+            <td>55.2%</td>
+            <td>22.1%</td>
+            <td>2.49×</td>
+            <td>28.2%</td>
+            <td>8.7%</td>
+          </tr>
+          <tr>
+            <td>LEAK_shop（对照）</td>
+            <td>6879</td>
+            <td>60.2%</td>
+            <td>22.1%</td>
+            <td>2.72×</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="foot" style="border:none;margin-top:0.75rem;padding:0;">来源：<code>metrics_top5pct.json</code> · 标签经 train p99.5 截断后 log1p</p>
+    </section>
+
+    <section>
+      <h2>二、外测 · 自然分布（随机 2000，seed=42）</h2>
+      <div class="card">
+        <p>文件内正例约 62%；抽样后可打分 <strong>1949</strong> 条，主图缓存命中率 ~97.5%。</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>指标</th>
+            <th>Top 5%</th>
+            <th>全样本基线</th>
+            <th>条形（Top5%）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>有销量 (&gt;0)</td>
+            <td><strong>80.6%</strong></td>
+            <td>60.7%</td>
+            <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:80.6%"></div></div></td>
+          </tr>
+          <tr>
+            <td>≥5 件</td>
+            <td><strong>60.2%</strong></td>
+            <td>40.6%</td>
+            <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:60.2%"></div></div></td>
+          </tr>
+          <tr>
+            <td>≥20 件</td>
+            <td>28.6%</td>
+            <td>13.9%</td>
+            <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:28.6%"></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>三、Label 正例率压力测试（<code>--pos-pct</code>）</h2>
+      <div class="card">
+        <ul>
+          <li><strong>0%</strong>：仅零销量 SKU（3794→3683 可打分）— 极端负样本池</li>
+          <li><strong>10–80%</strong>：分层抽样，准备阶段 cap≤5000（seed 固定）</li>
+          <li><strong>100%</strong>：仅有销量 SKU（6206→5958 可打分）</li>
+          <li>「实际正例率」略高于目标时，多因<strong>零销量行主图缺失更多</strong>，进入打分集后比例被抬高</li>
+        </ul>
+      </div>
+
+      <div class="legend">
+        <span><span class="dot" style="background:#2563eb"></span>Top5% P(有销量)</span>
+        <span><span class="dot" style="background:#475569"></span>基线 P(有销量)</span>
+      </div>
+      <div class="chart-row" id="stress-chart"></div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>目标正例率</th>
+            <th>打分 n</th>
+            <th>实际正例率</th>
+            <th>P(有销量)</th>
+            <th>基线</th>
+            <th>lift</th>
+            <th>P(≥5)</th>
+            <th>top5% 预测均值</th>
+            <th>Spearman</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="danger">
+            <td><strong>0%</strong></td>
+            <td>3683</td>
+            <td>0%</td>
+            <td>0%</td>
+            <td>0%</td>
+            <td>—</td>
+            <td>0%</td>
+            <td><strong>0.94</strong></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>10%</td>
+            <td>4824</td>
+            <td>23.7%</td>
+            <td>48.3%</td>
+            <td>23.7%</td>
+            <td>2.04×</td>
+            <td>34.7%</td>
+            <td>1.00</td>
+            <td>0.34</td>
+          </tr>
+          <tr>
+            <td>30%</td>
+            <td>4823</td>
+            <td>29.5%</td>
+            <td>59.1%</td>
+            <td>29.5%</td>
+            <td>2.00×</td>
+            <td>42.6%</td>
+            <td>1.01</td>
+            <td>0.36</td>
+          </tr>
+          <tr>
+            <td>50%</td>
+            <td>4806</td>
+            <td>49.5%</td>
+            <td>79.3%</td>
+            <td>49.5%</td>
+            <td>1.60×</td>
+            <td>56.0%</td>
+            <td>1.05</td>
+            <td>0.40</td>
+          </tr>
+          <tr>
+            <td>80%</td>
+            <td>4790</td>
+            <td>79.9%</td>
+            <td>93.3%</td>
+            <td>79.9%</td>
+            <td>1.17×</td>
+            <td>70.8%</td>
+            <td>1.08</td>
+            <td>0.29</td>
+          </tr>
+          <tr class="highlight">
+            <td>100%</td>
+            <td>5958</td>
+            <td>100%</td>
+            <td>100%</td>
+            <td>100%</td>
+            <td>1.00×</td>
+            <td>77.9%</td>
+            <td>1.11</td>
+            <td>0.14</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert" style="margin-top:1rem;">
+        <strong>结论摘要：</strong>正例越稀（尤其 0%），模型仍给 top 档<strong>偏高绝对分</strong>，排序在「全死款」池里会误导。
+        正例率 50% 附近外测 P(有销量) 与随机 2000 条（80.6%）可对照理解：混合池更「好挑」。
+        100% 正例池 Spearman 仅 0.14 — 模型主要在分<strong>谁更好卖</strong>，不是分有无销量。
+      </div>
+    </section>
+
+    <section>
+      <h2>四、文件与复现</h2>
+      <div class="card">
+        <p><code>rank_products.py</code> · <code>score_external_one.py --pos-pct {0,10,30,50,80,100}</code></p>
+        <p>明细 JSON：<code>artifacts_v2/external_2097863420316155906_labelp*.json</code></p>
+        <p>汇总：<code>label_stress_summary.json</code> · 简版 HTML：<code>外测_label压力_2097863420.html</code></p>
+        <p>主图缓存：<code>hit_cache/images/</code> · 训练产物：<code>artifacts_v2/lgbm_full.pkl</code> 等</p>
+      </div>
+    </section>
+
+    <p class="foot">本页为静态汇总，数据来自已跑完的实验产物；刷新数据可运行 <code>python build_label_stress_html.py</code> 或重新外测后手工更新本页。</p>
+  </div>
+
+  <script>
+    (function () {
+      const rows = [
+        { label: "0%", prec: 0, base: 0 },
+        { label: "10%", prec: 48.3, base: 23.7 },
+        { label: "30%", prec: 59.1, base: 29.5 },
+        { label: "50%", prec: 79.3, base: 49.5 },
+        { label: "80%", prec: 93.3, base: 79.9 },
+        { label: "100%", prec: 100, base: 100 },
+      ];
+      const max = 100;
+      const el = document.getElementById("stress-chart");
+      rows.forEach((r) => {
+        const col = document.createElement("div");
+        col.className = "chart-col";
+        const hBase = Math.max(2, (r.base / max) * 120);
+        const hPrec = Math.max(2, (r.prec / max) * 120);
+        col.innerHTML =
+          '<div class="chart-val">' + r.prec.toFixed(0) + "%</div>" +
+          '<div class="chart-bar" style="height:' + hPrec + 'px"></div>' +
+          '<div class="chart-bar base" style="height:' + hBase + 'px;margin-top:-' + Math.min(hBase, hPrec) + 'px"></div>' +
+          '<div class="chart-label">' + r.label + "</div>";
+        el.appendChild(col);
+      });
+    })();
+  </script>
+</body>
+</html>

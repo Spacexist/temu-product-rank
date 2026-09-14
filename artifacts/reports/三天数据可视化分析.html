@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>909–911 三天日报 · 数据可视化分析</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --card: #fff;
+      --ink: #1a1d21;
+      --muted: #6b7280;
+      --accent: #e85d04;
+      --border: #e5e7eb;
+      --blue: #2563eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 20px 48px; }
+    h1 { font-size: 1.65rem; margin: 0 0 8px; }
+    h2 { font-size: 1.15rem; margin: 32px 0 12px; border-left: 4px solid var(--accent); padding-left: 10px; }
+    .lead { color: var(--muted); margin: 0 0 20px; max-width: 72ch; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .kpi-day { font-weight: 700; margin-bottom: 10px; }
+    .kpi-row { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 3px 0; }
+    .kpi-row .accent { color: var(--accent); }
+    .muted { color: var(--muted); font-weight: 400; font-size: 0.85rem; }
+    .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px 8px;
+    }
+    .chart-card h3 { margin: 0 0 8px; font-size: 0.95rem; }
+    .chart-card canvas { max-height: 280px; }
+    .data-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; font-size: 0.9rem; }
+    .data-table th, .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+    .data-table th { background: #f9fafb; font-weight: 600; }
+    .data-table td.n { text-align: right; font-variant-numeric: tabular-nums; }
+    .insight {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      font-size: 0.92rem;
+    }
+    .insight strong { color: #c2410c; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>909 – 911 三天 Temu 日报 · 可视化数据分析</h1>
+    <p class="lead">基于云启导出的三份日报（各约 1 万行）。下图对比动销结构、价格、类目与店铺集中度；清洗后样本与建模流水线一致。</p>
+
+    <div class="kpi-grid"><div class="kpi-card">
+          <div class="kpi-day">909 <span class="muted">2026-09-09</span></div>
+          <div class="kpi-row"><span>原始行数</span><strong>10,000</strong></div>
+          <div class="kpi-row"><span>动销 &gt;0</span><strong class="accent">20.7%</strong></div>
+          <div class="kpi-row"><span>销量 ≥5</span><strong>7.0%</strong></div>
+          <div class="kpi-row"><span>销量 ≥20</span><strong>1.5%</strong></div>
+          <div class="kpi-row"><span>中位销量</span><strong>0</strong></div>
+          <div class="kpi-row"><span>均价</span><strong>$8.62</strong></div>
+        </div><div class="kpi-card">
+          <div class="kpi-day">910 <span class="muted">2026-09-10</span></div>
+          <div class="kpi-row"><span>原始行数</span><strong>10,000</strong></div>
+          <div class="kpi-row"><span>动销 &gt;0</span><strong class="accent">21.7%</strong></div>
+          <div class="kpi-row"><span>销量 ≥5</span><strong>6.8%</strong></div>
+          <div class="kpi-row"><span>销量 ≥20</span><strong>1.6%</strong></div>
+          <div class="kpi-row"><span>中位销量</span><strong>0</strong></div>
+          <div class="kpi-row"><span>均价</span><strong>$8.11</strong></div>
+        </div><div class="kpi-card">
+          <div class="kpi-day">911 <span class="muted">2026-09-11</span></div>
+          <div class="kpi-row"><span>原始行数</span><strong>10,000</strong></div>
+          <div class="kpi-row"><span>动销 &gt;0</span><strong class="accent">28.5%</strong></div>
+          <div class="kpi-row"><span>销量 ≥5</span><strong>8.3%</strong></div>
+          <div class="kpi-row"><span>销量 ≥20</span><strong>1.8%</strong></div>
+          <div class="kpi-row"><span>中位销量</span><strong>0</strong></div>
+          <div class="kpi-row"><span>均价</span><strong>$9.24</strong></div>
+        </div></div>
+
+    <div class="insight">
+      <strong>跨天重叠：</strong> 合并后唯一商品 ID 29,871 个；
+      至少出现在两天的 ID 共 <strong>129</strong> 个
+      （建模前需去重，否则同款进 train/test 会泄露）。
+       909∩910=129。 909∩911=0。 910∩911=0。
+    </div>
+
+    <h2>动销与销量分布</h2>
+    <div class="chart-grid">
+      <div class="chart-card"><h3>动销率对比（总销量 &gt; 0）</h3><canvas id="chartGt0"></canvas></div>
+      <div class="chart-card"><h3>分档动销占比（≥5 / ≥20 / ≥50）</h3><canvas id="chartTiers"></canvas></div>
+      <div class="chart-card"><h3>log1p(总销量) 分布</h3><canvas id="chartSalesHist"></canvas></div>
+      <div class="chart-card"><h3>美元价格分布</h3><canvas id="chartPriceHist"></canvas></div>
+    </div>
+
+    <h2>类目结构</h2>
+    <div class="chart-grid">
+      <div class="chart-card"><h3>二级类目 Top12 商品数（分天）</h3><canvas id="chartCatCount"></canvas></div>
+      <div class="chart-card"><h3>Top 类目动销率（&gt;0）分天对比</h3><canvas id="chartCatGt0"></canvas></div>
+    </div>
+
+    <h2>收录与店铺</h2>
+    <div class="chart-grid">
+      <div class="chart-card"><h3>已有收录时间占比（越低越像「纯新品」池）</h3><canvas id="chartIndexed"></canvas></div>
+      <div class="chart-card"><h3>店铺总销量 vs 商品总销量（Spearman）</h3><canvas id="chartShopCorr"></canvas></div>
+    </div>
+
+    <h2>店铺集中度</h2>
+    <div class="chart-grid">
+      <div class="chart-card"><h3>店铺数 &amp; 平均每店 SKU</h3><canvas id="chartShop"></canvas></div>
+      <div class="chart-card"><h3>上架时间解析（有「上架时间」列的天）</h3><canvas id="chartListingHour"></canvas></div>
+    </div>
+
+    <table class="data-table" style="margin-top:16px">
+      <thead><tr><th>天</th><th>店铺数</th><th>均 SKU/店</th><th>最大店 SKU</th><th>≥2 SKU 店铺占比</th></tr></thead>
+      <tbody id="shopTableBody"></tbody>
+    </table>
+
+    
+    <section>
+      <h2>清洗后样本（dataset.csv）</h2>
+      <p class="lead">去重商品 ID、去掉无价/无主图后用于建模的 29,871 行。</p>
+      <table class="data-table">
+        <thead><tr><th>来源</th><th>行数</th><th>动销&gt;0</th><th>≥5</th></tr></thead>
+        <tbody><tr><td>909.xlsx</td><td class='n'>9,997</td><td class='n'>20.7%</td><td class='n'>7.0%</td></tr><tr><td>910.csv</td><td class='n'>9,874</td><td class='n'>21.7%</td><td class='n'>6.8%</td></tr><tr><td>911.csv</td><td class='n'>10,000</td><td class='n'>28.5%</td><td class='n'>8.3%</td></tr></tbody>
+      </table>
+    </section>
+
+    <p class="muted" style="margin-top:32px;font-size:0.8rem">生成时间 2026-09-12T17:13:44 · 数据文件 909.xlsx / 910.csv / 911.csv</p>
+  </div>
+  <script>
+    const DATA = {"generated_at": "2026-09-12T17:13:44", "per_day": [{"label": "909", "file": "909.xlsx", "date": "2026-09-09", "rows_raw": 10000, "unique_ids": 10000, "price_ok": 10000, "main_url_ok": 10000, "sales": {"n": 10000, "mean": 4.8785, "median": 0.0, "p90": 3.0, "p99": 26.0, "max": 6900.0, "gt0": 0.2071, "ge5": 0.0697, "ge20": 0.0148, "ge50": 0.0044, "ge100": 0.0025}, "price": {"mean": 8.621158000000001, "median": 6.46, "p10": 2.39, "p90": 16.7}, "sales_hist": {"counts": [7929, 0, 0, 722, 328, 0, 196, 128, 178, 114, 85, 80, 49, 60, 33, 23, 20, 13, 7, 4, 6, 3, 0, 2, 0, 1, 0, 2, 0, 0, 3, 1, 4, 3, 4, 0, 0, 0, 0, 2], "edges": [0.0, 0.221, 0.442, 0.663, 0.884, 1.105, 1.326, 1.547, 1.768, 1.989, 2.21, 2.431, 2.652, 2.873, 3.094, 3.315, 3.536, 3.757, 3.978, 4.199, 4.42, 4.641, 4.862, 5.083, 5.304, 5.525, 5.746, 5.967, 6.188, 6.409, 6.63, 6.851, 7.072, 7.293, 7.514, 7.734, 7.955, 8.176, 8.397, 8.618, 8.839], "x_label": "log1p(总销量)"}, "price_hist": {"counts": [6430, 2497, 677, 227, 49, 50, 21, 12, 7, 5, 1, 2, 4, 3, 2, 1, 0, 2, 0, 2, 2, 1, 0, 1, 1, 0, 1, 1, 0, 1], "edges": [0.54, 8.18, 15.83, 23.47, 31.12, 38.76, 46.41, 54.05, 61.7, 69.34, 76.99, 84.63, 92.28, 99.92, 107.57, 115.21, 122.85, 130.5, 138.14, 145.79, 153.43, 161.08, 168.72, 176.37, 184.01, 191.66, 199.3, 206.95, 214.59, 222.24, 229.88]}, "cat_l2_top": [{"name": "家居装饰", "count": 1352}, {"name": "杯具", "count": 1236}, {"name": "节日饰品", "count": 1078}, {"name": "厨房收纳", "count": 732}, {"name": "餐厨布艺", "count": 696}, {"name": "节日聚会用品", "count": 631}, {"name": "墙面装饰", "count": 517}, {"name": "床上用品", "count": 492}, {"name": "地毯地垫", "count": 467}, {"name": "家庭收纳", "count": 422}, {"name": "毯子", "count": 356}, {"name": "衣橱收纳", "count": 303}], "listing": {"has_col": true, "parsed_rate": 1.0, "hour_counts": [{"hour": 0, "count": 70}, {"hour": 1, "count": 65}, {"hour": 2, "count": 6}, {"hour": 9, "count": 1032}, {"hour": 10, "count": 1401}, {"hour": 11, "count": 2081}, {"hour": 12, "count": 564}, {"hour": 13, "count": 991}, {"hour": 14, "count": 1042}, {"hour": 15, "count": 706}, {"hour": 16, "count": 699}, {"hour": 17, "count": 959}, {"hour": 18, "count": 43}, {"hour": 19, "count": 73}, {"hour": 20, "count": 114}, {"hour": 21, "count": 69}, {"hour": 22, "count": 28}, {"hour": 23, "count": 57}], "range": {"min": "2026-09-09 09:19", "max": "2026-09-10 02:01"}, "listed_rate": 1.0}, "indexed": {"has_col": true, "indexed_rate": 0.0124, "not_indexed_rate": 0.9876, "n_not_indexed": 9876}, "shop_sale_corr": {"spearman_shop_vs_sku_sale": 0.088, "n": 8607}, "shop": {"n_shops": 4111, "mean_skus_per_shop": 2.4324981756263684, "median_skus": 1.0, "p75_skus": 1.0, "max_skus": 836, "share_top1_shop": 0.0836, "shops_with_ge2": 0.23692532230600827, "top_shops": [{"shop_id": "_missing_shop_id", "n": 836}, {"shop_id": "shop_634418231581171", "n": 121}, {"shop_id": "shop_634418230984408", "n": 117}, {"shop_id": "shop_634418231681519", "n": 87}, {"shop_id": "shop_634418220239042", "n": 82}, {"shop_id": "shop_634418227586169", "n": 81}, {"shop_id": "shop_634418231674881", "n": 80}, {"shop_id": "shop_634418229241838", "n": 73}]}, "missing_shop_id": 836, "title_len_mean": 92.7426, "title_cjk_ratio_mean": 0.6734370960062456}, {"label": "910", "file": "910.csv", "date": "2026-09-10", "rows_raw": 10000, "unique_ids": 10000, "price_ok": 10000, "main_url_ok": 10000, "sales": {"n": 10000, "mean": 5.9829, "median": 0.0, "p90": 3.0, "p99": 27.01000000000022, "max": 7500.0, "gt0": 0.2171, "ge5": 0.0678, "ge20": 0.0162, "ge50": 0.0058, "ge100": 0.003}, "price": {"mean": 8.106746, "median": 6.26, "p10": 1.95, "p90": 14.871000000000002}, "sales_hist": {"counts": [7829, 0, 0, 765, 374, 0, 204, 150, 178, 115, 78, 72, 55, 37, 43, 19, 13, 16, 12, 7, 3, 4, 3, 0, 0, 1, 3, 2, 1, 1, 2, 4, 2, 2, 0, 0, 1, 0, 1, 3], "edges": [0.0, 0.223, 0.446, 0.669, 0.892, 1.115, 1.338, 1.561, 1.785, 2.008, 2.231, 2.454, 2.677, 2.9, 3.123, 3.346, 3.569, 3.792, 4.015, 4.238, 4.461, 4.684, 4.908, 5.131, 5.354, 5.577, 5.8, 6.023, 6.246, 6.469, 6.692, 6.915, 7.138, 7.361, 7.584, 7.807, 8.031, 8.254, 8.477, 8.7, 8.923], "x_label": "log1p(总销量)"}, "price_hist": {"counts": [6974, 2268, 455, 154, 58, 32, 12, 9, 2, 9, 3, 6, 3, 3, 4, 4, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1], "edges": [0.54, 8.7, 16.85, 25.01, 33.16, 41.32, 49.47, 57.63, 65.79, 73.94, 82.1, 90.25, 98.41, 106.56, 114.72, 122.88, 131.03, 139.19, 147.34, 155.5, 163.65, 171.81, 179.96, 188.12, 196.28, 204.43, 212.59, 220.74, 228.9, 237.05, 245.21]}, "cat_l2_top": [{"name": "家居装饰", "count": 1459}, {"name": "节日饰品", "count": 1170}, {"name": "节日聚会用品", "count": 756}, {"name": "杯具", "count": 753}, {"name": "餐厨布艺", "count": 619}, {"name": "厨房用品", "count": 602}, {"name": "家庭收纳", "count": 515}, {"name": "厨房收纳", "count": 496}, {"name": "地毯地垫", "count": 445}, {"name": "沙发装饰", "count": 441}, {"name": "床上用品", "count": 347}, {"name": "衣橱收纳", "count": 322}], "listing": {"has_col": true, "parsed_rate": 1.0, "hour_counts": [{"hour": 0, "count": 186}, {"hour": 1, "count": 85}, {"hour": 2, "count": 43}, {"hour": 3, "count": 111}, {"hour": 4, "count": 20}, {"hour": 5, "count": 17}, {"hour": 6, "count": 1}, {"hour": 7, "count": 26}, {"hour": 8, "count": 172}, {"hour": 9, "count": 549}, {"hour": 10, "count": 1398}, {"hour": 11, "count": 1263}, {"hour": 12, "count": 313}, {"hour": 13, "count": 951}, {"hour": 14, "count": 1282}, {"hour": 15, "count": 908}, {"hour": 16, "count": 754}, {"hour": 17, "count": 1012}, {"hour": 18, "count": 112}, {"hour": 19, "count": 145}, {"hour": 20, "count": 57}, {"hour": 21, "count": 108}, {"hour": 22, "count": 290}, {"hour": 23, "count": 197}], "range": {"min": "2026-09-10 00:00", "max": "2026-09-10 23:59"}, "listed_rate": 1.0}, "indexed": {"has_col": true, "indexed_rate": 0.0356, "not_indexed_rate": 0.9644, "n_not_indexed": 9644}, "shop_sale_corr": {"spearman_shop_vs_sku_sale": 0.1366, "n": 8479}, "shop": {"n_shops": 4177, "mean_skus_per_shop": 2.3940627244433803, "median_skus": 1.0, "p75_skus": 1.0, "max_skus": 890, "share_top1_shop": 0.089, "shops_with_ge2": 0.24203974144122575, "top_shops": [{"shop_id": "_missing_shop_id", "n": 890}, {"shop_id": "shop_634418212055649", "n": 206}, {"shop_id": "shop_634418227625592", "n": 94}, {"shop_id": "shop_634418226279502", "n": 71}, {"shop_id": "shop_634418221154672", "n": 68}, {"shop_id": "shop_634418228768462", "n": 66}, {"shop_id": "shop_634418225884229", "n": 64}, {"shop_id": "shop_634418230522765", "n": 56}]}, "missing_shop_id": 890, "title_len_mean": 95.9011, "title_cjk_ratio_mean": 0.6568616428971844}, {"label": "911", "file": "911.csv", "date": "2026-09-11", "rows_raw": 10000, "unique_ids": 10000, "price_ok": 10000, "main_url_ok": 10000, "sales": {"n": 10000, "mean": 3.9792, "median": 0.0, "p90": 4.0, "p99": 27.0, "max": 5934.0, "gt0": 0.2848, "ge5": 0.0832, "ge20": 0.0178, "ge50": 0.0048, "ge100": 0.0027}, "price": {"mean": 9.244554999999998, "median": 6.67, "p10": 2.18, "p90": 16.84}, "sales_hist": {"counts": [7152, 0, 0, 1123, 0, 454, 270, 169, 245, 75, 109, 106, 66, 53, 76, 27, 15, 11, 6, 14, 1, 2, 6, 3, 3, 0, 0, 0, 2, 1, 0, 1, 5, 1, 2, 0, 0, 0, 1, 1], "edges": [0.0, 0.217, 0.434, 0.652, 0.869, 1.086, 1.303, 1.521, 1.738, 1.955, 2.172, 2.389, 2.607, 2.824, 3.041, 3.258, 3.475, 3.693, 3.91, 4.127, 4.344, 4.562, 4.779, 4.996, 5.213, 5.43, 5.648, 5.865, 6.082, 6.299, 6.516, 6.734, 6.951, 7.168, 7.385, 7.603, 7.82, 8.037, 8.254, 8.471, 8.689], "x_label": "log1p(总销量)"}, "price_hist": {"counts": [7547, 1785, 419, 131, 45, 11, 9, 11, 2, 6, 8, 5, 1, 2, 4, 3, 1, 2, 2, 1, 1, 2, 1, 0, 0, 0, 0, 0, 0, 1], "edges": [0.46, 10.84, 21.22, 31.61, 41.99, 52.37, 62.75, 73.14, 83.52, 93.9, 104.28, 114.67, 125.05, 135.43, 145.81, 156.2, 166.58, 176.96, 187.34, 197.72, 208.11, 218.49, 228.87, 239.25, 249.64, 260.02, 270.4, 280.78, 291.17, 301.55, 311.93]}, "cat_l2_top": [{"name": "家居装饰", "count": 1504}, {"name": "节日饰品", "count": 1167}, {"name": "毛巾浴巾", "count": 994}, {"name": "杯具", "count": 839}, {"name": "厨房收纳", "count": 802}, {"name": "节日聚会用品", "count": 730}, {"name": "厨房用品", "count": 564}, {"name": "家庭收纳", "count": 416}, {"name": "餐厨布艺", "count": 414}, {"name": "墙面装饰", "count": 363}, {"name": "毯子", "count": 337}, {"name": "地毯地垫", "count": 261}], "listing": {"has_col": true, "parsed_rate": 1.0, "hour_counts": [{"hour": 0, "count": 176}, {"hour": 1, "count": 80}, {"hour": 2, "count": 58}, {"hour": 3, "count": 60}, {"hour": 4, "count": 65}, {"hour": 5, "count": 2}, {"hour": 6, "count": 30}, {"hour": 7, "count": 36}, {"hour": 8, "count": 99}, {"hour": 9, "count": 705}, {"hour": 10, "count": 1595}, {"hour": 11, "count": 2025}, {"hour": 12, "count": 507}, {"hour": 13, "count": 1670}, {"hour": 14, "count": 1870}, {"hour": 15, "count": 407}, {"hour": 16, "count": 239}, {"hour": 17, "count": 80}, {"hour": 18, "count": 46}, {"hour": 19, "count": 26}, {"hour": 20, "count": 34}, {"hour": 21, "count": 42}, {"hour": 22, "count": 102}, {"hour": 23, "count": 46}], "range": {"min": "2026-09-11 00:00", "max": "2026-09-11 23:59"}, "listed_rate": 1.0}, "indexed": {"has_col": true, "indexed_rate": 0.0196, "not_indexed_rate": 0.9804, "n_not_indexed": 9804}, "shop_sale_corr": {"spearman_shop_vs_sku_sale": 0.1387, "n": 8524}, "shop": {"n_shops": 3858, "mean_skus_per_shop": 2.592016588906169, "median_skus": 1.0, "p75_skus": 2.0, "max_skus": 904, "share_top1_shop": 0.0904, "shops_with_ge2": 0.2607568688439606, "top_shops": [{"shop_id": "_missing_shop_id", "n": 904}, {"shop_id": "shop_634418225843807", "n": 178}, {"shop_id": "shop_634418222937249", "n": 166}, {"shop_id": "shop_634418228715705", "n": 109}, {"shop_id": "shop_634418212055649", "n": 102}, {"shop_id": "shop_634418220095717", "n": 101}, {"shop_id": "shop_634418226931500", "n": 75}, {"shop_id": "shop_634418231309545", "n": 71}]}, "missing_shop_id": 904, "title_len_mean": 101.0382, "title_cjk_ratio_mean": 0.6206515822379026}], "global": {"rows_concat": 30000, "unique_product_ids": 29871, "rows_with_duplicate_id_across_files": 258, "ids_appearing_in_multiple_days": 129, "overlap": {"labels": ["909", "910", "911"], "matrix": [[10000, 129, 0], [129, 10000, 0], [0, 0, 10000]], "pairs": [{"a": "909", "b": "910", "overlap_ids": 129}, {"a": "909", "b": "911", "overlap_ids": 0}, {"a": "910", "b": "911", "overlap_ids": 0}]}}, "dataset_cleaned": {"n_rows": 29871, "by_source": [{"source": "909.xlsx", "n": 9997, "sales": {"n": 9997, "mean": 4.878363509052716, "median": 0.0, "p90": 3.0, "p99": 26.0, "max": 6900.0, "gt0": 0.20696208862658796, "ge5": 0.06952085625687707, "ge20": 0.01480444133239972, "ge50": 0.004401320396118836, "ge100": 0.00250075022506752}}, {"source": "910.csv", "n": 9874, "sales": {"n": 9874, "mean": 6.029370062791169, "median": 0.0, "p90": 3.0, "p99": 27.0, "max": 7500.0, "gt0": 0.21733846465464857, "ge5": 0.06765242049827831, "ge20": 0.015900344338667206, "ge50": 0.005671460401053271, "ge100": 0.0030382823577071094}}, {"source": "911.csv", "n": 10000, "sales": {"n": 10000, "mean": 3.9792, "median": 0.0, "p90": 4.0, "p99": 27.0, "max": 5934.0, "gt0": 0.2848, "ge5": 0.0832, "ge20": 0.0178, "ge50": 0.0048, "ge100": 0.0027}}], "split_counts": {"train": 22388, "test": 6879}}, "cat_compare": {"categories": ["家居装饰", "杯具", "节日饰品", "厨房收纳", "餐厨布艺", "节日聚会用品", "床上用品", "地毯地垫", "家庭收纳", "毯子", "沙发装饰", "厨房用品"], "gt0_by_day": [{"day": "909", "rates": [{"cat": "家居装饰", "gt0_rate": 0.19748520710059173}, {"cat": "杯具", "gt0_rate": 0.07281553398058252}, {"cat": "节日饰品", "gt0_rate": 0.21057513914656772}, {"cat": "厨房收纳", "gt0_rate": 0.1051912568306011}, {"cat": "餐厨布艺", "gt0_rate": 0.15373563218390804}, {"cat": "节日聚会用品", "gt0_rate": 0.2519809825673534}, {"cat": "床上用品", "gt0_rate": 0.3882113821138211}, {"cat": "地毯地垫", "gt0_rate": 0.1777301927194861}, {"cat": "家庭收纳", "gt0_rate": 0.1872037914691943}, {"cat": "毯子", "gt0_rate": 0.21067415730337077}, {"cat": "沙发装饰", "gt0_rate": 0.29277566539923955}, {"cat": "厨房用品", "gt0_rate": 0.30158730158730157}]}, {"day": "910", "rates": [{"cat": "家居装饰", "gt0_rate": 0.227553118574366}, {"cat": "杯具", "gt0_rate": 0.13147410358565736}, {"cat": "节日饰品", "gt0_rate": 0.1905982905982906}, {"cat": "厨房收纳", "gt0_rate": 0.16733870967741934}, {"cat": "餐厨布艺", "gt0_rate": 0.24717285945072698}, {"cat": "节日聚会用品", "gt0_rate": 0.19973544973544974}, {"cat": "床上用品", "gt0_rate": 0.26512968299711814}, {"cat": "地毯地垫", "gt0_rate": 0.1101123595505618}, {"cat": "家庭收纳", "gt0_rate": 0.1786407766990291}, {"cat": "毯子", "gt0_rate": 0.2581818181818182}, {"cat": "沙发装饰", "gt0_rate": 0.20408163265306123}, {"cat": "厨房用品", "gt0_rate": 0.2823920265780731}]}, {"day": "911", "rates": [{"cat": "家居装饰", "gt0_rate": 0.27061170212765956}, {"cat": "杯具", "gt0_rate": 0.13110846245530394}, {"cat": "节日饰品", "gt0_rate": 0.29648671808054844}, {"cat": "厨房收纳", "gt0_rate": 0.2169576059850374}, {"cat": "餐厨布艺", "gt0_rate": 0.17632850241545894}, {"cat": "节日聚会用品", "gt0_rate": 0.23013698630136986}, {"cat": "床上用品", "gt0_rate": 0.39166666666666666}, {"cat": "地毯地垫", "gt0_rate": 0.4904214559386973}, {"cat": "家庭收纳", "gt0_rate": 0.37259615384615385}, {"cat": "毯子", "gt0_rate": 0.29673590504451036}, {"cat": "沙发装饰", "gt0_rate": 0.5446428571428571}, {"cat": "厨房用品", "gt0_rate": 0.45390070921985815}]}]}};
+    const DAYS = DATA.per_day;
+    const labels = DAYS.map(d => d.label);
+    const colors = ['#e85d04', '#2563eb', '#059669'];
+
+    Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+    Chart.defaults.color = '#4b5563';
+
+    new Chart(document.getElementById('chartGt0'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: '动销率 (>0)',
+          data: DAYS.map(d => d.sales.gt0 * 100),
+          backgroundColor: colors.map(c => c + 'cc'),
+        }]
+      },
+      options: {
+        scales: { y: { beginAtZero: true, title: { display: true, text: '占比 (%)' } } },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    new Chart(document.getElementById('chartTiers'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: '≥5', data: DAYS.map(d => d.sales.ge5 * 100), backgroundColor: '#fdba74' },
+          { label: '≥20', data: DAYS.map(d => d.sales.ge20 * 100), backgroundColor: '#fb923c' },
+          { label: '≥50', data: DAYS.map(d => d.sales.ge50 * 100), backgroundColor: '#ea580c' },
+        ]
+      },
+      options: {
+        scales: { y: { beginAtZero: true, title: { display: true, text: '占比 (%)' } } }
+      }
+    });
+
+    function histDataset(day, field) {
+      const h = day[field];
+      const labels = [];
+      for (let i = 0; i < h.counts.length; i++) {
+        const lo = h.edges[i], hi = h.edges[i+1];
+        labels.push(lo.toFixed(1) + '–' + hi.toFixed(1));
+      }
+      return { labels, data: h.counts };
+    }
+
+    new Chart(document.getElementById('chartSalesHist'), {
+      type: 'line',
+      data: {
+        labels: histDataset(DAYS[0], 'sales_hist').labels,
+        datasets: DAYS.map((d, i) => {
+          const h = histDataset(d, 'sales_hist');
+          return {
+            label: d.label,
+            data: h.data,
+            borderColor: colors[i],
+            backgroundColor: colors[i] + '33',
+            fill: true,
+            tension: 0.25,
+            pointRadius: 0,
+          };
+        })
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: 'log1p(总销量)' }, ticks: { maxTicksLimit: 8 } },
+          y: { beginAtZero: true, title: { display: true, text: '商品数' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chartPriceHist'), {
+      type: 'line',
+      data: {
+        labels: histDataset(DAYS[0], 'price_hist').labels.map((_, i) => {
+          const e = DAYS[0].price_hist.edges;
+          return '$' + e[i].toFixed(0);
+        }),
+        datasets: DAYS.map((d, i) => ({
+          label: d.label,
+          data: d.price_hist.counts,
+          borderColor: colors[i],
+          tension: 0.25,
+          pointRadius: 0,
+        }))
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: '美元价格 ($)' }, ticks: { maxTicksLimit: 8 } },
+          y: { beginAtZero: true, title: { display: true, text: '商品数' } }
+        }
+      }
+    });
+
+    const cats = DATA.cat_compare.categories;
+    new Chart(document.getElementById('chartCatCount'), {
+      type: 'bar',
+      data: {
+        labels: cats,
+        datasets: DAYS.map((d, i) => ({
+          label: d.label,
+          data: cats.map(c => {
+            const row = d.cat_l2_top.find(x => x.name === c);
+            return row ? row.count : 0;
+          }),
+          backgroundColor: colors[i] + 'aa',
+        }))
+      },
+      options: {
+        indexAxis: 'y',
+        scales: { x: { beginAtZero: true, title: { display: true, text: 'SKU 数' } } }
+      }
+    });
+
+    new Chart(document.getElementById('chartCatGt0'), {
+      type: 'bar',
+      data: {
+        labels: cats,
+        datasets: DATA.cat_compare.gt0_by_day.map((block, i) => ({
+          label: block.day,
+          data: block.rates.map(r => r.gt0_rate * 100),
+          backgroundColor: colors[i] + 'aa',
+        }))
+      },
+      options: {
+        scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: '动销率 (%)' } } }
+      }
+    });
+
+    const idxDays = DAYS.filter(d => d.indexed && d.indexed.has_col);
+    if (idxDays.length) {
+      new Chart(document.getElementById('chartIndexed'), {
+        type: 'bar',
+        data: {
+          labels: idxDays.map(d => d.label),
+          datasets: [
+            { label: '无收录（可当新品）', data: idxDays.map(d => d.indexed.not_indexed_rate * 100), backgroundColor: '#34d399' },
+            { label: '已有收录', data: idxDays.map(d => d.indexed.indexed_rate * 100), backgroundColor: '#9ca3af' },
+          ]
+        },
+        options: {
+          scales: { x: { stacked: true }, y: { stacked: true, max: 100, title: { display: true, text: '占比 (%)' } } }
+        }
+      });
+    }
+
+    const corrDays = DAYS.filter(d => d.shop_sale_corr);
+    if (corrDays.length) {
+      new Chart(document.getElementById('chartShopCorr'), {
+        type: 'bar',
+        data: {
+          labels: corrDays.map(d => d.label),
+          datasets: [{
+            label: 'Spearman ρ',
+            data: corrDays.map(d => d.shop_sale_corr.spearman_shop_vs_sku_sale),
+            backgroundColor: '#a78bfa',
+          }]
+        },
+        options: {
+          scales: { y: { min: 0, max: 0.25, title: { display: true, text: '相关系数' } } },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    new Chart(document.getElementById('chartShop'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: '店铺数', data: DAYS.map(d => d.shop.n_shops), backgroundColor: '#93c5fd', yAxisID: 'y' },
+          { label: '均 SKU/店', data: DAYS.map(d => d.shop.mean_skus_per_shop), type: 'line', borderColor: '#1d4ed8', yAxisID: 'y1' },
+        ]
+      },
+      options: {
+        scales: {
+          y: { position: 'left', beginAtZero: true, title: { display: true, text: '店铺数' } },
+          y1: { position: 'right', beginAtZero: true, title: { display: true, text: '均 SKU/店' }, grid: { drawOnChartArea: false } }
+        }
+      }
+    });
+
+    const hourSets = DAYS.filter(d => d.listing.hour_counts && d.listing.hour_counts.length);
+    if (hourSets.length) {
+      const hours = Array.from({length: 24}, (_, i) => i);
+      new Chart(document.getElementById('chartListingHour'), {
+        type: 'line',
+        data: {
+          labels: hours.map(h => h + '时'),
+          datasets: hourSets.map((d, i) => {
+            const map = Object.fromEntries(d.listing.hour_counts.map(x => [x.hour, x.count]));
+            return {
+              label: d.label,
+              data: hours.map(h => map[h] || 0),
+              borderColor: colors[DAYS.indexOf(d)],
+              tension: 0.3,
+            };
+          })
+        },
+        options: {
+          scales: { y: { beginAtZero: true, title: { display: true, text: '上架记录数' } } }
+        }
+      });
+    } else {
+      document.getElementById('chartListingHour').parentElement.innerHTML += '<p class="muted">未解析到上架时间字段。</p>';
+    }
+
+    const tbody = document.getElementById('shopTableBody');
+    DAYS.forEach(d => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${d.label}</td><td class="n">${d.shop.n_shops.toLocaleString()}</td>`
+        + `<td class="n">${d.shop.mean_skus_per_shop.toFixed(2)}</td>`
+        + `<td class="n">${d.shop.max_skus}</td>`
+        + `<td class="n">${(100 * d.shop.shops_with_ge2).toFixed(1)}%</td>`;
+      tbody.appendChild(tr);
+    });
+  </script>
+</body>
+</html>

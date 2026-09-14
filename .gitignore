@@ -1,0 +1,13 @@
+# Python/runtime cache
+__pycache__/
+*.py[cod]
+
+# Regenerable image downloads
+screener/cache/images/
+
+# Local scratch/cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.tmp
+*.log
