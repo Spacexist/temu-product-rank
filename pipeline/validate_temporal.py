@@ -17,7 +17,8 @@ from sklearn.model_selection import GroupShuffleSplit
 import rank_products as rp
 
 ROOT = Path(__file__).resolve().parent
-ART = ROOT / "artifacts_v2"
+PROJECT_ROOT = ROOT.parent
+ART = PROJECT_ROOT / "artifacts" / "current"
 PRESETS = {
     "911": {
         "train": ("909.xlsx", "910.csv"),

@@ -28,11 +28,12 @@ from sklearn.model_selection import GroupShuffleSplit
 from torchvision import models
 
 ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = ROOT.parent
 
 from temu_region import temu_aiohttp_headers
-ART = ROOT / "artifacts_v2"
+ART = PROJECT_ROOT / "artifacts" / "current"
 NPZ_DIR = Path(r"D:\temu_rank_npz")
-IMG_DIR = ROOT / "hit_cache" / "images"
+IMG_DIR = PROJECT_ROOT / "hit_cache" / "images"
 
 
 def npz_paths() -> tuple[Path, Path]:
@@ -59,11 +60,11 @@ def save_npz_atomic(path: Path, **arrays) -> None:
         if bak.exists():
             bak.unlink(missing_ok=True)
 DATA_FILES = [
-    ROOT / "909.xlsx",
-    ROOT / "910.csv",
-    ROOT / "911.csv",
-    ROOT / "912.csv",
-    ROOT / "913.csv",
+    PROJECT_ROOT / "data" / "raw" / "909.xlsx",
+    PROJECT_ROOT / "data" / "raw" / "910.csv",
+    PROJECT_ROOT / "data" / "raw" / "911.csv",
+    PROJECT_ROOT / "data" / "raw" / "912.csv",
+    PROJECT_ROOT / "data" / "raw" / "913.csv",
 ]
 URL_RE = re.compile(r"https?://[^\s\],>]+")
 CJK_RE = re.compile(r"[\u4e00-\u9fff]")
@@ -403,45 +404,60 @@ def embed_texts(texts: list[str], batch: int = 32) -> np.ndarray:
     return vecs.astype(np.float32)
 
 
+def load_npz_cache(path: Path) -> dict[str, np.ndarray]:
+    """按商品 ID 读取向量缓存，避免训练阶段重新依赖图片文件。"""
+    cache: dict[str, np.ndarray] = {}
+    if path.exists():
+        with np.load(path, allow_pickle=True) as z:
+            cache = {str(i): v.copy() for i, v in zip(z["ids"], z["X"])}
+    return cache
+
+
+def add_local_image_vectors(df: pd.DataFrame, img_cache: dict[str, np.ndarray]) -> int:
+    """只给已有本地图片文件但尚无缓存向量的商品补 ResNet 向量。"""
+    miss = df[~df["商品ID"].astype(str).isin(img_cache)].copy()
+    if miss.empty:
+        return 0
+    local = miss[miss["main_url"].map(image_ok)].copy()
+    skipped = len(miss) - len(local)
+    if local.empty:
+        print(f"[embed] 图片向量缺失 {len(miss)} 条；本地无图，跳过下载")
+        return 0
+    paths = [url_to_path(u) for u in local["main_url"]]
+    model, tfm = build_resnet()
+    dev = device()
+    print(f"[embed] 新增 ResNet18 {len(local)} 条 device={dev}；本地无图跳过 {skipped} 条")
+    raw, ok_idx = embed_image_paths(model, tfm, paths, dev, img_batch_size())
+    raw_n = l2_normalize(raw) if len(raw) else raw
+    for k, pos in enumerate(ok_idx):
+        img_cache[str(local.iloc[pos]["商品ID"])] = raw_n[k]
+    print(f"[embed] 新增图像向量 {len(ok_idx)}/{len(local)}")
+    return len(ok_idx)
+
+
 def stage_embed() -> None:
+    """生成训练用对齐表；优先使用 NPZ 向量缓存，不主动下载训练图片。"""
     t0 = time.perf_counter()
     df = load_dataset()
-    mask = df["main_url"].map(image_ok)
-    df = df[mask].reset_index(drop=True)
-    dropped = (~mask).sum()
-    print(f"[embed] 主图不可用丢弃 {dropped} 行，保留 {len(df)}")
-
     img_path, txt_path = npz_paths()
 
-    img_cache: dict[str, np.ndarray] = {}
+    img_cache = load_npz_cache(img_path)
     if img_path.exists():
-        with np.load(img_path, allow_pickle=True) as z:
-            img_cache = {str(i): v.copy() for i, v in zip(z["ids"], z["X"])}
         print(f"[embed] 图像缓存 {len(img_cache)} 条")
 
-    miss = df[~df["商品ID"].astype(str).isin(img_cache)].copy()
-    if len(miss):
-        paths = [url_to_path(u) for u in miss["main_url"]]
-        model, tfm = build_resnet()
-        dev = device()
-        print(f"[embed] 新增 ResNet18 {len(miss)} 条 device={dev}")
-        raw, ok_idx = embed_image_paths(model, tfm, paths, dev, img_batch_size())
-        raw_n = l2_normalize(raw) if len(raw) else raw
-        for k, pos in enumerate(ok_idx):
-            img_cache[str(miss.iloc[pos]["商品ID"])] = raw_n[k]
-        print(f"[embed] 新增图像向量 {len(ok_idx)}/{len(miss)}")
+    add_local_image_vectors(df, img_cache)
 
     keep = df["商品ID"].astype(str).isin(img_cache)
+    dropped = int((~keep).sum())
     df = df[keep].reset_index(drop=True)
+    print(f"[embed] 图片向量缺失丢弃 {dropped} 行，保留 {len(df)}")
     ids = df["商品ID"].astype(str).tolist()
     X_img = np.stack([img_cache[i] for i in ids]).astype(np.float32)
     save_npz_atomic(img_path, ids=np.array(ids, dtype=object), X=X_img)
     print(f"[embed] 写入 {img_path} shape={X_img.shape}")
 
-    txt_cache: dict[str, np.ndarray] = {}
+    txt_cache = load_npz_cache(txt_path)
     if txt_path.exists():
-        with np.load(txt_path, allow_pickle=True) as z:
-            txt_cache = {str(i): v.copy() for i, v in zip(z["ids"], z["X"])}
         print(f"[embed] 文本缓存 {len(txt_cache)} 条")
 
     miss_t = df[~df["商品ID"].astype(str).isin(txt_cache)]
@@ -711,7 +727,7 @@ def stage_train() -> None:
         if name == "full":
             with open(ART / "lgbm_full.pkl", "wb") as f:
                 pickle.dump(model, f)
-            ascii_txt = Path(r"F:\Clip\screener_lgb_export\lgbm_full.txt")
+            ascii_txt = ART / "lgb_export_ascii" / "lgbm_full.txt"
             ascii_txt.parent.mkdir(parents=True, exist_ok=True)
             model.booster_.save_model(str(ascii_txt))
 

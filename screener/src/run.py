@@ -22,7 +22,7 @@ from embed import (  # noqa: E402
     image_ok,
     url_to_path,
 )
-from embed_cache import fill_from_cache, load_pair  # noqa: E402
+from embed_cache import load_pair, norm_id  # noqa: E402
 from features import (  # noqa: E402
     apply_cat_l2_te,
     apply_inference_source,
@@ -66,6 +66,40 @@ def resolve_cache_dirs(cfg: dict) -> list[Path]:
     return out
 
 
+def uncached_image_urls(df: pd.DataFrame, img_map: dict[str, np.ndarray] | None) -> list[str]:
+    """只返回没有图片向量缓存的商品主图 URL，避免预测阶段重复下载。"""
+    if not img_map:
+        urls = df["main_url"].fillna("").astype(str).unique().tolist()
+        return [u for u in urls if u]
+    work = df.copy()
+    work["_pid_norm"] = work["商品ID"].astype(str).map(norm_id)
+    miss = work[~work["_pid_norm"].isin(img_map)]
+    urls = miss["main_url"].fillna("").astype(str).unique().tolist()
+    return [u for u in urls if u]
+
+
+def fill_partial_from_cache(
+    ids: list[str],
+    img_map: dict[str, np.ndarray],
+    txt_map: dict[str, np.ndarray],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """分别填充图片/文本向量缓存，并分别返回缺失掩码。"""
+    n = len(ids)
+    X_img = np.zeros((n, 512), dtype=np.float32)
+    X_txt = np.zeros((n, 512), dtype=np.float32)
+    img_miss = np.ones(n, dtype=bool)
+    txt_miss = np.ones(n, dtype=bool)
+    for i, raw_pid in enumerate(ids):
+        pid = norm_id(raw_pid)
+        if pid in img_map:
+            X_img[i] = img_map[pid]
+            img_miss[i] = False
+        if pid in txt_map:
+            X_txt[i] = txt_map[pid]
+            txt_miss[i] = False
+    return X_img, X_txt, img_miss, txt_miss
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", required=True, help="xlsx/csv 日报")
@@ -87,21 +121,29 @@ def main() -> None:
         df = df.head(args.limit).copy()
     t_read = time.perf_counter() - t0
 
+    art_dir = resolve_art_dir(cfg)
+    npz_dir = resolve_npz_dir(cfg)
+    cache_pair = load_pair(art_dir, npz_dir) if art_dir or npz_dir else None
+    img_map = cache_pair[0] if cache_pair else None
+
     cache_dirs = resolve_cache_dirs(cfg)
-    urls = df["main_url"].fillna("").astype(str).unique().tolist()
-    urls = [u for u in urls if u]
+    urls = uncached_image_urls(df, img_map)
     t0 = time.perf_counter()
     if not args.skip_download:
         ok_map = asyncio.run(download_urls(urls, cache_dirs, cfg.get("download_concurrency", 200)))
-        print(f"[run] 下载主图 成功 {sum(ok_map.values())}/{len(ok_map)}")
+        print(f"[run] 下载未缓存主图 成功 {sum(ok_map.values())}/{len(ok_map)}")
     else:
         print("[run] skip-download")
     t_dl = time.perf_counter() - t0
 
     paths = []
     img_missing = []
-    for u in df["main_url"].fillna("").astype(str):
-        if u and image_ok(u, cache_dirs):
+    img_cache_ids = set(img_map or {})
+    for pid, u in zip(df["商品ID"].astype(str), df["main_url"].fillna("").astype(str)):
+        if norm_id(pid) in img_cache_ids:
+            paths.append(None)
+            img_missing.append(False)
+        elif u and image_ok(u, cache_dirs):
             paths.append(url_to_path(u, cache_dirs))
             img_missing.append(False)
         else:
@@ -109,30 +151,32 @@ def main() -> None:
             img_missing.append(True)
     df["img_missing"] = img_missing
 
-    art_dir = resolve_art_dir(cfg)
-    npz_dir = resolve_npz_dir(cfg)
-    cache_pair = load_pair(art_dir, npz_dir) if art_dir or npz_dir else None
     t0 = time.perf_counter()
     if cache_pair:
         img_map, txt_map = cache_pair
-        X_img, X_txt, cache_miss = fill_from_cache(
+        X_img, X_txt, img_miss, txt_miss = fill_partial_from_cache(
             df["商品ID"].astype(str).tolist(), img_map, txt_map
         )
-        miss_idx = np.flatnonzero(cache_miss)
-        if len(miss_idx):
-            sub_paths = [paths[i] for i in miss_idx]
+        img_idx = np.flatnonzero(img_miss)
+        if len(img_idx):
+            sub_paths = [paths[i] for i in img_idx]
             sub_img, sub_miss = embed_images(sub_paths, batch=cfg.get("embed_batch", 32))
+            for k, i in enumerate(img_idx):
+                X_img[i] = sub_img[k]
+                df.iat[i, df.columns.get_loc("img_missing")] = bool(sub_miss[k])
+        t_img = time.perf_counter() - t0
+
+        t0 = time.perf_counter()
+        txt_idx = np.flatnonzero(txt_miss)
+        if len(txt_idx):
             sub_txt = embed_texts(
-                df.iloc[miss_idx]["标题"].astype(str).tolist(),
+                df.iloc[txt_idx]["标题"].astype(str).tolist(),
                 cfg.get("hf_model", "BAAI/bge-small-zh-v1.5"),
                 batch=cfg.get("embed_batch", 32),
             )
-            for k, i in enumerate(miss_idx):
-                X_img[i] = sub_img[k]
+            for k, i in enumerate(txt_idx):
                 X_txt[i] = sub_txt[k]
-                df.iat[i, df.columns.get_loc("img_missing")] = bool(sub_miss[k])
-        t_img = time.perf_counter() - t0
-        t_txt = 0.0
+        t_txt = time.perf_counter() - t0
     else:
         X_img, miss = embed_images(paths, batch=cfg.get("embed_batch", 32))
         df["img_missing"] = df["img_missing"] | miss

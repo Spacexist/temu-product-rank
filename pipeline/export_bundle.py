@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""一次性导出选品筛子 model/（勿改 artifacts_v2 指标文件）。"""
+"""一次性导出选品筛子 model/（勿改训练指标文件）。"""
 from __future__ import annotations
 
 import json
@@ -9,17 +9,19 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-ART = ROOT / "artifacts_v2"
-OUT = ROOT / "_screener_bundle" / "model"
-# LightGBM 在含中文路径下 save_model 会失败，先写到 ASCII 临时目录
-LGB_TMP = Path(r"F:\Clip\screener_lgb_export")
-DESKTOP_OUT = Path(r"C:\Users\ZFGJ-WCH\Desktop\选品筛子\model")
+PROJECT_ROOT = ROOT.parent
+ART = PROJECT_ROOT / "artifacts" / "current"
+OUT = PROJECT_ROOT / "screener" / "model"
+# LightGBM 在含中文路径下 save_model 会失败，先写到项目内 ASCII 临时目录
+LGB_TMP = ART / "lgb_export_ascii"
+DESKTOP_OUT = OUT
 
 sys.path.insert(0, str(ROOT))
 import rank_products as rp  # noqa: E402
 
 
 def cat_l2_te_mapping(train_fit, m: float = 20.0) -> dict:
+    """基于训练折生成二级类目的平滑目标编码映射。"""
     global_mean = float(train_fit["y"].mean())
     agg = train_fit.groupby("cat_l2", observed=True)["y"].agg(["mean", "count"])
     mapping: dict = {"_global": global_mean, "m": m}
@@ -29,7 +31,14 @@ def cat_l2_te_mapping(train_fit, m: float = 20.0) -> dict:
     return mapping
 
 
+def latest_source_category(train_fit) -> str:
+    """取当前训练集中最新的数据源名，作为下一日推理的固定 source。"""
+    sources = sorted(train_fit["source"].dropna().astype(str).unique().tolist())
+    return sources[-1] if sources else ""
+
+
 def main() -> None:
+    """导出当前增量训练模型到 screener/model，供日常预测入口使用。"""
     os.environ.setdefault("OMP_NUM_THREADS", "1")
     pkl = ART / "lgbm_full.pkl"
     if not pkl.exists():
@@ -63,6 +72,7 @@ def main() -> None:
     )
 
     train_fit = bundle["train"]
+    inference_source = latest_source_category(train_fit)
     meta = {
         "exported_from": str(ART),
         "n_train_fit": int(len(train_fit)),
@@ -71,7 +81,7 @@ def main() -> None:
         "y_cap_p995": y_cap,
         "CAT_COLS": list(rp.CAT_COLS),
         "NUM_TAB_COLS": list(rp.NUM_TAB_COLS),
-        "inference_source_fixed": "912.csv",
+        "inference_source_fixed": inference_source,
         "forbidden_feature_cols": list(rp.LEAK_COLS)
         + ["店铺ID", "总销量", "y", "y_raw", "split", "shop_group"],
         "cat_l2_categories": sorted(train_fit["cat_l2"].astype(str).unique().tolist()),
@@ -94,7 +104,10 @@ def main() -> None:
                 "y_cap.json",
                 "meta.json",
             ):
-                shutil.copy2(OUT / name, DESKTOP_OUT / name)
+                src = OUT / name
+                dst = DESKTOP_OUT / name
+                if src.resolve() != dst.resolve():
+                    shutil.copy2(src, dst)
             print(f"[export] 已复制到 {DESKTOP_OUT}")
         except OSError as exc:
             print(f"[export] 复制到桌面目录失败 ({exc})，请手动复制 {OUT}")

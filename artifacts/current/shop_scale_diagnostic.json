@@ -1,0 +1,57 @@
+{
+  "spearman_pred_full_vs_shop_total_sales": 0.11234499634110118,
+  "shop_sales_tertiles": [
+    1039.0,
+    15425.593400000009
+  ],
+  "top5pct_by_shop_tier": {
+    "low": {
+      "top_k": 180,
+      "n": 3600,
+      "prec_sale_gt0": 0.5222222222222223,
+      "rec_sale_gt0": 0.13742690058479531,
+      "base_sale_gt0": 0.19,
+      "prec_sale_gt0_lift_vs_base": 2.7485380116959064,
+      "prec_sale_ge5": 0.2222222222222222,
+      "rec_sale_ge5": 0.1724137931034483,
+      "base_sale_ge5": 0.06444444444444444,
+      "prec_sale_ge5_lift_vs_base": 3.4482758620689653,
+      "prec_sale_ge20": 0.08333333333333333,
+      "rec_sale_ge20": 0.3488372093023256,
+      "base_sale_ge20": 0.011944444444444445,
+      "prec_sale_ge20_lift_vs_base": 6.976744186046511
+    },
+    "mid": {
+      "top_k": 180,
+      "n": 3584,
+      "prec_sale_gt0": 0.5388888888888889,
+      "rec_sale_gt0": 0.12613784135240572,
+      "base_sale_gt0": 0.21456473214285715,
+      "prec_sale_gt0_lift_vs_base": 2.511544574483456,
+      "prec_sale_ge5": 0.2222222222222222,
+      "rec_sale_ge5": 0.14814814814814814,
+      "base_sale_ge5": 0.07533482142857142,
+      "prec_sale_ge5_lift_vs_base": 2.9497942386831277,
+      "prec_sale_ge20": 0.03888888888888889,
+      "rec_sale_ge20": 0.1346153846153846,
+      "base_sale_ge20": 0.014508928571428572,
+      "prec_sale_ge20_lift_vs_base": 2.68034188034188
+    },
+    "high": {
+      "top_k": 180,
+      "n": 3591,
+      "prec_sale_gt0": 0.5833333333333334,
+      "rec_sale_gt0": 0.0898972602739726,
+      "base_sale_gt0": 0.32525758841548313,
+      "prec_sale_gt0_lift_vs_base": 1.7934503424657537,
+      "prec_sale_ge5": 0.28888888888888886,
+      "rec_sale_ge5": 0.14772727272727273,
+      "base_sale_ge5": 0.09802283486494012,
+      "prec_sale_ge5_lift_vs_base": 2.947159090909091,
+      "prec_sale_ge20": 0.07777777777777778,
+      "rec_sale_ge20": 0.18421052631578946,
+      "base_sale_ge20": 0.021164021164021163,
+      "prec_sale_ge20_lift_vs_base": 3.6750000000000003
+    }
+  }
+}

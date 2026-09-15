@@ -59,13 +59,18 @@ async def _download_one(session, url: str, dest: Path, sem: asyncio.Semaphore):
 
 
 async def download_urls(urls: list[str], cache_dirs: list[Path], concurrency: int):
+    """下载当前预测文件缺失的主图，供没有图片向量缓存的 SKU 生成 embedding。"""
     import sys
     from pathlib import Path
 
     _root = Path(__file__).resolve().parents[2]
     if str(_root) not in sys.path:
         sys.path.insert(0, str(_root))
-    from temu_region import temu_aiohttp_headers
+    try:
+        from temu_region import temu_aiohttp_headers
+    except ModuleNotFoundError:
+        sys.path.insert(0, str(_root / "pipeline"))
+        from temu_region import temu_aiohttp_headers
 
     headers = temu_aiohttp_headers()
     sem = asyncio.Semaphore(concurrency)

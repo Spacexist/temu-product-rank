@@ -3,11 +3,13 @@ __pycache__/
 *.py[cod]
 
 # Regenerable image downloads
+hit_cache/images/
 screener/cache/images/
 
 # Local scratch/cache
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+artifacts/current/lgb_export_ascii/_predict_tmp/
 *.tmp
 *.log

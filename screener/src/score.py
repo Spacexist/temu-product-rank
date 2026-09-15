@@ -14,10 +14,12 @@ import pandas as pd
 
 
 def load_meta(model_dir: Path) -> dict:
+    """读取模型导出时写入的特征和推理元信息。"""
     return json.loads((model_dir / "meta.json").read_text(encoding="utf-8"))
 
 
 def booster_path(model_dir: Path, ascii_fallback: str) -> str:
+    """返回 LightGBM 可读取的 ASCII 模型路径，必要时从 model_dir 复制。"""
     fb = Path(ascii_fallback or r"F:\Clip\screener_lgb_export\lgbm_full.txt")
     fb.parent.mkdir(parents=True, exist_ok=True)
     p = model_dir / "lgbm_full.txt"
@@ -32,6 +34,7 @@ def booster_path(model_dir: Path, ascii_fallback: str) -> str:
 def build_matrix(
     tab: pd.DataFrame, img: np.ndarray, txt: np.ndarray, feature_names: list[str]
 ) -> pd.DataFrame:
+    """拼接表格、图片、文本特征，并按训练特征顺序对齐。"""
     img_df = pd.DataFrame(img, columns=[f"img_{i}" for i in range(img.shape[1])])
     txt_df = pd.DataFrame(txt, columns=[f"txt_{i}" for i in range(txt.shape[1])])
     X = pd.concat([tab.reset_index(drop=True), img_df, txt_df], axis=1)
@@ -52,6 +55,7 @@ def predict(
     model_dir: Path,
     config: dict,
 ) -> np.ndarray:
+    """使用导出的 LightGBM 模型对子进程安全预测。"""
     os.environ.setdefault("OMP_NUM_THREADS", "1")
     names = json.loads((model_dir / "feature_names.json").read_text(encoding="utf-8"))
     X = build_matrix(tab, img, txt, names)
@@ -63,7 +67,7 @@ def predict(
 
 def _predict_subprocess_df(X: pd.DataFrame, model_path: str) -> np.ndarray:
     """Torch 与 LightGBM 同进程在部分 Windows 上会 access violation；用 pandas 类别在子进程预测。"""
-    tmp = Path(r"F:\Clip\screener_predict_tmp")
+    tmp = Path(model_path).resolve().parent / "_predict_tmp"
     tmp.mkdir(parents=True, exist_ok=True)
     x_path = tmp / "X.pkl"
     y_path = tmp / "y.npy"

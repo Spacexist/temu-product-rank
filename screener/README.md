@@ -20,6 +20,7 @@ F:\Clip\venv\Scripts\python.exe src\run.py --input "C:\path\日报.csv"
 - `config.json` 当前指向 `D:/temu_rank_npz`，用于读取图片/文本向量缓存。
 - 当前可部署模型在 `model/lgbm_full.txt`。
 - `src/run.py` 不再生成 HTML，避免模型阶段和前端展示耦合。
+- `src/run.py` 会先看图片向量缓存，只下载当前日报里未缓存图片向量的主图。
 
 ## HTML pipeline
 
@@ -70,3 +71,13 @@ output/913_Top5pct_去违禁_去2D平面.csv
 ```
 
 913 Top500 自动过滤后保留 203 条；过滤后违禁命中 0，2D/平面命中 0。
+
+## 914 当前结果
+
+```text
+output/914_scored.csv
+output/914_分享.html
+output/914_Top5pct_去违禁_去2D平面.csv
+```
+
+914 使用 909-913 增量训练模型预测；Top500 自动过滤后保留 262 条，过滤后违禁命中 0，2D/平面命中 0。
