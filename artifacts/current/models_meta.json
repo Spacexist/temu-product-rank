@@ -1,23 +1,23 @@
 {
   "price_only": {
-    "best_iteration": 79
+    "best_iteration": 14
   },
   "cat_only": {
-    "best_iteration": 63
+    "best_iteration": 48
   },
   "tab_only": {
-    "best_iteration": 99
+    "best_iteration": 123
   },
   "title_only": {
-    "best_iteration": 298
+    "best_iteration": 153
   },
   "image_only": {
-    "best_iteration": 190
+    "best_iteration": 125
   },
   "full": {
-    "best_iteration": 434
+    "best_iteration": 201
   },
   "LEAK_shop": {
-    "best_iteration": 381
+    "best_iteration": 247
   }
 }

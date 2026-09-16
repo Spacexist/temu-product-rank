@@ -1,83 +1,98 @@
 [
   {
     "Path": ".gitignore",
-    "Bytes": 194,
-    "LastWriteTime": "2026-09-15 09:49:40"
+    "Bytes": 243,
+    "LastWriteTime": "2026-09-15 09:51:30"
   },
   {
-    "Path": "artifacts\\current\\_round1\\split.json",
-    "Bytes": 201,
-    "LastWriteTime": "2026-09-15 09:24:59"
-  },
-  {
-    "Path": "artifacts\\current\\dataset_embedded.csv",
-    "Bytes": 23377832,
-    "LastWriteTime": "2026-09-15 09:24:30"
-  },
-  {
-    "Path": "artifacts\\current\\dataset.csv",
-    "Bytes": 26873122,
-    "LastWriteTime": "2026-09-15 09:31:19"
-  },
-  {
-    "Path": "artifacts\\current\\lgb_export_ascii\\_predict_tmp\\X.pkl",
-    "Bytes": 41712211,
-    "LastWriteTime": "2026-09-15 09:47:55"
-  },
-  {
-    "Path": "artifacts\\current\\lgb_export_ascii\\_predict_tmp\\y.npy",
-    "Bytes": 80128,
-    "LastWriteTime": "2026-09-15 09:47:57"
-  },
-  {
-    "Path": "artifacts\\current\\lgb_export_ascii\\lgbm_full.txt",
-    "Bytes": 2616964,
-    "LastWriteTime": "2026-09-15 09:31:19"
-  },
-  {
-    "Path": "artifacts\\current\\lgbm_full.pkl",
-    "Bytes": 2629335,
-    "LastWriteTime": "2026-09-15 09:28:38"
-  },
-  {
-    "Path": "artifacts\\current\\metrics_top5pct.json",
+    "Path": "artifacts\\current\\_round1\\metrics_top5pct.json",
     "Bytes": 4875,
     "LastWriteTime": "2026-09-15 09:29:39"
   },
   {
-    "Path": "artifacts\\current\\metrics_topk.json",
+    "Path": "artifacts\\current\\_round1\\metrics_topk.json",
     "Bytes": 6741,
     "LastWriteTime": "2026-09-15 09:29:39"
   },
   {
-    "Path": "artifacts\\current\\models_meta.json",
-    "Bytes": 353,
-    "LastWriteTime": "2026-09-15 09:29:19"
-  },
-  {
-    "Path": "artifacts\\current\\report.md",
+    "Path": "artifacts\\current\\_round1\\report.md",
     "Bytes": 3578,
     "LastWriteTime": "2026-09-15 09:29:39"
   },
   {
-    "Path": "artifacts\\current\\shop_scale_diagnostic.json",
-    "Bytes": 2060,
-    "LastWriteTime": "2026-09-15 09:29:39"
-  },
-  {
-    "Path": "artifacts\\current\\split.json",
+    "Path": "artifacts\\current\\_round1\\split.json",
     "Bytes": 201,
     "LastWriteTime": "2026-09-15 09:27:33"
   },
   {
-    "Path": "artifacts\\current\\test_scores.npz",
+    "Path": "artifacts\\current\\_round1\\test_scores.npz",
     "Bytes": 562330,
     "LastWriteTime": "2026-09-15 09:29:19"
   },
   {
-    "Path": "artifacts\\current\\top_picks.csv",
+    "Path": "artifacts\\current\\_round1\\top_picks.csv",
     "Bytes": 85904,
     "LastWriteTime": "2026-09-15 09:29:39"
+  },
+  {
+    "Path": "artifacts\\current\\dataset_embedded.csv",
+    "Bytes": 28693093,
+    "LastWriteTime": "2026-09-16 09:17:33"
+  },
+  {
+    "Path": "artifacts\\current\\dataset.csv",
+    "Bytes": 32267984,
+    "LastWriteTime": "2026-09-16 09:21:21"
+  },
+  {
+    "Path": "artifacts\\current\\lgb_export_ascii\\lgbm_full.txt",
+    "Bytes": 1239794,
+    "LastWriteTime": "2026-09-16 09:21:22"
+  },
+  {
+    "Path": "artifacts\\current\\lgbm_full.pkl",
+    "Bytes": 1247746,
+    "LastWriteTime": "2026-09-16 09:19:52"
+  },
+  {
+    "Path": "artifacts\\current\\metrics_top5pct.json",
+    "Bytes": 4877,
+    "LastWriteTime": "2026-09-16 09:20:53"
+  },
+  {
+    "Path": "artifacts\\current\\metrics_topk.json",
+    "Bytes": 6607,
+    "LastWriteTime": "2026-09-16 09:20:53"
+  },
+  {
+    "Path": "artifacts\\current\\models_meta.json",
+    "Bytes": 354,
+    "LastWriteTime": "2026-09-16 09:20:26"
+  },
+  {
+    "Path": "artifacts\\current\\report.md",
+    "Bytes": 3676,
+    "LastWriteTime": "2026-09-16 09:20:54"
+  },
+  {
+    "Path": "artifacts\\current\\shop_scale_diagnostic.json",
+    "Bytes": 2066,
+    "LastWriteTime": "2026-09-16 09:20:53"
+  },
+  {
+    "Path": "artifacts\\current\\split.json",
+    "Bytes": 202,
+    "LastWriteTime": "2026-09-16 09:18:59"
+  },
+  {
+    "Path": "artifacts\\current\\test_scores.npz",
+    "Bytes": 677182,
+    "LastWriteTime": "2026-09-16 09:20:26"
+  },
+  {
+    "Path": "artifacts\\current\\top_picks.csv",
+    "Bytes": 86676,
+    "LastWriteTime": "2026-09-16 09:20:54"
   },
   {
     "Path": "artifacts\\datasets\\dataset_embedded.csv",
@@ -255,6 +270,11 @@
     "LastWriteTime": "2026-09-15 09:02:00"
   },
   {
+    "Path": "data\\raw\\915.csv",
+    "Bytes": 3429340,
+    "LastWriteTime": "2026-09-16 09:04:40"
+  },
+  {
     "Path": "docs\\_astra_review.md",
     "Bytes": 12112,
     "LastWriteTime": "2026-09-12 11:47:25"
@@ -301,8 +321,8 @@
   },
   {
     "Path": "MANIFEST.json",
-    "Bytes": 665136,
-    "LastWriteTime": "2026-09-14 11:31:47"
+    "Bytes": 17389,
+    "LastWriteTime": "2026-09-15 09:50:02"
   },
   {
     "Path": "pipeline\\bootstrap_screener.py",
@@ -441,8 +461,8 @@
   },
   {
     "Path": "pipeline\\rank_products.py",
-    "Bytes": 41245,
-    "LastWriteTime": "2026-09-15 09:26:49"
+    "Bytes": 41711,
+    "LastWriteTime": "2026-09-16 09:09:50"
   },
   {
     "Path": "pipeline\\retrain_through_913.ps1",
@@ -461,38 +481,38 @@
   },
   {
     "Path": "README.md",
-    "Bytes": 6447,
-    "LastWriteTime": "2026-09-15 09:49:41"
+    "Bytes": 6503,
+    "LastWriteTime": "2026-09-16 09:26:30"
   },
   {
     "Path": "screener\\config.json",
     "Bytes": 424,
-    "LastWriteTime": "2026-09-15 09:38:51"
+    "LastWriteTime": "2026-09-16 09:08:22"
   },
   {
     "Path": "screener\\model\\cat_l2_te.json",
-    "Bytes": 1360,
-    "LastWriteTime": "2026-09-15 09:31:19"
+    "Bytes": 1351,
+    "LastWriteTime": "2026-09-16 09:21:22"
   },
   {
     "Path": "screener\\model\\feature_names.json",
     "Bytes": 14301,
-    "LastWriteTime": "2026-09-15 09:31:19"
+    "LastWriteTime": "2026-09-16 09:21:22"
   },
   {
     "Path": "screener\\model\\lgbm_full.txt",
-    "Bytes": 2616964,
-    "LastWriteTime": "2026-09-15 09:31:19"
+    "Bytes": 1239794,
+    "LastWriteTime": "2026-09-16 09:21:22"
   },
   {
     "Path": "screener\\model\\meta.json",
-    "Bytes": 1701,
-    "LastWriteTime": "2026-09-15 09:31:19"
+    "Bytes": 1717,
+    "LastWriteTime": "2026-09-16 09:21:22"
   },
   {
     "Path": "screener\\model\\y_cap.json",
     "Bytes": 20,
-    "LastWriteTime": "2026-09-15 09:31:19"
+    "LastWriteTime": "2026-09-16 09:21:22"
   },
   {
     "Path": "screener\\output\\.gitkeep",
@@ -610,9 +630,29 @@
     "LastWriteTime": "2026-09-15 09:48:15"
   },
   {
+    "Path": "screener\\output\\915_分享.html",
+    "Bytes": 363981,
+    "LastWriteTime": "2026-09-16 09:25:34"
+  },
+  {
+    "Path": "screener\\output\\915_scored.csv",
+    "Bytes": 4672134,
+    "LastWriteTime": "2026-09-16 09:25:12"
+  },
+  {
+    "Path": "screener\\output\\915_screener.html",
+    "Bytes": 5916645,
+    "LastWriteTime": "2026-09-16 09:25:34"
+  },
+  {
+    "Path": "screener\\output\\915_Top5pct_去违禁_去2D平面.csv",
+    "Bytes": 125082,
+    "LastWriteTime": "2026-09-16 09:25:34"
+  },
+  {
     "Path": "screener\\README.md",
-    "Bytes": 2731,
-    "LastWriteTime": "2026-09-15 09:49:42"
+    "Bytes": 2988,
+    "LastWriteTime": "2026-09-16 09:26:32"
   },
   {
     "Path": "screener\\requirements.txt",
@@ -672,6 +712,6 @@
   {
     "Path": "screener\\words\\words_normalized.json",
     "Bytes": 11085,
-    "LastWriteTime": "2026-09-15 09:47:57"
+    "LastWriteTime": "2026-09-16 09:25:10"
   }
 ]

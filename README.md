@@ -10,9 +10,9 @@
 - 当前文本向量：`artifacts/embeddings/txt.npz`
 - 当前 913 预测输出：`screener/output/913_scored.csv`
 - 当前 913 人工筛选入口：`screener/output/913_分享.html`
-- 当前增量训练缓存：`artifacts/current/`，已纳入 909-913
-- 当前 914 预测输出：`screener/output/914_scored.csv`
-- 当前 914 人工筛选入口：`screener/output/914_分享.html`
+- 当前增量训练缓存：`artifacts/current/`，已纳入 909-914
+- 当前 915 预测输出：`screener/output/915_scored.csv`
+- 当前 915 人工筛选入口：`screener/output/915_分享.html`
 
 `img.npz` 已校验：
 
@@ -137,7 +137,7 @@ Top500 原始商品：500
 - 第二天运行时，自动从 manifest 找“已预测但未入训练”的上一批文件，也允许手动覆盖。
 - 训练方式采用“累计数据 + 全量重训”，embedding 采用增量缓存。
 - 训练库应包含每日不可变归档、manifest、当前合并训练表。
-- 每天先把前一天日报纳入 `data/raw/` 后重跑训练；例如 914 预测前，训练集为 909-913。
+- 每天先把当天日报放入 `data/raw/`；训练脚本会自动排除最新日报，只用此前所有日报训练。例如 915 预测前，训练集为 909-914。
 - 模型阶段输出 `*_scored.csv`；HTML 阶段读取该 CSV 生成 HTML，不让模型脚本直接碰前端展示。
 - 输出应按 `runs/YYYYMMDD/` 归档，同时最新 HTML 可同步到 `screener/output/`。
 - 分享 HTML 先给自己人工筛，人工筛完保存出的 HTML 才发给别人。

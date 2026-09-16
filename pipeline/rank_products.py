@@ -33,7 +33,7 @@ PROJECT_ROOT = ROOT.parent
 from temu_region import temu_aiohttp_headers
 ART = PROJECT_ROOT / "artifacts" / "current"
 NPZ_DIR = Path(r"D:\temu_rank_npz")
-IMG_DIR = PROJECT_ROOT / "hit_cache" / "images"
+IMG_DIR = PROJECT_ROOT / "screener" / "cache" / "images"
 
 
 def npz_paths() -> tuple[Path, Path]:
@@ -42,6 +42,7 @@ def npz_paths() -> tuple[Path, Path]:
 
 
 def save_npz_atomic(path: Path, **arrays) -> None:
+    """原子写入 npz，避免中断时破坏已有向量缓存。"""
     import os
 
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -59,13 +60,30 @@ def save_npz_atomic(path: Path, **arrays) -> None:
         os.replace(tmp, path)
         if bak.exists():
             bak.unlink(missing_ok=True)
-DATA_FILES = [
-    PROJECT_ROOT / "data" / "raw" / "909.xlsx",
-    PROJECT_ROOT / "data" / "raw" / "910.csv",
-    PROJECT_ROOT / "data" / "raw" / "911.csv",
-    PROJECT_ROOT / "data" / "raw" / "912.csv",
-    PROJECT_ROOT / "data" / "raw" / "913.csv",
-]
+
+
+def training_data_files() -> list[Path]:
+    """使用 data/raw 中除最新日报外的文件训练，最新日报只用于当天预测。"""
+    raw_dir = PROJECT_ROOT / "data" / "raw"
+    files = [
+        p
+        for p in raw_dir.iterdir()
+        if p.is_file() and p.suffix.lower() in {".csv", ".xlsx", ".xls"}
+    ]
+
+    def day_key(path: Path) -> int:
+        try:
+            return int(path.stem)
+        except ValueError:
+            return -1
+
+    ordered = sorted((p for p in files if day_key(p) > 0), key=day_key)
+    if len(ordered) <= 1:
+        return ordered
+    return ordered[:-1]
+
+
+DATA_FILES = training_data_files()
 URL_RE = re.compile(r"https?://[^\s\],>]+")
 CJK_RE = re.compile(r"[\u4e00-\u9fff]")
 SEED = 42
