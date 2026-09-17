@@ -10,9 +10,9 @@
 - 当前文本向量：`artifacts/embeddings/txt.npz`
 - 当前 913 预测输出：`screener/output/913_scored.csv`
 - 当前 913 人工筛选入口：`screener/output/913_分享.html`
-- 当前增量训练缓存：`artifacts/current/`，已纳入 909-914
-- 当前 915 预测输出：`screener/output/915_scored.csv`
-- 当前 915 人工筛选入口：`screener/output/915_分享.html`
+- 当前增量训练缓存：`artifacts/current/`，已纳入 909-915
+- 当前 916 预测输出：`screener/output/916_scored.csv`
+- 当前 916 人工筛选入口：`screener/output/916_分享.html`
 
 `img.npz` 已校验：
 

@@ -1,9 +1,9 @@
 {
   "exported_from": "C:\\Users\\ZFGJ-WCH\\Desktop\\datta\\artifacts\\current",
-  "n_train_fit": 35697,
-  "n_valid": 4470,
-  "n_test_shop_split": 13018,
-  "y_cap_p995": 44.0,
+  "n_train_fit": 39196,
+  "n_valid": 4241,
+  "n_test_shop_split": 13887,
+  "y_cap_p995": 42.81999999999971,
   "CAT_COLS": [
     "cat_l2",
     "source"
@@ -19,7 +19,7 @@
     "has_backend_cat",
     "cat_l2_te"
   ],
-  "inference_source_fixed": "914.csv",
+  "inference_source_fixed": "915.csv",
   "forbidden_feature_cols": [
     "店铺总销量",
     "粉丝数",
@@ -72,8 +72,9 @@
     "911.csv",
     "912.csv",
     "913.csv",
-    "914.csv"
+    "914.csv",
+    "915.csv"
   ],
-  "best_iteration": 201,
+  "best_iteration": 660,
   "note": "导出时未在本进程 predict（Windows LGBM 偶发 access violation）；自测用 test_scores.npz 对齐"
 }

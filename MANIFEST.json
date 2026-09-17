@@ -6,93 +6,93 @@
   },
   {
     "Path": "artifacts\\current\\_round1\\metrics_top5pct.json",
-    "Bytes": 4875,
-    "LastWriteTime": "2026-09-15 09:29:39"
-  },
-  {
-    "Path": "artifacts\\current\\_round1\\metrics_topk.json",
-    "Bytes": 6741,
-    "LastWriteTime": "2026-09-15 09:29:39"
-  },
-  {
-    "Path": "artifacts\\current\\_round1\\report.md",
-    "Bytes": 3578,
-    "LastWriteTime": "2026-09-15 09:29:39"
-  },
-  {
-    "Path": "artifacts\\current\\_round1\\split.json",
-    "Bytes": 201,
-    "LastWriteTime": "2026-09-15 09:27:33"
-  },
-  {
-    "Path": "artifacts\\current\\_round1\\test_scores.npz",
-    "Bytes": 562330,
-    "LastWriteTime": "2026-09-15 09:29:19"
-  },
-  {
-    "Path": "artifacts\\current\\_round1\\top_picks.csv",
-    "Bytes": 85904,
-    "LastWriteTime": "2026-09-15 09:29:39"
-  },
-  {
-    "Path": "artifacts\\current\\dataset_embedded.csv",
-    "Bytes": 28693093,
-    "LastWriteTime": "2026-09-16 09:17:33"
-  },
-  {
-    "Path": "artifacts\\current\\dataset.csv",
-    "Bytes": 32267984,
-    "LastWriteTime": "2026-09-16 09:21:21"
-  },
-  {
-    "Path": "artifacts\\current\\lgb_export_ascii\\lgbm_full.txt",
-    "Bytes": 1239794,
-    "LastWriteTime": "2026-09-16 09:21:22"
-  },
-  {
-    "Path": "artifacts\\current\\lgbm_full.pkl",
-    "Bytes": 1247746,
-    "LastWriteTime": "2026-09-16 09:19:52"
-  },
-  {
-    "Path": "artifacts\\current\\metrics_top5pct.json",
     "Bytes": 4877,
     "LastWriteTime": "2026-09-16 09:20:53"
   },
   {
-    "Path": "artifacts\\current\\metrics_topk.json",
+    "Path": "artifacts\\current\\_round1\\metrics_topk.json",
     "Bytes": 6607,
     "LastWriteTime": "2026-09-16 09:20:53"
   },
   {
-    "Path": "artifacts\\current\\models_meta.json",
-    "Bytes": 354,
-    "LastWriteTime": "2026-09-16 09:20:26"
-  },
-  {
-    "Path": "artifacts\\current\\report.md",
+    "Path": "artifacts\\current\\_round1\\report.md",
     "Bytes": 3676,
     "LastWriteTime": "2026-09-16 09:20:54"
   },
   {
-    "Path": "artifacts\\current\\shop_scale_diagnostic.json",
-    "Bytes": 2066,
-    "LastWriteTime": "2026-09-16 09:20:53"
-  },
-  {
-    "Path": "artifacts\\current\\split.json",
+    "Path": "artifacts\\current\\_round1\\split.json",
     "Bytes": 202,
     "LastWriteTime": "2026-09-16 09:18:59"
   },
   {
-    "Path": "artifacts\\current\\test_scores.npz",
+    "Path": "artifacts\\current\\_round1\\test_scores.npz",
     "Bytes": 677182,
     "LastWriteTime": "2026-09-16 09:20:26"
   },
   {
-    "Path": "artifacts\\current\\top_picks.csv",
+    "Path": "artifacts\\current\\_round1\\top_picks.csv",
     "Bytes": 86676,
     "LastWriteTime": "2026-09-16 09:20:54"
+  },
+  {
+    "Path": "artifacts\\current\\dataset_embedded.csv",
+    "Bytes": 30883270,
+    "LastWriteTime": "2026-09-17 09:21:25"
+  },
+  {
+    "Path": "artifacts\\current\\dataset.csv",
+    "Bytes": 37580439,
+    "LastWriteTime": "2026-09-17 09:25:44"
+  },
+  {
+    "Path": "artifacts\\current\\lgb_export_ascii\\lgbm_full.txt",
+    "Bytes": 3956289,
+    "LastWriteTime": "2026-09-17 09:25:45"
+  },
+  {
+    "Path": "artifacts\\current\\lgbm_full.pkl",
+    "Bytes": 3972974,
+    "LastWriteTime": "2026-09-17 09:23:38"
+  },
+  {
+    "Path": "artifacts\\current\\metrics_top5pct.json",
+    "Bytes": 4853,
+    "LastWriteTime": "2026-09-17 09:25:11"
+  },
+  {
+    "Path": "artifacts\\current\\metrics_topk.json",
+    "Bytes": 6732,
+    "LastWriteTime": "2026-09-17 09:25:11"
+  },
+  {
+    "Path": "artifacts\\current\\models_meta.json",
+    "Bytes": 354,
+    "LastWriteTime": "2026-09-17 09:24:34"
+  },
+  {
+    "Path": "artifacts\\current\\report.md",
+    "Bytes": 3679,
+    "LastWriteTime": "2026-09-17 09:25:12"
+  },
+  {
+    "Path": "artifacts\\current\\shop_scale_diagnostic.json",
+    "Bytes": 2063,
+    "LastWriteTime": "2026-09-17 09:25:11"
+  },
+  {
+    "Path": "artifacts\\current\\split.json",
+    "Bytes": 215,
+    "LastWriteTime": "2026-09-17 09:21:56"
+  },
+  {
+    "Path": "artifacts\\current\\test_scores.npz",
+    "Bytes": 723517,
+    "LastWriteTime": "2026-09-17 09:24:34"
+  },
+  {
+    "Path": "artifacts\\current\\top_picks.csv",
+    "Bytes": 86937,
+    "LastWriteTime": "2026-09-17 09:25:12"
   },
   {
     "Path": "artifacts\\datasets\\dataset_embedded.csv",
@@ -275,6 +275,11 @@
     "LastWriteTime": "2026-09-16 09:04:40"
   },
   {
+    "Path": "data\\raw\\916.csv",
+    "Bytes": 3526530,
+    "LastWriteTime": "2026-09-17 09:13:02"
+  },
+  {
     "Path": "docs\\_astra_review.md",
     "Bytes": 12112,
     "LastWriteTime": "2026-09-12 11:47:25"
@@ -321,8 +326,8 @@
   },
   {
     "Path": "MANIFEST.json",
-    "Bytes": 17389,
-    "LastWriteTime": "2026-09-15 09:50:02"
+    "Bytes": 18413,
+    "LastWriteTime": "2026-09-16 09:26:50"
   },
   {
     "Path": "pipeline\\bootstrap_screener.py",
@@ -482,37 +487,37 @@
   {
     "Path": "README.md",
     "Bytes": 6503,
-    "LastWriteTime": "2026-09-16 09:26:30"
+    "LastWriteTime": "2026-09-17 09:32:40"
   },
   {
     "Path": "screener\\config.json",
     "Bytes": 424,
-    "LastWriteTime": "2026-09-16 09:08:22"
+    "LastWriteTime": "2026-09-17 09:16:17"
   },
   {
     "Path": "screener\\model\\cat_l2_te.json",
-    "Bytes": 1351,
-    "LastWriteTime": "2026-09-16 09:21:22"
+    "Bytes": 1355,
+    "LastWriteTime": "2026-09-17 09:25:45"
   },
   {
     "Path": "screener\\model\\feature_names.json",
     "Bytes": 14301,
-    "LastWriteTime": "2026-09-16 09:21:22"
+    "LastWriteTime": "2026-09-17 09:25:45"
   },
   {
     "Path": "screener\\model\\lgbm_full.txt",
-    "Bytes": 1239794,
-    "LastWriteTime": "2026-09-16 09:21:22"
+    "Bytes": 3956289,
+    "LastWriteTime": "2026-09-17 09:25:45"
   },
   {
     "Path": "screener\\model\\meta.json",
-    "Bytes": 1717,
-    "LastWriteTime": "2026-09-16 09:21:22"
+    "Bytes": 1746,
+    "LastWriteTime": "2026-09-17 09:25:45"
   },
   {
     "Path": "screener\\model\\y_cap.json",
-    "Bytes": 20,
-    "LastWriteTime": "2026-09-16 09:21:22"
+    "Bytes": 33,
+    "LastWriteTime": "2026-09-17 09:25:45"
   },
   {
     "Path": "screener\\output\\.gitkeep",
@@ -650,9 +655,29 @@
     "LastWriteTime": "2026-09-16 09:25:34"
   },
   {
+    "Path": "screener\\output\\916_分享.html",
+    "Bytes": 326645,
+    "LastWriteTime": "2026-09-17 09:31:39"
+  },
+  {
+    "Path": "screener\\output\\916_scored.csv",
+    "Bytes": 4715712,
+    "LastWriteTime": "2026-09-17 09:31:24"
+  },
+  {
+    "Path": "screener\\output\\916_screener.html",
+    "Bytes": 5958899,
+    "LastWriteTime": "2026-09-17 09:31:39"
+  },
+  {
+    "Path": "screener\\output\\916_Top5pct_去违禁_去2D平面.csv",
+    "Bytes": 112590,
+    "LastWriteTime": "2026-09-17 09:31:39"
+  },
+  {
     "Path": "screener\\README.md",
-    "Bytes": 2988,
-    "LastWriteTime": "2026-09-16 09:26:32"
+    "Bytes": 3245,
+    "LastWriteTime": "2026-09-17 09:32:53"
   },
   {
     "Path": "screener\\requirements.txt",
@@ -712,6 +737,6 @@
   {
     "Path": "screener\\words\\words_normalized.json",
     "Bytes": 11085,
-    "LastWriteTime": "2026-09-16 09:25:10"
+    "LastWriteTime": "2026-09-17 09:31:21"
   }
 ]
