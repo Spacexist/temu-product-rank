@@ -59,8 +59,10 @@ def resolve_npz_dir(cfg: dict) -> Path | None:
 
 def resolve_cache_dirs(cfg: dict) -> list[Path]:
     out = []
-    for rel in cfg.get("image_cache_dirs", ["cache/images"]):
-        p = (PKG / rel).resolve()
+    for rel in cfg.get("image_cache_dirs", [r"D:\temu_images"]):
+        p = Path(rel)
+        if not p.is_absolute():
+            p = (PKG / rel).resolve()
         p.mkdir(parents=True, exist_ok=True)
         out.append(p)
     return out

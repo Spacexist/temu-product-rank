@@ -5,8 +5,7 @@
   "download_concurrency": 200,
   "seed": 42,
   "image_cache_dirs": [
-    "../hit_cache/images",
-    "cache/images"
+    "D:/temu_images"
   ],
   "lgb_model_ascii_fallback": "C:/Users/ZFGJ-WCH/Desktop/datta/artifacts/current/lgb_export_ascii/lgbm_full.txt",
   "hf_model": "BAAI/bge-small-zh-v1.5",

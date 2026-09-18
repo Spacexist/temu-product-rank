@@ -77,6 +77,14 @@ C:\Users\ZFGJ-WCH\Desktop\datta\pipeline\generate_html_from_scored.ps1 -InputCsv
 - 点 `保存筛选后HTML` 会另存一个只包含当前可见且未删除商品的 HTML。
 - 另存后的人工筛选版 HTML 仍支持价格、关键词、分类筛选，但没有删除/保留按钮。
 
+发给别人请走 Cloudflare，不要直接甩本地 HTML：
+
+```text
+C:\Users\ZFGJ-WCH\Desktop\datta\cf-site\uploadedCF.bat
+```
+
+站点：https://datta-picks.changkaishen7788.workers.dev
+
 ## 913 当前结果
 
 ```text

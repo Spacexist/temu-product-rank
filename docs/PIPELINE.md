@@ -1,6 +1,8 @@
 # 选品排序总结与日常 Pipeline
 
-这是 Temu 家居厨房用品的选品排序筛子，不是爆品预言机。模型只负责同一批商品内部排序；每天看 Top 5%，不要设固定分数线。结论只适用于「家居厨房用品」。
+对外说明看仓库根目录 [README.md](../README.md)。本文是操作约定：怎么训、怎么切分、怎么出 HTML、怎么上 Cloudflare。
+
+这是 Temu 家居厨房用品的选品排序筛子，不是爆品预言机。模型只负责同一批商品内部排序；每天看 Top 5%，不要设固定分数线。
 
 ## 模型怎么做判断
 
@@ -29,6 +31,7 @@ y = log1p(clip(总销量, 0, train_p99.5))
   预测 N，只出 scored CSV
   HTML 阶段生成分享页
   你手动删/留，另存后再发给别人
+  或用 cf-site/uploadedCF.bat 导入 CSV，标准化 HTML 后上传 Cloudflare
 
 第 N+1 天：
   把 N 留在 data/raw/ 当带标签训练数据
@@ -76,6 +79,7 @@ F:\Clip\venv\Scripts\python.exe C:\Users\ZFGJ-WCH\Desktop\datta\pipeline\daily_p
 | 导出 | `pipeline/export_bundle.py` | `screener/model/lgbm_full.txt` |
 | 预测 | `screener/src/run.py` | `screener/output/日期_scored.csv` |
 | HTML | `screener/src/generate_html.py` | 分享页、完整筛子、过滤 Top CSV |
+| 上传 | `cf-site/uploadedCF.py` | 标准选品页发布到 Cloudflare |
 | 编排 | `pipeline/daily_pipeline.py` | 串以上步骤，并写入 `runs/` |
 
 日常默认跳过 `download` 和 `eval`。训练只从 NPZ 和已有本地图补向量。预测阶段才下载「当天还没有向量缓存」的主图。
@@ -83,6 +87,32 @@ F:\Clip\venv\Scripts\python.exe C:\Users\ZFGJ-WCH\Desktop\datta\pipeline\daily_p
 ## HTML 规则
 
 `*_分享.html` 默认只展示 Top 5%，并先自动剔除违禁词和 2D/平面印刷类。页面支持价格、标题关键词、中文前台分类筛选。卡片可删除/保留；删除状态写入 localStorage，F5 不会丢。筛完点「保存筛选后HTML」再发给别人。
+
+## 上传 Cloudflare
+
+对外站点（独立 Worker `datta-picks`，不是「自动组货」）：
+
+https://datta-picks.changkaishen7788.workers.dev
+
+- `/` 默认最新一天
+- `/days/2026-09-18/` 或 `/days/918/` 按日期归档
+- 页顶可改日期、下拉已发布列表
+
+本机上传窗口：
+
+```text
+C:\Users\ZFGJ-WCH\Desktop\datta\cf-site\uploadedCF.bat
+```
+
+逻辑：
+
+1. 导入 CSV（`*_scored.csv` 或 `*_Top5pct_去违禁_去2D平面.csv`）或已有 HTML
+2. 手动核对发布日期（年/月/日，可改 ISO；短码跟随，如 918）
+3. 按分享页同一口径标准化：可选 Top 5%、去违禁、去 2D/平面
+4. 生成统一卡片页（价格/关键词/分类筛选，无删除按钮）
+5. 预览后上传；`public/index.html` 换成这一天，`days.json` 追加归档
+
+已是过滤结果的 CSV 会默认不再截 Top5%。命令行也可以：`python uploadedCF.py 文件.csv|.html`
 
 ## 已跑过的日期
 
@@ -102,3 +132,5 @@ F:\Clip\venv\Scripts\python.exe C:\Users\ZFGJ-WCH\Desktop\datta\pipeline\daily_p
 - 仓库：https://github.com/Spacexist/temu-product-rank
 - 向量缓存：`D:\temu_rank_npz\img.npz`、`txt.npz`
 - Python：`F:\Clip\venv\Scripts\python.exe`
+- 上传窗口：`C:\Users\ZFGJ-WCH\Desktop\datta\cf-site\uploadedCF.bat`
+- 对外链接：https://datta-picks.changkaishen7788.workers.dev

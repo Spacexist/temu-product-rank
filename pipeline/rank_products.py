@@ -7,6 +7,7 @@ import ast
 import asyncio
 import hashlib
 import json
+import os
 import pickle
 import re
 import shutil
@@ -31,9 +32,17 @@ ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = ROOT.parent
 
 from temu_region import temu_aiohttp_headers
-ART = PROJECT_ROOT / "artifacts" / "current"
-NPZ_DIR = Path(r"D:\temu_rank_npz")
-IMG_DIR = PROJECT_ROOT / "screener" / "cache" / "images"
+
+
+def _env_path(key: str, default: Path) -> Path:
+    """允许用环境变量改产物目录，方便单独实验而不覆盖主模型。"""
+    raw = os.environ.get(key, "").strip()
+    return Path(raw) if raw else default
+
+
+ART = _env_path("DATTA_ART", PROJECT_ROOT / "artifacts" / "current")
+NPZ_DIR = _env_path("DATTA_NPZ", Path(r"D:\temu_rank_npz"))
+IMG_DIR = _env_path("DATTA_IMG", Path(r"D:\temu_images"))
 
 
 def npz_paths() -> tuple[Path, Path]:
@@ -63,8 +72,11 @@ def save_npz_atomic(path: Path, **arrays) -> None:
 
 
 def training_data_files() -> list[Path]:
-    """使用 data/raw 中除最新日报外的文件训练，最新日报只用于当天预测。"""
-    raw_dir = PROJECT_ROOT / "data" / "raw"
+    """使用 data/raw 中除最新日报外的文件训练，最新日报只用于当天预测。
+
+    DATTA_RAW 可改数据目录；DATTA_USE_ALL_RAW=1 时不丢最新文件（单文件实验用）。
+    """
+    raw_dir = _env_path("DATTA_RAW", PROJECT_ROOT / "data" / "raw")
     files = [
         p
         for p in raw_dir.iterdir()
@@ -78,12 +90,12 @@ def training_data_files() -> list[Path]:
             return -1
 
     ordered = sorted((p for p in files if day_key(p) > 0), key=day_key)
-    if len(ordered) <= 1:
+    if not ordered:
+        ordered = sorted(files, key=lambda p: p.name)
+    use_all = os.environ.get("DATTA_USE_ALL_RAW", "").strip().lower() in {"1", "true", "yes"}
+    if use_all or len(ordered) <= 1:
         return ordered
     return ordered[:-1]
-
-
-DATA_FILES = training_data_files()
 URL_RE = re.compile(r"https?://[^\s\],>]+")
 CJK_RE = re.compile(r"[\u4e00-\u9fff]")
 SEED = 42
@@ -202,7 +214,7 @@ def shop_group_series(df: pd.DataFrame) -> pd.Series:
 
 def build_prepared_df() -> pd.DataFrame:
     frames = []
-    for path in DATA_FILES:
+    for path in training_data_files():
         df = pd.read_excel(path, sheet_name="sheet", header=[0, 1])
         df = flatten_columns(df)
         df["source"] = path.name
@@ -564,19 +576,96 @@ def load_embed_tables() -> tuple[pd.DataFrame, np.ndarray, np.ndarray]:
     return df, X_img, X_txt
 
 
+def pos_rate(frame: pd.DataFrame) -> float:
+    """动销正样本率：总销量/y_raw > 0。"""
+    y = pd.to_numeric(frame["y_raw"], errors="coerce").fillna(0)
+    return float((y > 0).mean()) if len(frame) else 0.0
+
+
+def grouped_split_by_pos_rate(
+    groups: np.ndarray, y_pos: np.ndarray, test_size: float, seed: int
+) -> tuple[np.ndarray, np.ndarray]:
+    """按店铺整组切分，零动销店和有动销店分别按 test_size 抽样，使两边正样本率接近。"""
+    rng = np.random.default_rng(seed)
+    groups = np.asarray(groups).astype(str)
+    y_pos = np.asarray(y_pos).astype(bool)
+    shops: dict[str, dict] = {}
+    for i, g in enumerate(groups):
+        rec = shops.setdefault(g, {"idx": [], "n_pos": 0})
+        rec["idx"].append(i)
+        rec["n_pos"] += int(y_pos[i])
+    zeros = []
+    mixed = []
+    for rec in shops.values():
+        rec["idx"] = np.asarray(rec["idx"], dtype=np.int64)
+        rec["n"] = len(rec["idx"])
+        (mixed if rec["n_pos"] > 0 else zeros).append(rec)
+
+    def take_frac(bucket: list[dict], frac: float) -> tuple[list[dict], list[dict]]:
+        """桶内打乱后按商品数凑到 frac，同时尽量凑够正样本配额。"""
+        if not bucket:
+            return [], []
+        order = [bucket[i] for i in rng.permutation(len(bucket))]
+        target_n = int(round(sum(s["n"] for s in order) * frac))
+        target_p = int(round(sum(s["n_pos"] for s in order) * frac))
+        picked, rest = [], []
+        n = p = 0
+        for s in order:
+            need = n < target_n or p < target_p
+            if need and not (n >= target_n and p >= target_p and n + s["n"] > target_n * 1.12):
+                picked.append(s)
+                n += s["n"]
+                p += s["n_pos"]
+            else:
+                rest.append(s)
+        if not picked and rest:
+            picked.append(rest.pop(0))
+        return picked, rest
+
+    te_shops, tr_shops = [], []
+    for bucket in (zeros, mixed):
+        te, tr = take_frac(bucket, test_size)
+        te_shops.extend(te)
+        tr_shops.extend(tr)
+    if not te_shops or not tr_shops:
+        gss = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=seed)
+        dummy = np.zeros(len(groups))
+        tr_idx, te_idx = next(gss.split(dummy, groups=groups))
+        return np.asarray(tr_idx), np.asarray(te_idx)
+    te_idx = np.sort(np.concatenate([s["idx"] for s in te_shops]))
+    tr_idx = np.sort(np.concatenate([s["idx"] for s in tr_shops]))
+    return tr_idx, te_idx
+
+
+def split_train_test(df: pd.DataFrame, test_size: float, seed: int) -> tuple[np.ndarray, np.ndarray]:
+    """默认按店铺随机切；DATTA_STRATIFY_POS=1 时对齐动销正样本率。"""
+    groups = df["shop_group"].astype(str).to_numpy()
+    use_pos = os.environ.get("DATTA_STRATIFY_POS", "").strip().lower() in {"1", "true", "yes"}
+    if use_pos:
+        y_pos = (pd.to_numeric(df["y_raw"], errors="coerce").fillna(0) > 0).to_numpy()
+        return grouped_split_by_pos_rate(groups, y_pos, test_size, seed)
+    gss = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=seed)
+    tr_idx, te_idx = next(gss.split(df, groups=groups))
+    return np.asarray(tr_idx), np.asarray(te_idx)
+
+
 def make_split_bundle() -> dict:
     df, X_img, X_txt = load_embed_tables()
 
-    gss = GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=SEED)
-    tr_idx, te_idx = next(gss.split(df, groups=df["shop_group"]))
+    tr_idx, te_idx = split_train_test(df, 0.25, SEED)
     train = df.iloc[tr_idx].copy().reset_index(drop=True)
     test = df.iloc[te_idx].copy().reset_index(drop=True)
     X_img_tr, X_img_te = X_img[tr_idx], X_img[te_idx]
     X_txt_tr, X_txt_te = X_txt[tr_idx], X_txt[te_idx]
+    print(
+        f"[split] train n={len(train)} pos={pos_rate(train):.3f}  "
+        f"test n={len(test)} pos={pos_rate(test):.3f}  (切分后、去近重复前)"
+    )
 
     test, X_img_te, X_txt_te, dedupe_stats = remove_test_near_duplicates(
         train, test, X_img_tr, X_img_te, X_txt_te
     )
+    print(f"[split] test 去近重复后 n={len(test)} pos={pos_rate(test):.3f}")
 
     y_cap = float(np.percentile(train["y_raw"].astype(float), 99.5))
 
@@ -595,10 +684,13 @@ def make_split_bundle() -> dict:
     full["split"] = full["商品ID"].map(split_map).fillna("")
     full.to_csv(ART / "dataset.csv", index=False, encoding="utf-8-sig")
 
-    gss2 = GroupShuffleSplit(n_splits=1, test_size=0.1, random_state=SEED)
-    tr2, va2 = next(gss2.split(train, groups=train["shop_group"]))
+    tr2, va2 = split_train_test(train, 0.1, SEED + 7)
     train_fit = train.iloc[tr2].reset_index(drop=True)
     valid = train.iloc[va2].reset_index(drop=True)
+    print(
+        f"[split] fit n={len(train_fit)} pos={pos_rate(train_fit):.3f}  "
+        f"valid n={len(valid)} pos={pos_rate(valid):.3f}"
+    )
     train_fit["cat_l2_te"] = cat_l2_target_encode(train_fit, train_fit)
     valid["cat_l2_te"] = cat_l2_target_encode(train_fit, valid)
     test["cat_l2_te"] = cat_l2_target_encode(train_fit, test)
@@ -716,6 +808,10 @@ def stage_train() -> None:
         "n_train_fit": bundle["n_train"],
         "n_valid": bundle["n_valid"],
         "n_test": bundle["n_test"],
+        "pos_rate_train": pos_rate(bundle["train"]),
+        "pos_rate_valid": pos_rate(bundle["valid"]),
+        "pos_rate_test": pos_rate(bundle["test"]),
+        "stratify_pos": os.environ.get("DATTA_STRATIFY_POS", ""),
         "dedupe_removed_from_test": bundle["dedupe_stats"],
         "y_cap_p995_train": bundle["y_cap_p995"],
     }
