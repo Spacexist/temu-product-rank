@@ -1,7 +1,7 @@
 {
   "embed_cache_art_dir": "../artifacts/current",
   "npz_dir": "D:/temu_rank_npz",
-  "inference_source": "915.csv",
+  "inference_source": "916.csv",
   "download_concurrency": 200,
   "seed": 42,
   "image_cache_dirs": [

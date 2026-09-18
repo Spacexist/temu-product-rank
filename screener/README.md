@@ -1,8 +1,16 @@
 # 选品筛子
 
-这是 `datta` 项目的日常预测和人工筛选包。
+这是 `datta` 项目的日常预测和人工筛选包。完整约定见 [../docs/PIPELINE.md](../docs/PIPELINE.md)。
 
-## 日常运行
+## 推荐入口
+
+日常不要分开手跑。项目根目录：
+
+```powershell
+C:\Users\ZFGJ-WCH\Desktop\datta\pipeline\daily_pipeline.ps1 -Today C:\Users\ZFGJ-WCH\Downloads\当天.csv
+```
+
+## 拆开运行
 
 模型阶段只负责打分并输出 CSV：
 
@@ -28,6 +36,12 @@ HTML 阶段读取模型输出的 `*_scored.csv`：
 
 ```powershell
 F:\Clip\venv\Scripts\python.exe src\generate_html.py --input output\913_scored.csv
+```
+
+训练已完成、只要出当天页时：
+
+```powershell
+C:\Users\ZFGJ-WCH\Desktop\datta\pipeline\daily_pipeline.ps1 -SkipTrain
 ```
 
 也可以从项目根目录使用包装脚本：
@@ -101,3 +115,13 @@ output/916_Top5pct_去违禁_去2D平面.csv
 ```
 
 916 使用 909-915 增量训练模型预测；Top500 自动过滤后保留 248 条，过滤后违禁命中 0，2D/平面命中 0。
+
+## 917 当前结果
+
+```text
+output/917_scored.csv
+output/917_分享.html
+output/917_Top5pct_去违禁_去2D平面.csv
+```
+
+917 使用 909-916 增量训练模型预测；Top5% 自动过滤后保留 232 条，过滤后违禁命中 0，2D/平面命中 0。

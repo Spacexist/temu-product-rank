@@ -3,21 +3,21 @@
     "best_iteration": 17
   },
   "cat_only": {
-    "best_iteration": 62
+    "best_iteration": 170
   },
   "tab_only": {
-    "best_iteration": 296
+    "best_iteration": 240
   },
   "title_only": {
-    "best_iteration": 248
+    "best_iteration": 288
   },
   "image_only": {
-    "best_iteration": 302
+    "best_iteration": 137
   },
   "full": {
-    "best_iteration": 660
+    "best_iteration": 364
   },
   "LEAK_shop": {
-    "best_iteration": 503
+    "best_iteration": 410
   }
 }

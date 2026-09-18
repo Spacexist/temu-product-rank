@@ -1,11 +1,11 @@
 {
-  "n_train_fit": 39196,
-  "n_valid": 4241,
-  "n_test": 13887,
+  "n_train_fit": 44554,
+  "n_valid": 5258,
+  "n_test": 16073,
   "dedupe_removed_from_test": {
-    "main_url": 172,
-    "title": 145,
-    "image_cosine": 183
+    "main_url": 210,
+    "title": 193,
+    "image_cosine": 209
   },
-  "y_cap_p995_train": 42.81999999999971
+  "y_cap_p995_train": 44.0
 }
