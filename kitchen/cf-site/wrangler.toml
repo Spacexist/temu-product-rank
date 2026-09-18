@@ -1,0 +1,5 @@
+name = "datta-picks"
+compatibility_date = "2026-09-18"
+
+[assets]
+directory = "./public"

@@ -1,0 +1,14 @@
+data/
+data_cache/
+output/
+artifacts/
+inbox/
+screener/output/
+screener/cache/
+screener/model/lgbm_full.txt
+cf-site/public/days/
+cf-site/public/index.html
+cf-site/node_modules/
+cf-site/preview/
+__pycache__/
+*.pyc

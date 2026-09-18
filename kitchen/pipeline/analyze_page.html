@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>三表数分 __ISO__</title>
+<style>
+:root {
+  --bg: #f3f1ea;
+  --ink: #161513;
+  --muted: #6b675f;
+  --paper: #fffcf6;
+  --line: #161513;
+  --accent: #fb7701;
+  --kitchen: #fb7701;
+  --ind: #1e3d5c;
+  --pet: #2f7a58;
+  --dust: #d9d4c8;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 72px; }
+.kicker {
+  font-family: ui-monospace, Consolas, monospace;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--muted);
+}
+h1 {
+  font-size: clamp(2.4rem, 7vw, 4.6rem);
+  line-height: .88;
+  letter-spacing: -.05em;
+  margin: 8px 0 10px;
+  font-weight: 800;
+}
+.lead { color: var(--muted); max-width: 46rem; margin-bottom: 22px; }
+.grid { display: grid; gap: 16px; }
+.g2 { grid-template-columns: 1.15fr .85fr; }
+.g3 { grid-template-columns: 1fr 1fr 1fr; }
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 16px 16px 12px;
+}
+.panel h2 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.cap { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+.nums {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12px;
+}
+.nums th, .nums td {
+  text-align: left;
+  padding: 5px 6px;
+  border-top: 1px solid #e4dfd4;
+}
+.nums th { color: var(--muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 10px; }
+.nums td.r, .nums th.r { text-align: right; font-variant-numeric: tabular-nums; }
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.kpi { background: var(--paper); padding: 12px 14px; }
+.kpi b { display: block; font-size: 1.6rem; letter-spacing: -.03em; line-height: 1.1; }
+.kpi span { color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+svg { display: block; width: 100%; height: auto; }
+.tick, .lbl { font-size: 11px; fill: var(--muted); font-family: ui-monospace, Consolas, monospace; }
+.v { font-size: 11px; fill: var(--ink); font-family: ui-monospace, Consolas, monospace; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 8px; }
+.sw { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+.funnel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-items: end; min-height: 180px; }
+.funnel .col { display: flex; flex-direction: column; justify-content: flex-end; height: 180px; }
+.funnel .blk {
+  background: var(--accent);
+  color: #fff;
+  display: flex; align-items: flex-end; justify-content: center;
+  font-weight: 800; font-size: 1.35rem; padding: 8px 4px 10px;
+}
+.funnel .nm { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+.tree { display: flex; flex-wrap: wrap; gap: 4px; min-height: 220px; }
+.leaf {
+  color: #fff; padding: 10px; min-width: 90px; min-height: 64px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.leaf b { font-size: 12px; line-height: 1.2; }
+.leaf span { font-size: 11px; opacity: .85; font-family: ui-monospace, Consolas, monospace; }
+.meta { margin-top: 28px; color: var(--muted); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-family: ui-monospace, Consolas, monospace; }
+@media (max-width: 860px) {
+  .g2, .g3, .funnel { grid-template-columns: 1fr; }
+  .funnel .col { height: 120px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">analyze pipeline · charts first</div>
+  <h1>今天这三表<br>看起来像什么</h1>
+  <p class="lead" id="lead"></p>
+  <div class="kpis" id="kpis"></div>
+
+  <div class="panel">
+    <h2>漏斗</h2>
+    <p class="cap">从三表原始到人工留下，宽度随数量变细。</p>
+    <div class="funnel" id="funnel"></div>
+    <table class="nums" id="funnelnums"></table>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="panel">
+      <h2>三类盘面</h2>
+      <p class="cap">柱高是 SKU 数，颜色条是动销率。工业动销更高，厨房盘最大。</p>
+      <div id="l1chart"></div>
+      <table class="nums" id="l1nums"></table>
+    </div>
+    <div class="panel">
+      <h2>词表砍了谁</h2>
+      <p class="cap">每类里丢掉的比例。厨房通常被 2D / 杯子削一刀。</p>
+      <div id="bannedchart"></div>
+      <table class="nums" id="bannednums"></table>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="panel">
+      <h2>价格带 × 动销</h2>
+      <p class="cap">灰柱是货量，橙柱是动销率。看哪段价既有货又动得动。</p>
+      <div id="pricechart"></div>
+      <div class="legend"><span><i class="sw" style="background:#cfcabf"></i>货量占比</span><span><i class="sw" style="background:#fb7701"></i>动销率</span></div>
+      <table class="nums" id="pricenums"></table>
+    </div>
+    <div class="panel">
+      <h2>销量长什么样</h2>
+      <p class="cap">中位数若在 0，这盘是右尾生意，不是平均店。</p>
+      <div id="saleschart"></div>
+      <table class="nums" id="salesnums"></table>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="panel">
+      <h2>模型五档</h2>
+      <p class="cap" id="scorecap">分越高，动销和均销是否一起抬头。冷启动日只能说明记住了销量。</p>
+      <div id="scorechart"></div>
+      <table class="nums" id="scorenums"></table>
+    </div>
+    <div class="panel">
+      <h2>榜单偏爱</h2>
+      <p class="cap">灰 = 清洗后盘面占比，橙 = Top 5%，绿 = 你留下的。柱子高过灰就是超配。</p>
+      <div id="mixchart"></div>
+      <div class="legend">
+        <span><i class="sw" style="background:#cfcabf"></i>盘面</span>
+        <span><i class="sw" style="background:#fb7701"></i>Top5%</span>
+        <span><i class="sw" style="background:#2f7a58"></i>发布</span>
+      </div>
+      <table class="nums" id="mixnums"></table>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="panel">
+      <h2>二级类目地图</h2>
+      <p class="cap">格子面积是 SKU，颜色越深动销越高。</p>
+      <div class="tree" id="tree"></div>
+      <table class="nums" id="l2nums"></table>
+    </div>
+    <div class="panel">
+      <h2>店有多集中</h2>
+      <p class="cap" id="shopcap">前几家店吃掉多少销量。越靠上越像头部店盘。</p>
+      <div id="shopchart"></div>
+      <table class="nums" id="shopnums"></table>
+    </div>
+  </div>
+
+  <div class="meta" id="meta"></div>
+</div>
+<script id="payload" type="application/json">__PAYLOAD__</script>
+<script>
+const D = JSON.parse(document.getElementById("payload").textContent);
+const C = {
+  kitchen: "#fb7701",
+  ind: "#1e3d5c",
+  pet: "#2f7a58",
+  ink: "#161513",
+  dust: "#d4cfc3",
+  accent: "#fb7701"
+};
+function colorOf(name) {
+  const s = String(name || "");
+  if (s.indexOf("厨") >= 0 || s.indexOf("家居") >= 0) return C.kitchen;
+  if (s.indexOf("工业") >= 0 || s.indexOf("商用") >= 0) return C.ind;
+  if (s.indexOf("宠物") >= 0) return C.pet;
+  return C.ink;
+}
+function esc(s) {
+  return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+}
+function short(s, n) {
+  s = String(s || "");
+  return s.length > n ? s.slice(0, n - 1) + "…" : s;
+}
+function maxOf(arr, k) {
+  return Math.max(1, ...arr.map(x => Number(x[k] || 0)));
+}
+
+function svgEl(w, h, inner) {
+  return `<svg viewBox="0 0 ${w} ${h}" role="img">${inner}</svg>`;
+}
+
+function vgroup(rows, series) {
+  const w = 560, h = 240, pad = {l: 44, r: 12, t: 12, b: 48};
+  const n = rows.length || 1;
+  const gw = (w - pad.l - pad.r) / n;
+  const max = Math.max(1, ...series.flatMap(s => rows.map(r => Number(r[s.key] || 0))));
+  const ih = h - pad.t - pad.b;
+  const bw = Math.min(22, (gw - 10) / series.length);
+  let g = "";
+  rows.forEach((r, i) => {
+    const x0 = pad.l + i * gw + (gw - bw * series.length) / 2;
+    series.forEach((s, j) => {
+      const v = Number(r[s.key] || 0);
+      const bh = (v / max) * ih;
+      const x = x0 + j * bw;
+      const y = pad.t + ih - bh;
+      g += `<rect x="${x}" y="${y}" width="${bw - 2}" height="${Math.max(bh, 1)}" fill="${typeof s.color === "function" ? s.color(r) : s.color}"/>`;
+      if (series.length === 1 && bh > 18) {
+        g += `<text class="v" x="${x + (bw - 2) / 2}" y="${y - 4}" text-anchor="middle">${Math.round(v)}</text>`;
+      }
+    });
+    g += `<text class="tick" x="${pad.l + i * gw + gw / 2}" y="${h - 16}" text-anchor="middle">${esc(short(r.label, 8))}</text>`;
+  });
+  g += `<text class="tick" x="8" y="14">${series[0].axis || ""}</text>`;
+  return svgEl(w, h, g);
+}
+
+function hbars(rows, key, colorFn) {
+  const w = 560, rowH = 28, padL = 108, padR = 56;
+  const h = 16 + rows.length * rowH;
+  const max = maxOf(rows, key);
+  const iw = w - padL - padR;
+  let g = "";
+  rows.forEach((r, i) => {
+    const y = 8 + i * rowH;
+    const v = Number(r[key] || 0);
+    const bw = (v / max) * iw;
+    g += `<text class="lbl" x="${padL - 8}" y="${y + 12}" text-anchor="end">${esc(short(r.label, 12))}</text>`;
+    g += `<rect x="${padL}" y="${y}" width="${Math.max(bw, 2)}" height="16" fill="${colorFn(r)}"/>`;
+    g += `<text class="v" x="${padL + bw + 6}" y="${y + 13}">${r.fmt || v}</text>`;
+  });
+  return svgEl(w, Math.max(h, 80), g);
+}
+
+function dualBars(rows, aKey, bKey) {
+  const w = 560, h = 250, pad = {l: 36, r: 12, t: 10, b: 40};
+  const n = rows.length || 1;
+  const gw = (w - pad.l - pad.r) / n;
+  const maxA = maxOf(rows, aKey);
+  const maxB = maxOf(rows, bKey);
+  const ih = h - pad.t - pad.b;
+  let g = "";
+  rows.forEach((r, i) => {
+    const x = pad.l + i * gw;
+    const bw = Math.min(18, gw / 3);
+    const ah = (Number(r[aKey] || 0) / maxA) * ih;
+    const bh = (Number(r[bKey] || 0) / maxB) * ih;
+    g += `<rect x="${x + gw * 0.22}" y="${pad.t + ih - ah}" width="${bw}" height="${Math.max(ah,1)}" fill="${C.dust}"/>`;
+    g += `<rect x="${x + gw * 0.22 + bw + 3}" y="${pad.t + ih - bh}" width="${bw}" height="${Math.max(bh,1)}" fill="${C.accent}"/>`;
+    g += `<text class="tick" x="${x + gw / 2}" y="${h - 14}" text-anchor="middle">${esc(r.label)}</text>`;
+  });
+  return svgEl(w, h, g);
+}
+
+function pct(x) { return x == null ? "—" : (Number(x) * 100).toFixed(1) + "%"; }
+function nfmt(x) { return x == null ? "—" : Number(x).toLocaleString("en-US"); }
+function money(x) { return x == null ? "—" : "$" + Number(x).toFixed(2); }
+function table(headers, rows) {
+  return "<thead><tr>" + headers.map(h => `<th class="${h.r ? "r" : ""}">${h.t}</th>`).join("") +
+    "</tr></thead><tbody>" + rows.join("") + "</tbody>";
+}
+
+const F = D.funnel;
+const fmax = Math.max(F.raw, 1);
+document.getElementById("lead").textContent =
+  (D.notes && D.notes[0] ? D.notes[0] + " " : "") +
+  (D.notes && D.notes[1] ? D.notes[1] : "");
+document.getElementById("funnel").innerHTML = [
+  ["三表原始", F.raw],
+  ["清洗后", F.cleaned],
+  ["Top 5%", F.top5],
+  ["你留下", F.published]
+].map(([lab, v], i) => {
+  const h = 36 + (v / fmax) * 140;
+  const op = 1 - i * 0.18;
+  return `<div class="col"><div class="blk" style="height:${h}px;opacity:${op}">${Number(v).toLocaleString()}</div><div class="nm">${lab}</div></div>`;
+}).join("");
+
+const all = D.cleaned_all || {};
+document.getElementById("kpis").innerHTML = [
+  ["清洗后 SKU", nfmt(F.cleaned)],
+  ["动销率", pct(all.pos_rate)],
+  ["价格中位", money(all.price_median)],
+  ["店数", nfmt(all.shops)],
+].map(([k,v]) => `<div class="kpi"><span>${k}</span><b>${v}</b></div>`).join("");
+document.getElementById("funnelnums").innerHTML = table(
+  [{t:"阶段"},{t:"条数",r:1},{t:"相对上一步",r:1}],
+  [
+    ["三表原始", F.raw, "—"],
+    ["清洗后", F.cleaned, (F.drop_pct != null ? "砍 " + F.drop_pct + "%" : "—")],
+    ["Top 5%", F.top5, F.cleaned ? ((F.top5 / F.cleaned) * 100).toFixed(1) + "%" : "—"],
+    ["你留下", F.published, F.top5 ? ((F.published / F.top5) * 100).toFixed(1) + "% of top" : "—"],
+  ].map(([a,b,c]) => `<tr><td>${a}</td><td class="r">${nfmt(b)}</td><td class="r">${c}</td></tr>`)
+);
+
+document.getElementById("l1chart").innerHTML = vgroup(
+  (D.l1 || []).map(r => ({label: r.name.replace("商用、工业与科技","工业"), n: r.n, pos: r.pos_rate * 100})),
+  [{key: "n", color: (r) => colorOf(r.label), axis: "SKU"}]
+) + `<p class="cap" style="margin:10px 0 6px">动销率</p>` + hbars(
+  (D.l1 || []).map(r => ({label: r.name.replace("商用、工业与科技","工业"), pos_rate: r.pos_rate, fmt: (r.pos_rate*100).toFixed(1)+"%", keyv: r.pos_rate})),
+  "keyv",
+  r => colorOf(r.label)
+);
+document.getElementById("l1nums").innerHTML = table(
+  [{t:"类目"},{t:"SKU",r:1},{t:"店",r:1},{t:"动销",r:1},{t:"销量中位",r:1},{t:"P90",r:1},{t:"价中位",r:1}],
+  (D.l1 || []).map(r => `<tr><td>${esc(r.name)}</td><td class="r">${nfmt(r.n)}</td><td class="r">${nfmt(r.shops)}</td>
+    <td class="r">${pct(r.pos_rate)}</td><td class="r">${r.sales_median}</td><td class="r">${r.sales_p90}</td>
+    <td class="r">${money(r.price_median)}</td></tr>`)
+);
+
+document.getElementById("bannedchart").innerHTML = hbars(
+  (D.banned_l1 || []).map(r => ({label: r.name.replace("商用、工业与科技","工业"), drop_pct: r.drop_pct, fmt: r.drop_pct + "%", keyv: r.drop_pct})),
+  "keyv",
+  r => colorOf(r.label)
+) + `<p class="cap" style="margin:10px 0 6px">命中词</p>` + hbars(
+  (D.banned_words || []).slice(0, 8).map(r => ({label: r.name, keyv: r.n, fmt: r.n})),
+  "keyv",
+  () => C.ink
+);
+document.getElementById("bannednums").innerHTML = table(
+  [{t:"类目"},{t:"原始",r:1},{t:"砍掉",r:1},{t:"留下",r:1},{t:"砍掉%",r:1}],
+  (D.banned_l1 || []).map(r => `<tr><td>${esc(r.name)}</td><td class="r">${nfmt(r.n)}</td><td class="r">${nfmt(r.banned)}</td>
+    <td class="r">${nfmt(r.keep)}</td><td class="r">${r.drop_pct}%</td></tr>`)
+);
+
+document.getElementById("pricechart").innerHTML = dualBars(
+  (D.price_bands || []).map(r => ({label: r.name, a: r.share, b: r.pos_rate * 100})),
+  "a", "b"
+);
+document.getElementById("pricenums").innerHTML = table(
+  [{t:"价格带"},{t:"SKU",r:1},{t:"占比",r:1},{t:"动销",r:1},{t:"均销",r:1}],
+  (D.price_bands || []).map(r => `<tr><td>${r.name}</td><td class="r">${nfmt(r.n)}</td><td class="r">${r.share}%</td>
+    <td class="r">${pct(r.pos_rate)}</td><td class="r">${r.sales_mean}</td></tr>`)
+);
+document.getElementById("saleschart").innerHTML = vgroup(
+  (D.sales_bands || []).map(r => ({label: r.name, n: r.share})),
+  [{key: "n", color: C.ink, axis: "% SKU"}]
+);
+document.getElementById("salesnums").innerHTML = table(
+  [{t:"销量"},{t:"SKU",r:1},{t:"占比",r:1}],
+  (D.sales_bands || []).map(r => `<tr><td>${r.name}</td><td class="r">${nfmt(r.n)}</td><td class="r">${r.share}%</td></tr>`)
+);
+
+const sc = D.score || {};
+document.getElementById("scorecap").textContent =
+  "Spearman " + (sc.spearman ?? "—") + "。档越往右，橙柱（均销）和灰柱（动销）一起抬头才算排到了销量。";
+document.getElementById("scorechart").innerHTML = dualBars(
+  (sc.quintiles || []).map(r => ({label: r.name.replace(" 低","").replace(" 高",""), a: r.pos_rate * 100, b: r.sales_mean})),
+  "a", "b"
+);
+document.getElementById("scorenums").innerHTML = table(
+  [{t:"档"},{t:"SKU",r:1},{t:"动销",r:1},{t:"均销",r:1},{t:"均分",r:1}],
+  (sc.quintiles || []).map(r => `<tr><td>${esc(r.name)}</td><td class="r">${nfmt(r.n)}</td>
+    <td class="r">${pct(r.pos_rate)}</td><td class="r">${r.sales_mean}</td><td class="r">${r.score_mean}</td></tr>`)
+);
+
+const names = Array.from(new Set([
+  ...(D.top5_mix || []).map(r => r.name),
+  ...(D.published_mix || []).map(r => r.name),
+]));
+const topMap = Object.fromEntries((D.top5_mix || []).map(r => [r.name, r]));
+const pubMap = Object.fromEntries((D.published_mix || []).map(r => [r.name, r]));
+document.getElementById("mixchart").innerHTML = vgroup(
+  names.map(name => ({
+    label: name.replace("商用、工业与科技","工业"),
+    base: (topMap[name] || pubMap[name] || {}).base_share || 0,
+    top: (topMap[name] || {}).share || 0,
+    pub: (pubMap[name] || {}).share || 0
+  })),
+  [
+    {key: "base", color: C.dust},
+    {key: "top", color: C.accent},
+    {key: "pub", color: C.pet}
+  ]
+);
+document.getElementById("mixnums").innerHTML = table(
+  [{t:"类目"},{t:"盘面",r:1},{t:"Top5%",r:1},{t:"指数",r:1},{t:"发布",r:1},{t:"发布条",r:1}],
+  names.map(name => {
+    const t = topMap[name] || {};
+    const p = pubMap[name] || {};
+    return `<tr><td>${esc(name)}</td><td class="r">${t.base_share ?? p.base_share ?? 0}%</td>
+      <td class="r">${t.share ?? 0}%</td><td class="r">${t.index ?? "—"}</td>
+      <td class="r">${p.share ?? 0}%</td><td class="r">${nfmt(p.n)}</td></tr>`;
+  })
+);
+
+const l2 = D.l2 || [];
+const tot = l2.reduce((s, r) => s + r.n, 0) || 1;
+const maxPos = Math.max(0.01, ...l2.map(r => r.pos_rate || 0));
+document.getElementById("tree").innerHTML = l2.map(r => {
+  const flex = Math.max(8, (r.n / tot) * 100);
+  const base = colorOf(r.l1);
+  return `<div class="leaf" style="flex:${flex} 1 ${flex * 3}px;background:${base};opacity:${0.45 + 0.55 * ((r.pos_rate||0)/maxPos)}">
+    <b>${esc(short(r.l2, 14))}</b><span>${r.n} · ${(r.pos_rate*100).toFixed(0)}%</span></div>`;
+}).join("");
+document.getElementById("l2nums").innerHTML = table(
+  [{t:"一级"},{t:"二级"},{t:"SKU",r:1},{t:"动销",r:1},{t:"均销",r:1},{t:"中位",r:1}],
+  l2.map(r => `<tr><td>${esc(r.l1)}</td><td>${esc(r.l2)}</td><td class="r">${nfmt(r.n)}</td>
+    <td class="r">${pct(r.pos_rate)}</td><td class="r">${r.sales_mean}</td><td class="r">${r.sales_median}</td></tr>`)
+);
+
+const sh = D.shops || {};
+document.getElementById("shopcap").textContent =
+  `一共 ${sh.n || 0} 家店。前 10 家吃掉 ${sh.top10_sales || 0}% 销量。`;
+document.getElementById("shopchart").innerHTML = hbars(
+  (sh.rows || []).map(r => ({label: r.name, keyv: r.sales, fmt: Math.round(r.sales).toLocaleString()})),
+  "keyv",
+  () => C.ind
+);
+document.getElementById("shopnums").innerHTML = table(
+  [{t:"店"},{t:"SKU",r:1},{t:"销量",r:1},{t:"动销",r:1},{t:"SKU占比",r:1}],
+  (sh.rows || []).map(r => `<tr><td>${esc(r.name)}</td><td class="r">${nfmt(r.n)}</td>
+    <td class="r">${nfmt(Math.round(r.sales))}</td><td class="r">${pct(r.pos_rate)}</td>
+    <td class="r">${r.sku_share}%</td></tr>`)
+);
+document.getElementById("meta").textContent = `analyze ${D.iso} · ${D.generated_at} · charts from cleaned / score / published`;
+</script>
+</body>
+</html>

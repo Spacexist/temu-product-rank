@@ -1,0 +1,13 @@
+{
+  "embed_cache_art_dir": "C:\\Users\\ZFGJ-WCH\\Desktop\\厨房收纳\\artifacts",
+  "npz_dir": "C:\\Users\\ZFGJ-WCH\\AppData\\Local\\kitchen_rank\\npz",
+  "inference_source": "20260918_merged.csv",
+  "download_concurrency": 200,
+  "seed": 42,
+  "image_cache_dirs": [
+    "D:\\temu_images"
+  ],
+  "lgb_model_ascii_fallback": "C:\\Users\\ZFGJ-WCH\\AppData\\Local\\kitchen_rank\\lgb\\lgbm_full.txt",
+  "hf_model": "BAAI/bge-small-zh-v1.5",
+  "embed_batch": 32
+}
