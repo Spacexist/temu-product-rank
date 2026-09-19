@@ -54,7 +54,7 @@ Downloads 三份 CSV（工业 / 家居厨房 / 宠物）
   → 统计追加 cache.json
   → 训练（见下）
   → 对 cleaned 打分 → output/{stem}_scored.csv
-  → generate_html → output/{stem}_分享.html
+  → generate_html（可选主图 cos 去重，默认 0.92 / 按 L1+L2）→ output/{stem}_分享.html
   → 人在浏览器删卡片、调 Top%
   → 「筛选结果 → 明天训练」写入 data/published/
   → wrangler deploy → https://datta-picks.changkaishen7788.workers.dev

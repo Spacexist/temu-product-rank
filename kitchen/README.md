@@ -6,7 +6,7 @@
 
 1. 三个类目 CSV 先合并：`合并.bat a.csv b.csv c.csv`（写出 `data/raw/YYYYMMDD_merged.csv` 并拷到 `inbox\`）。
 2. 或把已合并 CSV 丢进 `inbox\`，双击 `启动.bat` 点导入。
-3. 流水线：`words/banned.txt` 过滤（含 2D/平面/杯子）→ 统计写入 `cache.json` → **按店铺 GroupShuffleSplit** 训练（有昨天保存结果则 continue）→ 预测 → `output/*_分享.html`。
+3. 流水线：`words/banned.txt` 过滤（含 2D/平面/杯子）→ 统计写入 `cache.json` → **按店铺 GroupShuffleSplit** 训练（有昨天保存结果则 continue）→ 预测 → **主图 cos 去重（默认 0.92，按一级+二级分组）** → `output/*_分享.html`（详见 [`docs/主图余弦去重.md`](docs/主图余弦去重.md)）。
 4. 浏览器里删卡片，可调 Top 5% / 10%。保存筛选后 HTML。
 5. 「筛选结果 → 明天训练」或「上传 Cloudflare」时生成上传包：数分 HTML + 数据写入 `data_cache/YYYY-MM-DD/`（按天留档，不覆盖旧天）。
 6. 「上传 Cloudflare」发到现有 [datta-picks](https://datta-picks.changkaishen7788.workers.dev)。

@@ -3,6 +3,7 @@
   "npz_dir": "C:\\Users\\ZFGJ-WCH\\AppData\\Local\\kitchen_rank\\npz",
   "inference_source": "20260918_merged.csv",
   "download_concurrency": 200,
+  "dedupe_download_concurrency": 30,
   "seed": 42,
   "image_cache_dirs": [
     "D:\\temu_images"

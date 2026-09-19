@@ -266,7 +266,20 @@ def predict_and_html(today: Path, iso: str) -> Path:
     title = f"选品 {iso}"
     run_py(
         SCREENER / "src" / "generate_html.py",
-        ["--input", str(scored), "--out-dir", str(OUTPUT), "--title", title, "--top-pct", "5"],
+        [
+            "--input",
+            str(scored),
+            "--out-dir",
+            str(OUTPUT),
+            "--title",
+            title,
+            "--top-pct",
+            "5",
+            "--img-dedupe",
+            "0.92",
+            "--img-dedupe-scope",
+            "all",
+        ],
     )
     share = OUTPUT / f"{today.stem}_分享.html"
     print(f"[html] {share}")

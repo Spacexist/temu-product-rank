@@ -244,6 +244,12 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     csv_path = out_dir / f"{stem}_scored.csv"
     export.to_csv(csv_path, index=False, encoding="utf-8-sig")
+    npz_path = out_dir / f"{stem}_img512.npz"
+    np.savez_compressed(
+        npz_path,
+        ids=df["商品ID"].astype(str).to_numpy(),
+        X=X_img.astype(np.float32),
+    )
 
     print(
         f"[run] 耗时 读表{t_read:.1f}s 下载{t_dl:.1f}s 图{t_img:.1f}s 文{t_txt:.1f}s "

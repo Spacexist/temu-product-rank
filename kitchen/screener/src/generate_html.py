@@ -10,6 +10,7 @@ import pandas as pd
 PKG = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PKG / "src"))
 
+from img_dedupe import demote_rows, load_config, visual_dup_row_indices  # noqa: E402
 from render_html import is_flat_print_product, render, render_share, rows_from_df  # noqa: E402
 
 
@@ -21,6 +22,18 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--top-pct", type=float, default=5.0, help="分享页默认取模型排序前 N%%")
     ap.add_argument("--title", default="", help="页面标题；默认由文件名生成")
     ap.add_argument("--prefix", default="", help="输出文件前缀；默认由输入文件名去掉 _scored")
+    ap.add_argument(
+        "--img-dedupe",
+        type=float,
+        default=0.92,
+        help="全类目主图 cos 去重阈值（按一级类目分别去重）；0 关闭",
+    )
+    ap.add_argument(
+        "--img-dedupe-scope",
+        choices=("all", "kitchen"),
+        default="all",
+        help="all=三个一级类目都做；kitchen=仅家居厨房",
+    )
     return ap.parse_args()
 
 
@@ -70,6 +83,32 @@ def main() -> None:
     title = build_title(prefix, input_path, args.title)
     df = pd.read_csv(input_path, encoding="utf-8-sig", dtype={"商品ID": str})
     rows = rows_from_df(df)
+
+    if args.img_dedupe and args.img_dedupe > 0:
+        cfg = load_config(PKG)
+        npz = input_path.parent / f"{input_path.stem.replace('_scored', '')}_img512.npz"
+        if not npz.is_file():
+            npz = input_path.parent / f"{input_path.stem}_img512.npz"
+        scope = "家居厨房用品" if args.img_dedupe_scope == "kitchen" else None
+        dropped_idx, stats = visual_dup_row_indices(
+            df,
+            cfg,
+            threshold=args.img_dedupe,
+            scope_l1=scope,
+            npz_path=npz if npz.is_file() else None,
+        )
+        dup_ids = demote_rows(rows, df, dropped_idx)
+        print(
+            f"[html] 主图去重 cos>={args.img_dedupe:g} "
+            f"范围={stats['scope']} 共 {stats['candidates']} 条 "
+            f"embed={stats['embed_ok']} 沉底 {stats['dropped']} 条"
+        )
+        for l1, st in stats.get("by_l1", {}).items():
+            if st["dropped"] <= 0:
+                continue
+            print(f"  · {l1}: {st['candidates']} 条 沉底 {st['dropped']} 条")
+        if stats["dropped"] and not dup_ids:
+            print("[html] 警告: 去重命中但 id 未匹配，请检查 CSV")
 
     screener_path = out_dir / f"{prefix}_screener.html"
     share_path = out_dir / f"{prefix}_分享.html"
